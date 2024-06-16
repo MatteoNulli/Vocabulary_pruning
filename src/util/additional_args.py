@@ -19,10 +19,6 @@ class AdditionalArguments:
         default=False, metadata={"help": ("Counting the number of FLOPs for each block.")},
     )
 
-    render_jsds: Optional[bool] = field(
-        default=False, metadata={"help": ("Print the JSDs across blocks.")},
-    )
-
     # deployment scenario
     deploy_scenario: Optional[bool] = field(
         default=False, metadata={"help": ("Assume a deploying scneario for the accurate measurement.")},
