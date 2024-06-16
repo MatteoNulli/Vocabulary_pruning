@@ -45,8 +45,6 @@ from util import (
     BetaMixture1D,
 )
 
-from util.skip_conf import get_skip_mask_cd
-
 logger = logging.get_logger(__name__)
 __HEAD_MASK_WARNING_MSG = """
 The input argument `head_mask` was split into two arguments `head_mask` and `decoder_head_mask`. Currently,
@@ -768,7 +766,7 @@ class DeployLongT5Stack(LongT5Stack):
                             pos_time=past_key_values[i][0].shape[2] + 1 if past_key_values[i] is not None else 1,
                             return_conf=True if self.config.type_vocab_reduct == "adaptive" else False
                         )
-                        
+
                         if self.config.type_vocab_reduct == "adaptive":
                             skip_mask, conf = out
                             prev_confidences[i] = conf

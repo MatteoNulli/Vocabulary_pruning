@@ -628,7 +628,7 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
         # evaluation metrics could be differ from evaluation during training
         # refer to https://discuss.huggingface.co/t/evaluation-results-metric-during-training-is-different-from-the-evaluation-results-at-the-end/15401/3
         if training_args.include_inputs_for_metrics:
-            output = trainer.evaluate(max_length=max_length, num_beams=num_beams, metric_key_prefix="eval", render_jsds=additional_args.render_jsds)
+            output = trainer.evaluate(max_length=max_length, num_beams=num_beams, metric_key_prefix="eval")
             metrics = output.metrics
             if additional_args.count_flops:
                 final_flops = model.decoder.flop_counter/len(eval_dataset)

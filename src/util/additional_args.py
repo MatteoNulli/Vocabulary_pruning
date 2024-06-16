@@ -160,7 +160,6 @@ def update_autoconfig(config, additional_args, **kwargs):
         'type_vocab_reduct': additional_args.type_vocab_reduct,
         'plotting_logits': additional_args.plotting_logits,
         'count_flops': additional_args.count_flops,
-        'render_jsds': additional_args.render_jsds,
     }
     config.update(early_exit_config)
     
