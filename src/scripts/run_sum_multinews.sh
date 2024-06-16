@@ -1,20 +1,44 @@
-CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.run --nproc_per_node=2 \
-    run_summarization.py \
+# CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.run --nproc_per_node=2 \
+#     run_summarization.py \
+#     --model_name_or_path google/long-t5-tglobal-base \
+#     --do_train \
+#     --do_eval \
+#     --dataset_name multi_news \
+#     --output_dir ./save/multi_news_longt5_base/ \
+#     --per_device_train_batch_size 2 \
+#     --per_device_eval_batch_size 16 \
+#     --overwrite_output_dir \
+#     --predict_with_generate \
+#     --source_prefix "summarize: " \
+#     --save_steps 1000 \
+#     --learning_rate 1e-4 \
+#     --num_train_epochs 3 \
+#     --max_source_length 2048 \
+#     --max_target_length 512 \
+
+CUDA_VISIBLE_DEVICES=0 python -m run_summarization \
     --model_name_or_path google/long-t5-tglobal-base \
-    --do_train \
     --do_eval \
     --dataset_name multi_news \
     --output_dir ./save/multi_news_longt5_base/ \
-    --per_device_train_batch_size 2 \
-    --per_device_eval_batch_size 16 \
+    --per_device_eval_batch_size 1 \
     --overwrite_output_dir \
     --predict_with_generate \
     --source_prefix "summarize: " \
+    --deploy_scenario True \
+    --use_synchronize False \
     --save_steps 1000 \
-    --learning_rate 1e-4 \
-    --num_train_epochs 3 \
     --max_source_length 2048 \
     --max_target_length 512 \
+    --max_eval_samples 10 \
+    --use_early_exit True \
+    --exit_conf_type softmax \
+    --exit_conf_threshold 0.9 \
+    --exit_min_layer 1 \
+    --include_inputs_for_metrics True \
+    --use_auth_token True \
+    --type_vocab_reduct fixed \
+
 
     # FREE
     # --output_hidden_states_decoder True \
@@ -28,20 +52,20 @@ CUDA_VISIBLE_DEVICES=0,1 python -m torch.distributed.run --nproc_per_node=2 \
     # --intermediate_loss_fn weighted_ce \
 
 
-CUDA_VISIBLE_DEVICES=0 python -m torch.distributed.run --nproc_per_node=1 \
-    run_summarization.py \
-    --model_name_or_path ./save/multi_news_longt5_base/ \
-    --do_eval \
-    --dataset_name multi_news \
-    --output_dir ./save/multi_news_longt5_base/ \
-    --per_device_eval_batch_size 1 \
-    --deploy_scenario True \
-    --use_synchronize True \
-    --overwrite_output_dir \
-    --predict_with_generate \
-    --source_prefix "summarize: " \
-    --max_source_length 2048 \
-    --max_target_length 512 \
+# CUDA_VISIBLE_DEVICES=0 python -m torch.distributed.run --nproc_per_node=1 \
+#     run_summarization.py \
+#     --model_name_or_path ./save/multi_news_longt5_base/ \
+#     --do_eval \
+#     --dataset_name multi_news \
+#     --output_dir ./save/multi_news_longt5_base/ \
+#     --per_device_eval_batch_size 1 \
+#     --deploy_scenario True \
+#     --use_synchronize True \
+#     --overwrite_output_dir \
+#     --predict_with_generate \
+#     --source_prefix "summarize: " \
+#     --max_source_length 2048 \
+#     --max_target_length 512 \
 
     # FREE
     # --use_shallow_deep True \

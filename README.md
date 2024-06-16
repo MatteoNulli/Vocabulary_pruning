@@ -2,11 +2,12 @@
 # Not all FLOPs are created equally: leveraging confidence in intermediate representations to maximize efficiency subject to calibration error
 -->
 
-# Optimizing Predictions: Vocabulary Reduction and Contrastive Decoding in LLMs
+# Optimizing Predictions: Vocabulary Reduction in LLMs
 
-### K.A. Abdel Sadek, G. Desimini, M. Nulli, J. Velja, J. Vincenti
+### K.A. Abdel Sadek, M. Nulli, J. Velja, J. Vincenti
 
-This repository is cloned from the code-base <a href="https://github.com/raymin0223/fast_robust_early_exit" target="_blank" rel="noopener noreferrer">  Fast_Robust_Early_Exit</a> (here their [paper](https://arxiv.org/abs/2310.05424)). Our research aims to further extend their work by implementing two approaches: Softmax Exiting with reduced vocabulary size, and Contrastive Decoding. Our discussion and findings can be found in our [blogpost](blogpost.md) file. Refer to it for the details of our work and the precise setting of the experiments. This README file will mainly address the codebase and reproduction of our results. 
+This repository is cloned from the code-base <a href="https://github.com/raymin0223/fast_robust_early_exit" target="_blank" rel="noopener noreferrer">  Fast_Robust_Early_Exit</a> (here their [paper](https://arxiv.org/abs/2310.05424)). Our research aims to further extend their work by implementing a Softmax Exiting with reduced vocabulary size. 
+<!-- Our discussion and findings can be found in our [blogpost](blogpost.md) file. Refer to it for the details of our work and the precise setting of the experiments. This README file will mainly address the codebase and reproduction of our results.  -->
 
 
 ## Requirements
@@ -47,27 +48,13 @@ for job in *.job; do sbatch $job; done
 Here we explain how to reproduce the experiments from the Section `Softmax Vocabulary Prunning` of our [blogpost](blogpost.md). 
 Please see the main [folder](src/scripts/softmax_experiments) for a total overview of the files you need to reproduce this section.
 
-The plots obtained for [Figure 2](./blogpost_images/plots/figure2.png), [3](./blogpost_images/plots/figure3.png), and [4](./blogpost_images/plots/figure4.png) can be obtained by running this [folder](src\scripts\softmax_experiments\plotting_graphs). Regarding the full runs for plots [7](/blogpost_images/plots/figure5.png) and [8](/blogpost_images/plots/figure6.png) they can be obtained by running the folders for [baseline](src\scripts\softmax_experiments\final_jobs_results_no_reduct), [fixed](src\scripts\softmax_experiments\final_jobs_results_fixed), and [decaying](src\scripts\softmax_experiments\final_jobs_results_decaying) and logging their respective results.
+<!-- 
+The plots obtained for [Figure 2](./blogpost_images/plots/figure2.png), [3](./blogpost_images/plots/figure3.png), and [4](./blogpost_images/plots/figure4.png) can be obtained by running this [folder](src\scripts\softmax_experiments\plotting_graphs). Regarding the full runs for plots [7](/blogpost_images/plots/figure5.png) and [8](/blogpost_images/plots/figure6.png) they can be obtained by running the folders for [baseline](src\scripts\softmax_experiments\final_jobs_results_no_reduct), [fixed](src\scripts\softmax_experiments\final_jobs_results_fixed), and [decaying](src\scripts\softmax_experiments\final_jobs_results_decaying) and logging their respective results. -->
 
-
-#### Contrastive Decoding
-Here we explain how to reproduce the experiments from the Section `Contrastive Decoding` of our [blogpost](blogpost.md). 
-
-The experiments of Figures [Figure 8a](./blogpost_images/plots/squadexit.png), [Figure 8b](./blogpost_images/plots/squadf1.png), [Figure 9a](./blogpost_images/plots/sam_avg.png), [Figure 9b](./blogpost_images/plots/samsum_intermediate.png) and Table 1 are carried out across 100 samples. To reproduce these results it is enough to run the files in both folders  [F1](src/scripts/contrastive_decoding_experiments/SQuAD) and [F2](src/scripts/contrastive_decoding_experiments/SamSum) by adding an extra parameter namely:
-
-- `--max_eval_samples 100`
-  
-Similarly, [Figure 10b](./blogpost_images/plots/squad_flops.png),  [Figure 11b](./blogpost_images/plots/sam_flops.png) are performed over 100 samples with the additional need of the `count_flops` parameter
-
-- `--count_flops True`
-  
-Differently, the results of the last plots [Figure 10a](./blogpost_images/plots/squad_f1.png) and [Figure 11a](./blogpost_images/plots/rougesamsam.png) are made by running the .job files of [SQuAD](src/scripts/contrastive_decoding_experiments/SQuAD) and [SamSum](src/scripts/contrastive_decoding_experiments/SamSum) without any additional change.
-
-Additionally, the actual plots of Figure 6 and all figures of Section `Contrastive Decoding` are produced with the files [plots1](src/plots/plots_mn.ipynb) and [plots2](src/plots/plots_jsds.ipynb). 
 
 ### Illustration of an Example Case
 
-Here below you can find the explicit command to run the experiments for Jansen-Shannon Divergence Contrastive Decoding with adaptive pruning approach
+Here below you can find the explicit command to run the experiments for softmax confidence with adaptive pruning approach
 
 ```bash
 srun python run_question_answering.py \
@@ -85,7 +72,7 @@ srun python run_question_answering.py \
     --predict_with_generate \
     --max_seq_length 512 \
     --use_early_exit True \
-    --exit_conf_type JSD_contrastive_confidence \
+    --exit_conf_type softmax \
     --exit_conf_threshold 0.9 \
     --exit_min_layer 19 \
     --include_inputs_for_metrics False \
@@ -115,12 +102,7 @@ In addition to the parameters previously implemented, we have introduced new one
 - `--plotting_logits False`: if set to True this will plot the confidence, f1, and boxplots (Figure 2,3, and 4 of the [blogpost](blogpost.md)).
 - `--final_flops False`: if set to True this will showcase the amount of flops calculated during confidence estimation (Figure 7 and 8 of the [blogpost](blogpost.md)).
 
-##### Contrastive Decoding
-- `--exit_conf_type [str]`: Can now also be set to <i>contrastive_decoding</i>, <i>reweight_contrastive_decoding</i>, or <i>JSD_contrastive_confidence</i>.
-- `--type_vocab_reduct [str]`: Can be either fixed, decaying, or adaptive. This will prune the vocabulary matrix. This parameter is needed to combine <i>reweight_contrastive_decoding</i>, or <i>JSD_contrastive_confidence</i> with the pruning method.
-
 Sample task-specific bash files can be found in the `src/scripts` directory. 
-
 
 
 ### W&B logging
@@ -137,7 +119,6 @@ This line of code can be found within [run_question_answering](src/run_question_
 
 ## Contact
 - Karim Abdel Sadek: karim.abdel.sadek@student.uva.nl
-- Gabriele Desimini: gabriele.desimini@student.uva.nl
 - Matteo Nulli: matteo.nulli@student.uva.nl
 - Joan Velja: joan.velja@student.uva.nl
 - Jort Vincenti: jort.vincenti@student.uva.nl
