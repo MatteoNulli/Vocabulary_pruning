@@ -1,0 +1,173 @@
+/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/datasets/load.py:2547: FutureWarning: 'use_auth_token' was deprecated in favor of 'token' in version 2.14.0 and will be removed in 3.0.0.
+You can remove this warning by passing 'token=<use_auth_token>' instead.
+  warnings.warn(
+Traceback (most recent call last):
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/run_question_answering.py", line 759, in <module>
+    main(model_args, data_args, training_args, additional_args, model_cls, trainer_cls)
+  File "/Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/run_question_answering.py", line 153, in main
+    raw_datasets = load_dataset(
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/datasets/load.py", line 2587, in load_dataset
+    builder_instance = load_dataset_builder(
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/datasets/load.py", line 2259, in load_dataset_builder
+    dataset_module = dataset_module_factory(
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/datasets/load.py", line 1892, in dataset_module_factory
+    ).get_module()
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/datasets/load.py", line 1198, in get_module
+    hfh_dataset_info = HfApi(config.HF_ENDPOINT).dataset_info(
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 119, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/huggingface_hub/hf_api.py", line 2290, in dataset_info
+    r = get_session().get(path, headers=headers, timeout=timeout, params=params)
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/requests/sessions.py", line 602, in get
+    return self.request("GET", url, **kwargs)
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/requests/sessions.py", line 725, in send
+    history = [resp for resp in gen]
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/requests/sessions.py", line 725, in <listcomp>
+    history = [resp for resp in gen]
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/requests/sessions.py", line 266, in resolve_redirects
+    resp = self.send(
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
+    r = adapter.send(request, **kwargs)
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 68, in send
+    return super().send(request, *args, **kwargs)
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/requests/adapters.py", line 486, in send
+    resp = conn.urlopen(
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/urllib3/connectionpool.py", line 793, in urlopen
+    response = self._make_request(
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/urllib3/connectionpool.py", line 537, in _make_request
+    response = conn.getresponse()
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/urllib3/connection.py", line 466, in getresponse
+    httplib_response = super().getresponse()
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/http/client.py", line 1375, in getresponse
+    response.begin()
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/http/client.py", line 318, in begin
+    version, status, reason = self._read_status()
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/http/client.py", line 279, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/socket.py", line 705, in readinto
+    return self._sock.recv_into(b)
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/ssl.py", line 1274, in recv_into
+    return self.read(nbytes, buffer)
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/ssl.py", line 1130, in read
+    return self._sslobj.read(len, buffer)
+KeyboardInterrupt
+05/23/2024 18:02:06 - WARNING - __main__ - Process rank: -1, device: cpu, n_gpu: 0distributed training: False, 16-bits training: False
+05/23/2024 18:02:06 - INFO - __main__ - Training/evaluation parameters Seq2SeqTrainingArguments(
+_n_gpu=0,
+adafactor=False,
+adam_beta1=0.9,
+adam_beta2=0.999,
+adam_epsilon=1e-08,
+auto_find_batch_size=False,
+bf16=False,
+bf16_full_eval=False,
+data_seed=None,
+dataloader_drop_last=False,
+dataloader_num_workers=0,
+dataloader_pin_memory=True,
+ddp_bucket_cap_mb=None,
+ddp_find_unused_parameters=None,
+ddp_timeout=1800,
+debug=[],
+deepspeed=None,
+disable_tqdm=False,
+do_eval=True,
+do_predict=False,
+do_train=False,
+eval_accumulation_steps=None,
+eval_delay=0,
+eval_steps=None,
+evaluation_strategy=no,
+fp16=False,
+fp16_backend=auto,
+fp16_full_eval=False,
+fp16_opt_level=O1,
+fsdp=[],
+fsdp_config={'fsdp_min_num_params': 0, 'xla': False, 'xla_fsdp_grad_ckpt': False},
+fsdp_min_num_params=0,
+fsdp_transformer_layer_cls_to_wrap=None,
+full_determinism=False,
+generation_config=None,
+generation_max_length=None,
+generation_num_beams=None,
+gradient_accumulation_steps=1,
+gradient_checkpointing=False,
+greater_is_better=None,
+group_by_length=False,
+half_precision_backend=auto,
+hub_model_id=None,
+hub_private_repo=False,
+hub_strategy=every_save,
+hub_token=<HUB_TOKEN>,
+ignore_data_skip=False,
+include_inputs_for_metrics=True,
+jit_mode_eval=False,
+label_names=None,
+label_smoothing_factor=0.0,
+learning_rate=5e-05,
+length_column_name=length,
+load_best_model_at_end=False,
+local_rank=-1,
+log_level=passive,
+log_level_replica=warning,
+log_on_each_node=True,
+logging_dir=./save/squad_t5-base/runs/May23_18-02-03_sp-byods-145-109-14-79.wireless.uva.nl,
+logging_first_step=False,
+logging_nan_inf_filter=True,
+logging_steps=500,
+logging_strategy=steps,
+lr_scheduler_type=linear,
+max_grad_norm=1.0,
+max_steps=-1,
+metric_for_best_model=None,
+mp_parameters=,
+no_cuda=False,
+num_train_epochs=3.0,
+optim=adamw_hf,
+optim_args=None,
+output_dir=./save/squad_t5-base/,
+overwrite_output_dir=True,
+past_index=-1,
+per_device_eval_batch_size=1,
+per_device_train_batch_size=8,
+predict_with_generate=True,
+prediction_loss_only=False,
+push_to_hub=False,
+push_to_hub_model_id=None,
+push_to_hub_organization=None,
+push_to_hub_token=<PUSH_TO_HUB_TOKEN>,
+ray_scope=last,
+remove_unused_columns=True,
+report_to=['wandb'],
+resume_from_checkpoint=None,
+run_name=./save/squad_t5-base/,
+save_on_each_node=False,
+save_safetensors=False,
+save_steps=500,
+save_strategy=steps,
+save_total_limit=None,
+seed=42,
+sharded_ddp=[],
+skip_memory_metrics=True,
+sortish_sampler=False,
+tf32=None,
+torch_compile=False,
+torch_compile_backend=None,
+torch_compile_mode=None,
+torchdynamo=None,
+tpu_metrics_debug=False,
+tpu_num_cores=None,
+use_ipex=False,
+use_legacy_prediction_loop=False,
+use_mps_device=False,
+warmup_ratio=0.0,
+warmup_steps=0,
+weight_decay=0.0,
+xpu_backend=None,
+)

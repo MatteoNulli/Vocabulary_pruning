@@ -1,0 +1,316 @@
+05/12/2024 19:49:47 - WARNING - __main__ - Process rank: -1, device: mps, n_gpu: 0distributed training: False, 16-bits training: False
+05/12/2024 19:49:47 - INFO - __main__ - Training/evaluation parameters Seq2SeqTrainingArguments(
+_n_gpu=0,
+adafactor=False,
+adam_beta1=0.9,
+adam_beta2=0.999,
+adam_epsilon=1e-08,
+auto_find_batch_size=False,
+bf16=False,
+bf16_full_eval=False,
+data_seed=None,
+dataloader_drop_last=False,
+dataloader_num_workers=0,
+dataloader_pin_memory=True,
+ddp_bucket_cap_mb=None,
+ddp_find_unused_parameters=None,
+ddp_timeout=1800,
+debug=[],
+deepspeed=None,
+disable_tqdm=False,
+do_eval=True,
+do_predict=False,
+do_train=False,
+eval_accumulation_steps=None,
+eval_delay=0,
+eval_steps=None,
+evaluation_strategy=no,
+fp16=False,
+fp16_backend=auto,
+fp16_full_eval=False,
+fp16_opt_level=O1,
+fsdp=[],
+fsdp_config={'fsdp_min_num_params': 0, 'xla': False, 'xla_fsdp_grad_ckpt': False},
+fsdp_min_num_params=0,
+fsdp_transformer_layer_cls_to_wrap=None,
+full_determinism=False,
+generation_config=None,
+generation_max_length=None,
+generation_num_beams=None,
+gradient_accumulation_steps=1,
+gradient_checkpointing=False,
+greater_is_better=None,
+group_by_length=False,
+half_precision_backend=auto,
+hub_model_id=None,
+hub_private_repo=False,
+hub_strategy=every_save,
+hub_token=<HUB_TOKEN>,
+ignore_data_skip=False,
+include_inputs_for_metrics=True,
+jit_mode_eval=False,
+label_names=None,
+label_smoothing_factor=0.0,
+learning_rate=5e-05,
+length_column_name=length,
+load_best_model_at_end=False,
+local_rank=-1,
+log_level=passive,
+log_level_replica=warning,
+log_on_each_node=True,
+logging_dir=./save/squad_t5-base/runs/May12_19-49-43_Joans-MacBook-Pro.local,
+logging_first_step=False,
+logging_nan_inf_filter=True,
+logging_steps=500,
+logging_strategy=steps,
+lr_scheduler_type=linear,
+max_grad_norm=1.0,
+max_steps=-1,
+metric_for_best_model=None,
+mp_parameters=,
+no_cuda=False,
+num_train_epochs=3.0,
+optim=adamw_hf,
+optim_args=None,
+output_dir=./save/squad_t5-base/,
+overwrite_output_dir=True,
+past_index=-1,
+per_device_eval_batch_size=1,
+per_device_train_batch_size=8,
+predict_with_generate=True,
+prediction_loss_only=False,
+push_to_hub=False,
+push_to_hub_model_id=None,
+push_to_hub_organization=None,
+push_to_hub_token=<PUSH_TO_HUB_TOKEN>,
+ray_scope=last,
+remove_unused_columns=True,
+report_to=[],
+resume_from_checkpoint=None,
+run_name=./save/squad_t5-base/,
+save_on_each_node=False,
+save_safetensors=False,
+save_steps=500,
+save_strategy=steps,
+save_total_limit=None,
+seed=42,
+sharded_ddp=[],
+skip_memory_metrics=True,
+sortish_sampler=False,
+tf32=None,
+torch_compile=False,
+torch_compile_backend=None,
+torch_compile_mode=None,
+torchdynamo=None,
+tpu_metrics_debug=False,
+tpu_num_cores=None,
+use_ipex=False,
+use_legacy_prediction_loop=False,
+use_mps_device=False,
+warmup_ratio=0.0,
+warmup_steps=0,
+weight_decay=0.0,
+xpu_backend=None,
+)
+05/12/2024 19:49:53 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
+05/12/2024 19:49:53 - INFO - datasets.info - Loading Dataset info from /Users/joanvelja/.cache/huggingface/datasets/squad/plain_text/0.0.0/7b6d24c440a36b6815f21b70d25016731768db1f
+05/12/2024 19:49:53 - INFO - datasets.builder - Found cached dataset squad (/Users/joanvelja/.cache/huggingface/datasets/squad/plain_text/0.0.0/7b6d24c440a36b6815f21b70d25016731768db1f)
+05/12/2024 19:49:53 - INFO - datasets.info - Loading Dataset info from /Users/joanvelja/.cache/huggingface/datasets/squad/plain_text/0.0.0/7b6d24c440a36b6815f21b70d25016731768db1f
+05/12/2024 19:49:59 - INFO - datasets.arrow_dataset - Caching processed dataset at /Users/joanvelja/.cache/huggingface/datasets/squad/plain_text/0.0.0/7b6d24c440a36b6815f21b70d25016731768db1f/cache-426d0201214cd394.arrow
+05/12/2024 19:50:00 - INFO - __main__ - *** Evaluate ***
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6820, device='mps:0'), 3: tensor(0.6546, device='mps:0'), 4: tensor(0.6521, device='mps:0'), 5: tensor(0.6502, device='mps:0'), 6: tensor(0.6467, device='mps:0'), 7: tensor(0.6414, device='mps:0'), 8: tensor(0.6343, device='mps:0'), 9: tensor(0.5965, device='mps:0'), 10: tensor(0.1708, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  Denver
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6930, device='mps:0'), 3: tensor(0.6908, device='mps:0'), 4: tensor(0.6914, device='mps:0'), 5: tensor(0.6655, device='mps:0'), 6: tensor(0.6190, device='mps:0'), 7: tensor(0.4253, device='mps:0'), 8: tensor(0.4763, device='mps:0'), 9: tensor(0.0478, device='mps:0'), 10: tensor(0.0005, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  Bro
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6931, device='mps:0'), 3: tensor(0.6921, device='mps:0'), 4: tensor(0.6817, device='mps:0'), 5: tensor(0.5587, device='mps:0'), 6: tensor(0.2014, device='mps:0'), 7: tensor(0.1611, device='mps:0'), 8: tensor(0.0346, device='mps:0'), 9: tensor(0.0014, device='mps:0'), 10: tensor(8.5404e-05, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  n
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6931, device='mps:0'), 3: tensor(0.6930, device='mps:0'), 4: tensor(0.6925, device='mps:0'), 5: tensor(0.6892, device='mps:0'), 6: tensor(0.6424, device='mps:0'), 7: tensor(0.6365, device='mps:0'), 8: tensor(0.5341, device='mps:0'), 9: tensor(0.0552, device='mps:0'), 10: tensor(0.0029, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  co
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6931, device='mps:0'), 3: tensor(0.6494, device='mps:0'), 4: tensor(0.3856, device='mps:0'), 5: tensor(0.0568, device='mps:0'), 6: tensor(4.6076e-05, device='mps:0'), 7: tensor(0.0002, device='mps:0'), 8: tensor(3.4911e-05, device='mps:0'), 9: tensor(8.3706e-05, device='mps:0'), 10: tensor(6.6356e-05, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  s
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6487, device='mps:0'), 3: tensor(0.0589, device='mps:0'), 4: tensor(0.0003, device='mps:0'), 5: tensor(0.0036, device='mps:0'), 6: tensor(0.0030, device='mps:0'), 7: tensor(2.0175e-05, device='mps:0'), 8: tensor(3.1339e-05, device='mps:0'), 9: tensor(3.1600e-05, device='mps:0'), 10: tensor(2.9013e-05, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  </s>
+Layer:  11
+question: Which NFL team represented the AFC at Super Bowl 50? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6789, device='mps:0'), 3: tensor(0.6355, device='mps:0'), 4: tensor(0.6312, device='mps:0'), 5: tensor(0.6278, device='mps:0'), 6: tensor(0.6203, device='mps:0'), 7: tensor(0.6111, device='mps:0'), 8: tensor(0.6006, device='mps:0'), 9: tensor(0.5349, device='mps:0'), 10: tensor(0.1483, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  Carolina
+Layer:  11
+JSDS:  {1: tensor(0.6928, device='mps:0'), 2: tensor(0.6927, device='mps:0'), 3: tensor(0.6911, device='mps:0'), 4: tensor(0.6614, device='mps:0'), 5: tensor(0.4358, device='mps:0'), 6: tensor(0.2833, device='mps:0'), 7: tensor(0.3496, device='mps:0'), 8: tensor(0.3749, device='mps:0'), 9: tensor(0.1154, device='mps:0'), 10: tensor(0.0039, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  Panther
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6930, device='mps:0'), 3: tensor(0.3240, device='mps:0'), 4: tensor(0.0558, device='mps:0'), 5: tensor(0.0020, device='mps:0'), 6: tensor(1.4102e-05, device='mps:0'), 7: tensor(2.5587e-05, device='mps:0'), 8: tensor(1.6594e-05, device='mps:0'), 9: tensor(3.2995e-05, device='mps:0'), 10: tensor(2.7605e-05, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  s
+Layer:  11
+JSDS:  {1: tensor(0.6930, device='mps:0'), 2: tensor(0.6427, device='mps:0'), 3: tensor(0.0362, device='mps:0'), 4: tensor(0.0002, device='mps:0'), 5: tensor(0.0005, device='mps:0'), 6: tensor(0.0002, device='mps:0'), 7: tensor(7.2014e-05, device='mps:0'), 8: tensor(7.5374e-05, device='mps:0'), 9: tensor(7.5389e-05, device='mps:0'), 10: tensor(7.1645e-05, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  </s>
+Layer:  11
+question: Which NFL team represented the NFC at Super Bowl 50? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6743, device='mps:0'), 3: tensor(0.5993, device='mps:0'), 4: tensor(0.5911, device='mps:0'), 5: tensor(0.5859, device='mps:0'), 6: tensor(0.5750, device='mps:0'), 7: tensor(0.5627, device='mps:0'), 8: tensor(0.5484, device='mps:0'), 9: tensor(0.4801, device='mps:0'), 10: tensor(0.3715, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  Levi
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6931, device='mps:0'), 3: tensor(0.6931, device='mps:0'), 4: tensor(0.6912, device='mps:0'), 5: tensor(0.6468, device='mps:0'), 6: tensor(0.3114, device='mps:0'), 7: tensor(0.2743, device='mps:0'), 8: tensor(0.3097, device='mps:0'), 9: tensor(0.0051, device='mps:0'), 10: tensor(0.0001, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  '
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.3292, device='mps:0'), 3: tensor(0.1383, device='mps:0'), 4: tensor(0.0252, device='mps:0'), 5: tensor(0.0030, device='mps:0'), 6: tensor(0.0010, device='mps:0'), 7: tensor(0.0005, device='mps:0'), 8: tensor(8.0522e-05, device='mps:0'), 9: tensor(2.1014e-06, device='mps:0'), 10: tensor(1.6170e-06, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  s
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6845, device='mps:0'), 3: tensor(0.6608, device='mps:0'), 4: tensor(0.6246, device='mps:0'), 5: tensor(0.3657, device='mps:0'), 6: tensor(0.1547, device='mps:0'), 7: tensor(0.0783, device='mps:0'), 8: tensor(0.0151, device='mps:0'), 9: tensor(0.0007, device='mps:0'), 10: tensor(1.4368e-05, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  Stadium
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6931, device='mps:0'), 3: tensor(0.6693, device='mps:0'), 4: tensor(0.4244, device='mps:0'), 5: tensor(0.3345, device='mps:0'), 6: tensor(0.0363, device='mps:0'), 7: tensor(0.0175, device='mps:0'), 8: tensor(0.0660, device='mps:0'), 9: tensor(0.0751, device='mps:0'), 10: tensor(0.0058, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  in
+Layer:  11
+JSDS:  {1: tensor(0.6727, device='mps:0'), 2: tensor(0.2849, device='mps:0'), 3: tensor(0.3124, device='mps:0'), 4: tensor(0.1545, device='mps:0'), 5: tensor(0.0209, device='mps:0'), 6: tensor(0.0028, device='mps:0'), 7: tensor(0.0020, device='mps:0'), 8: tensor(0.0007, device='mps:0'), 9: tensor(0.0007, device='mps:0'), 10: tensor(0.0006, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  the
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6929, device='mps:0'), 3: tensor(0.6917, device='mps:0'), 4: tensor(0.6920, device='mps:0'), 5: tensor(0.6834, device='mps:0'), 6: tensor(0.6731, device='mps:0'), 7: tensor(0.6802, device='mps:0'), 8: tensor(0.6640, device='mps:0'), 9: tensor(0.0733, device='mps:0'), 10: tensor(0.0004, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  San
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6924, device='mps:0'), 3: tensor(0.6257, device='mps:0'), 4: tensor(0.3704, device='mps:0'), 5: tensor(0.1392, device='mps:0'), 6: tensor(0.0708, device='mps:0'), 7: tensor(0.0636, device='mps:0'), 8: tensor(0.0119, device='mps:0'), 9: tensor(0.0011, device='mps:0'), 10: tensor(5.0729e-06, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  Francisco
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6911, device='mps:0'), 3: tensor(0.4788, device='mps:0'), 4: tensor(0.3411, device='mps:0'), 5: tensor(0.3337, device='mps:0'), 6: tensor(0.1738, device='mps:0'), 7: tensor(0.0976, device='mps:0'), 8: tensor(0.0879, device='mps:0'), 9: tensor(0.0094, device='mps:0'), 10: tensor(0.0002, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  Bay
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6925, device='mps:0'), 3: tensor(0.6114, device='mps:0'), 4: tensor(0.3187, device='mps:0'), 5: tensor(0.0244, device='mps:0'), 6: tensor(0.0069, device='mps:0'), 7: tensor(0.0079, device='mps:0'), 8: tensor(0.0038, device='mps:0'), 9: tensor(0.0005, device='mps:0'), 10: tensor(5.8408e-06, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  Area
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6931, device='mps:0'), 3: tensor(0.6433, device='mps:0'), 4: tensor(0.4119, device='mps:0'), 5: tensor(0.3704, device='mps:0'), 6: tensor(0.2719, device='mps:0'), 7: tensor(0.1895, device='mps:0'), 8: tensor(0.0345, device='mps:0'), 9: tensor(0.0823, device='mps:0'), 10: tensor(0.0011, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  at
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6928, device='mps:0'), 3: tensor(0.6924, device='mps:0'), 4: tensor(0.6926, device='mps:0'), 5: tensor(0.6886, device='mps:0'), 6: tensor(0.6816, device='mps:0'), 7: tensor(0.6782, device='mps:0'), 8: tensor(0.6064, device='mps:0'), 9: tensor(0.0210, device='mps:0'), 10: tensor(1.7342e-05, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  Santa
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6931, device='mps:0'), 3: tensor(0.6930, device='mps:0'), 4: tensor(0.6919, device='mps:0'), 5: tensor(0.6658, device='mps:0'), 6: tensor(0.6084, device='mps:0'), 7: tensor(0.4159, device='mps:0'), 8: tensor(0.1963, device='mps:0'), 9: tensor(0.0370, device='mps:0'), 10: tensor(0.0004, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  Clar
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6931, device='mps:0'), 3: tensor(0.6929, device='mps:0'), 4: tensor(0.6607, device='mps:0'), 5: tensor(0.5548, device='mps:0'), 6: tensor(0.3115, device='mps:0'), 7: tensor(0.2046, device='mps:0'), 8: tensor(0.0053, device='mps:0'), 9: tensor(2.6011e-05, device='mps:0'), 10: tensor(4.7984e-06, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  a
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6802, device='mps:0'), 3: tensor(0.5952, device='mps:0'), 4: tensor(0.6355, device='mps:0'), 5: tensor(0.4159, device='mps:0'), 6: tensor(0.2061, device='mps:0'), 7: tensor(0.1448, device='mps:0'), 8: tensor(0.0007, device='mps:0'), 9: tensor(0.0051, device='mps:0'), 10: tensor(0.0004, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  ,
+Layer:  11
+JSDS:  {1: tensor(0.6930, device='mps:0'), 2: tensor(0.6905, device='mps:0'), 3: tensor(0.6731, device='mps:0'), 4: tensor(0.6603, device='mps:0'), 5: tensor(0.5589, device='mps:0'), 6: tensor(0.3977, device='mps:0'), 7: tensor(0.2907, device='mps:0'), 8: tensor(0.1168, device='mps:0'), 9: tensor(0.0038, device='mps:0'), 10: tensor(0.0001, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  California
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6930, device='mps:0'), 3: tensor(0.6741, device='mps:0'), 4: tensor(0.1521, device='mps:0'), 5: tensor(0.3764, device='mps:0'), 6: tensor(0.2974, device='mps:0'), 7: tensor(0.2068, device='mps:0'), 8: tensor(0.0001, device='mps:0'), 9: tensor(8.9094e-05, device='mps:0'), 10: tensor(0.0004, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  </s>
+Layer:  11
+question: Where did Super Bowl 50 take place? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6710, device='mps:0'), 3: tensor(0.5825, device='mps:0'), 4: tensor(0.5728, device='mps:0'), 5: tensor(0.5657, device='mps:0'), 6: tensor(0.5503, device='mps:0'), 7: tensor(0.5310, device='mps:0'), 8: tensor(0.5103, device='mps:0'), 9: tensor(0.4368, device='mps:0'), 10: tensor(0.2043, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  Denver
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6930, device='mps:0'), 3: tensor(0.6893, device='mps:0'), 4: tensor(0.6898, device='mps:0'), 5: tensor(0.6508, device='mps:0'), 6: tensor(0.6001, device='mps:0'), 7: tensor(0.3972, device='mps:0'), 8: tensor(0.4246, device='mps:0'), 9: tensor(0.0372, device='mps:0'), 10: tensor(0.0005, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  Bro
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6931, device='mps:0'), 3: tensor(0.6925, device='mps:0'), 4: tensor(0.6857, device='mps:0'), 5: tensor(0.5793, device='mps:0'), 6: tensor(0.2219, device='mps:0'), 7: tensor(0.1738, device='mps:0'), 8: tensor(0.0360, device='mps:0'), 9: tensor(0.0013, device='mps:0'), 10: tensor(7.9037e-05, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  n
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6931, device='mps:0'), 3: tensor(0.6930, device='mps:0'), 4: tensor(0.6923, device='mps:0'), 5: tensor(0.6887, device='mps:0'), 6: tensor(0.6406, device='mps:0'), 7: tensor(0.6328, device='mps:0'), 8: tensor(0.5176, device='mps:0'), 9: tensor(0.0543, device='mps:0'), 10: tensor(0.0033, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  co
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6931, device='mps:0'), 3: tensor(0.6550, device='mps:0'), 4: tensor(0.3085, device='mps:0'), 5: tensor(0.0406, device='mps:0'), 6: tensor(4.6481e-05, device='mps:0'), 7: tensor(9.7619e-05, device='mps:0'), 8: tensor(5.0518e-05, device='mps:0'), 9: tensor(9.0571e-05, device='mps:0'), 10: tensor(7.0768e-05, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  s
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6455, device='mps:0'), 3: tensor(0.0624, device='mps:0'), 4: tensor(0.0004, device='mps:0'), 5: tensor(0.0031, device='mps:0'), 6: tensor(0.0032, device='mps:0'), 7: tensor(5.0131e-05, device='mps:0'), 8: tensor(7.1917e-05, device='mps:0'), 9: tensor(7.2746e-05, device='mps:0'), 10: tensor(6.6657e-05, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  </s>
+Layer:  11
+question: Which NFL team won Super Bowl 50? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6901, device='mps:0'), 3: tensor(0.6836, device='mps:0'), 4: tensor(0.6825, device='mps:0'), 5: tensor(0.6815, device='mps:0'), 6: tensor(0.6794, device='mps:0'), 7: tensor(0.6719, device='mps:0'), 8: tensor(0.6467, device='mps:0'), 9: tensor(0.3633, device='mps:0'), 10: tensor(0.0137, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  gold
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6931, device='mps:0'), 3: tensor(0.5732, device='mps:0'), 4: tensor(0.0360, device='mps:0'), 5: tensor(0.0845, device='mps:0'), 6: tensor(0.0160, device='mps:0'), 7: tensor(0.0004, device='mps:0'), 8: tensor(0.0004, device='mps:0'), 9: tensor(0.0004, device='mps:0'), 10: tensor(0.0003, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  </s>
+Layer:  11
+question: What color was used to emphasize the 50th anniversary of the Super Bowl? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6826, device='mps:0'), 3: tensor(0.6456, device='mps:0'), 4: tensor(0.6405, device='mps:0'), 5: tensor(0.6382, device='mps:0'), 6: tensor(0.6315, device='mps:0'), 7: tensor(0.6134, device='mps:0'), 8: tensor(0.5734, device='mps:0'), 9: tensor(0.2666, device='mps:0'), 10: tensor(0.1162, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  gold
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6929, device='mps:0'), 3: tensor(0.6355, device='mps:0'), 4: tensor(0.3643, device='mps:0'), 5: tensor(0.3126, device='mps:0'), 6: tensor(0.2944, device='mps:0'), 7: tensor(0.1197, device='mps:0'), 8: tensor(0.0060, device='mps:0'), 9: tensor(0.0012, device='mps:0'), 10: tensor(0.0040, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  </s>
+Layer:  11
+question: What was the theme of Super Bowl 50? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6902, device='mps:0'), 3: tensor(0.6834, device='mps:0'), 4: tensor(0.6823, device='mps:0'), 5: tensor(0.6810, device='mps:0'), 6: tensor(0.6757, device='mps:0'), 7: tensor(0.6598, device='mps:0'), 8: tensor(0.6006, device='mps:0'), 9: tensor(0.2890, device='mps:0'), 10: tensor(0.0121, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  February
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6924, device='mps:0'), 3: tensor(0.6908, device='mps:0'), 4: tensor(0.6867, device='mps:0'), 5: tensor(0.6824, device='mps:0'), 6: tensor(0.6806, device='mps:0'), 7: tensor(0.6738, device='mps:0'), 8: tensor(0.5169, device='mps:0'), 9: tensor(0.1249, device='mps:0'), 10: tensor(0.0047, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  7,
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6923, device='mps:0'), 3: tensor(0.6675, device='mps:0'), 4: tensor(0.6315, device='mps:0'), 5: tensor(0.6013, device='mps:0'), 6: tensor(0.5676, device='mps:0'), 7: tensor(0.5572, device='mps:0'), 8: tensor(0.5384, device='mps:0'), 9: tensor(0.3242, device='mps:0'), 10: tensor(0.0156, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  2016
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6931, device='mps:0'), 3: tensor(0.3573, device='mps:0'), 4: tensor(0.0015, device='mps:0'), 5: tensor(0.0016, device='mps:0'), 6: tensor(0.0004, device='mps:0'), 7: tensor(1.8585e-05, device='mps:0'), 8: tensor(2.7925e-05, device='mps:0'), 9: tensor(2.8260e-05, device='mps:0'), 10: tensor(2.6292e-05, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  </s>
+Layer:  11
+question: What day was the game played on? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6854, device='mps:0'), 3: tensor(0.6681, device='mps:0'), 4: tensor(0.6663, device='mps:0'), 5: tensor(0.6646, device='mps:0'), 6: tensor(0.6612, device='mps:0'), 7: tensor(0.6548, device='mps:0'), 8: tensor(0.6356, device='mps:0'), 9: tensor(0.2228, device='mps:0'), 10: tensor(0.0050, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  American
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6916, device='mps:0'), 3: tensor(0.6440, device='mps:0'), 4: tensor(0.5032, device='mps:0'), 5: tensor(0.4152, device='mps:0'), 6: tensor(0.2351, device='mps:0'), 7: tensor(0.2169, device='mps:0'), 8: tensor(0.1049, device='mps:0'), 9: tensor(0.0381, device='mps:0'), 10: tensor(0.0016, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  Football
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6931, device='mps:0'), 3: tensor(0.6888, device='mps:0'), 4: tensor(0.6856, device='mps:0'), 5: tensor(0.6781, device='mps:0'), 6: tensor(0.6612, device='mps:0'), 7: tensor(0.6444, device='mps:0'), 8: tensor(0.6399, device='mps:0'), 9: tensor(0.2123, device='mps:0'), 10: tensor(0.0096, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  Conference
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6931, device='mps:0'), 3: tensor(0.4491, device='mps:0'), 4: tensor(0.0021, device='mps:0'), 5: tensor(0.1304, device='mps:0'), 6: tensor(0.0978, device='mps:0'), 7: tensor(0.0001, device='mps:0'), 8: tensor(0.0002, device='mps:0'), 9: tensor(0.0002, device='mps:0'), 10: tensor(0.0002, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  </s>
+Layer:  11
+question: What is the AFC short for? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6826, device='mps:0'), 3: tensor(0.6456, device='mps:0'), 4: tensor(0.6405, device='mps:0'), 5: tensor(0.6382, device='mps:0'), 6: tensor(0.6315, device='mps:0'), 7: tensor(0.6134, device='mps:0'), 8: tensor(0.5734, device='mps:0'), 9: tensor(0.2666, device='mps:0'), 10: tensor(0.1162, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  gold
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6929, device='mps:0'), 3: tensor(0.6355, device='mps:0'), 4: tensor(0.3643, device='mps:0'), 5: tensor(0.3126, device='mps:0'), 6: tensor(0.2944, device='mps:0'), 7: tensor(0.1197, device='mps:0'), 8: tensor(0.0060, device='mps:0'), 9: tensor(0.0012, device='mps:0'), 10: tensor(0.0040, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  </s>
+Layer:  11
+question: What was the theme of Super Bowl 50? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6852, device='mps:0'), 3: tensor(0.6673, device='mps:0'), 4: tensor(0.6653, device='mps:0'), 5: tensor(0.6637, device='mps:0'), 6: tensor(0.6601, device='mps:0'), 7: tensor(0.6533, device='mps:0'), 8: tensor(0.6330, device='mps:0'), 9: tensor(0.2216, device='mps:0'), 10: tensor(0.0054, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  American
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6919, device='mps:0'), 3: tensor(0.6517, device='mps:0'), 4: tensor(0.5790, device='mps:0'), 5: tensor(0.5255, device='mps:0'), 6: tensor(0.3536, device='mps:0'), 7: tensor(0.3150, device='mps:0'), 8: tensor(0.1567, device='mps:0'), 9: tensor(0.0545, device='mps:0'), 10: tensor(0.0025, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  Football
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6931, device='mps:0'), 3: tensor(0.6890, device='mps:0'), 4: tensor(0.6852, device='mps:0'), 5: tensor(0.6744, device='mps:0'), 6: tensor(0.6562, device='mps:0'), 7: tensor(0.6403, device='mps:0'), 8: tensor(0.6421, device='mps:0'), 9: tensor(0.2296, device='mps:0'), 10: tensor(0.0120, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  Conference
+Layer:  11
+JSDS:  {1: tensor(0.6931, device='mps:0'), 2: tensor(0.6931, device='mps:0'), 3: tensor(0.4565, device='mps:0'), 4: tensor(0.0023, device='mps:0'), 5: tensor(0.1180, device='mps:0'), 6: tensor(0.0741, device='mps:0'), 7: tensor(7.7747e-05, device='mps:0'), 8: tensor(0.0002, device='mps:0'), 9: tensor(0.0002, device='mps:0'), 10: tensor(0.0002, device='mps:0'), 11: tensor(0., device='mps:0')}
+Word:  </s>
+Layer:  11
+question: What does AFC stand for? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+['Denver Broncos', 'Carolina Panthers', "Levi's Stadium in the San Francisco Bay Area at Santa Clara, California", 'Denver Broncos', 'gold', 'gold', 'February 7, 2016', 'American Football Conference', 'gold', 'American Football Conference']
+***** eval metrics *****
+  eval_block_avg              =                   12.0
+  eval_exact_match            =                   90.0
+  eval_f1                     =                   90.0
+  eval_runtime                =             0:00:09.12
+  eval_samples                =                     10
+  eval_samples_per_second     =                  1.095
+  eval_steps_per_second       =                  1.095
+  time_attn                   = ['0:00:01', '0:00:00']
+  time_confidence             =                0:00:05
+  time_decoder_forward        =                0:00:08
+  time_encoder_forward        =                0:00:00
+  time_estimate_conf          =                0:00:00
+  time_exit_attn              = ['0:00:00', '0:00:00']
+  time_exit_ffn               =                0:00:00
+  time_exit_key_value_gen     = ['0:00:00', '0:00:00']
+  time_ffn                    =                0:00:00
+  time_key_value_gen          = ['0:00:00', '0:00:00']
+  time_others                 =                0:00:00
+  time_parallel_attn          = ['0:00:00', '0:00:00']
+  time_parallel_ffn           =                0:00:00
+  time_parallel_key_value_gen = ['0:00:00', '0:00:00']

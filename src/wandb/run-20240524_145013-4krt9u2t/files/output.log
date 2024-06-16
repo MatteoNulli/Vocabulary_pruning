@@ -1,0 +1,836 @@
+05/24/2024 14:50:15 - WARNING - __main__ - Process rank: -1, device: cpu, n_gpu: 0distributed training: False, 16-bits training: False
+05/24/2024 14:50:15 - INFO - __main__ - Training/evaluation parameters Seq2SeqTrainingArguments(
+_n_gpu=0,
+adafactor=False,
+adam_beta1=0.9,
+adam_beta2=0.999,
+adam_epsilon=1e-08,
+auto_find_batch_size=False,
+bf16=False,
+bf16_full_eval=False,
+data_seed=None,
+dataloader_drop_last=False,
+dataloader_num_workers=0,
+dataloader_pin_memory=True,
+ddp_bucket_cap_mb=None,
+ddp_find_unused_parameters=None,
+ddp_timeout=1800,
+debug=[],
+deepspeed=None,
+disable_tqdm=False,
+do_eval=True,
+do_predict=False,
+do_train=False,
+eval_accumulation_steps=None,
+eval_delay=0,
+eval_steps=None,
+evaluation_strategy=no,
+fp16=False,
+fp16_backend=auto,
+fp16_full_eval=False,
+fp16_opt_level=O1,
+fsdp=[],
+fsdp_config={'fsdp_min_num_params': 0, 'xla': False, 'xla_fsdp_grad_ckpt': False},
+fsdp_min_num_params=0,
+fsdp_transformer_layer_cls_to_wrap=None,
+full_determinism=False,
+generation_config=None,
+generation_max_length=None,
+generation_num_beams=None,
+gradient_accumulation_steps=1,
+gradient_checkpointing=False,
+greater_is_better=None,
+group_by_length=False,
+half_precision_backend=auto,
+hub_model_id=None,
+hub_private_repo=False,
+hub_strategy=every_save,
+hub_token=<HUB_TOKEN>,
+ignore_data_skip=False,
+include_inputs_for_metrics=True,
+jit_mode_eval=False,
+label_names=None,
+label_smoothing_factor=0.0,
+learning_rate=5e-05,
+length_column_name=length,
+load_best_model_at_end=False,
+local_rank=-1,
+log_level=passive,
+log_level_replica=warning,
+log_on_each_node=True,
+logging_dir=./save/squad_t5-base/runs/May24_14-50-12_sp-byods-145-109-14-79.wireless.uva.nl,
+logging_first_step=False,
+logging_nan_inf_filter=True,
+logging_steps=500,
+logging_strategy=steps,
+lr_scheduler_type=linear,
+max_grad_norm=1.0,
+max_steps=-1,
+metric_for_best_model=None,
+mp_parameters=,
+no_cuda=False,
+num_train_epochs=3.0,
+optim=adamw_hf,
+optim_args=None,
+output_dir=./save/squad_t5-base/,
+overwrite_output_dir=True,
+past_index=-1,
+per_device_eval_batch_size=1,
+per_device_train_batch_size=8,
+predict_with_generate=True,
+prediction_loss_only=False,
+push_to_hub=False,
+push_to_hub_model_id=None,
+push_to_hub_organization=None,
+push_to_hub_token=<PUSH_TO_HUB_TOKEN>,
+ray_scope=last,
+remove_unused_columns=True,
+report_to=['wandb'],
+resume_from_checkpoint=None,
+run_name=./save/squad_t5-base/,
+save_on_each_node=False,
+save_safetensors=False,
+save_steps=500,
+save_strategy=steps,
+save_total_limit=None,
+seed=42,
+sharded_ddp=[],
+skip_memory_metrics=True,
+sortish_sampler=False,
+tf32=None,
+torch_compile=False,
+torch_compile_backend=None,
+torch_compile_mode=None,
+torchdynamo=None,
+tpu_metrics_debug=False,
+tpu_num_cores=None,
+use_ipex=False,
+use_legacy_prediction_loop=False,
+use_mps_device=False,
+warmup_ratio=0.0,
+warmup_steps=0,
+weight_decay=0.0,
+xpu_backend=None,
+)
+/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/datasets/load.py:2547: FutureWarning: 'use_auth_token' was deprecated in favor of 'token' in version 2.14.0 and will be removed in 3.0.0.
+You can remove this warning by passing 'token=<use_auth_token>' instead.
+  warnings.warn(
+Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /Users/matteo/.cache/huggingface/datasets/squad/plain_text/0.0.0/7b6d24c440a36b6815f21b70d25016731768db1f
+Found cached dataset squad (/Users/matteo/.cache/huggingface/datasets/squad/plain_text/0.0.0/7b6d24c440a36b6815f21b70d25016731768db1f)
+Loading Dataset info from /Users/matteo/.cache/huggingface/datasets/squad/plain_text/0.0.0/7b6d24c440a36b6815f21b70d25016731768db1f
+[INFO|configuration_utils.py:668] 2024-05-24 14:50:20,542 >> loading configuration file config.json from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/config.json
+[INFO|configuration_utils.py:720] 2024-05-24 14:50:20,543 >> Model config T5Config {
+  "_name_or_path": "google-t5/t5-large",
+  "architectures": [
+    "T5ForConditionalGeneration"
+  ],
+  "d_ff": 4096,
+  "d_kv": 64,
+  "d_model": 1024,
+  "decoder_start_token_id": 0,
+  "dense_act_fn": "relu",
+  "dropout_rate": 0.1,
+  "eos_token_id": 1,
+  "feed_forward_proj": "relu",
+  "initializer_factor": 1.0,
+  "is_encoder_decoder": true,
+  "is_gated_act": false,
+  "layer_norm_epsilon": 1e-06,
+  "model_type": "t5",
+  "n_positions": 512,
+  "num_decoder_layers": 24,
+  "num_heads": 16,
+  "num_layers": 24,
+  "output_past": true,
+  "pad_token_id": 0,
+  "relative_attention_max_distance": 128,
+  "relative_attention_num_buckets": 32,
+  "task_specific_params": {
+    "summarization": {
+      "early_stopping": true,
+      "length_penalty": 2.0,
+      "max_length": 200,
+      "min_length": 30,
+      "no_repeat_ngram_size": 3,
+      "num_beams": 4,
+      "prefix": "summarize: "
+    },
+    "translation_en_to_de": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to German: "
+    },
+    "translation_en_to_fr": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to French: "
+    },
+    "translation_en_to_ro": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to Romanian: "
+    }
+  },
+  "transformers_version": "4.28.1",
+  "use_cache": true,
+  "vocab_size": 32128
+}
+[INFO|tokenization_auto.py:502] 2024-05-24 14:50:20,652 >> Could not locate the tokenizer configuration file, will try to use the model config instead.
+[INFO|configuration_utils.py:668] 2024-05-24 14:50:20,769 >> loading configuration file config.json from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/config.json
+[INFO|configuration_utils.py:720] 2024-05-24 14:50:20,770 >> Model config T5Config {
+  "_name_or_path": "google-t5/t5-large",
+  "architectures": [
+    "T5ForConditionalGeneration"
+  ],
+  "d_ff": 4096,
+  "d_kv": 64,
+  "d_model": 1024,
+  "decoder_start_token_id": 0,
+  "dense_act_fn": "relu",
+  "dropout_rate": 0.1,
+  "eos_token_id": 1,
+  "feed_forward_proj": "relu",
+  "initializer_factor": 1.0,
+  "is_encoder_decoder": true,
+  "is_gated_act": false,
+  "layer_norm_epsilon": 1e-06,
+  "model_type": "t5",
+  "n_positions": 512,
+  "num_decoder_layers": 24,
+  "num_heads": 16,
+  "num_layers": 24,
+  "output_past": true,
+  "pad_token_id": 0,
+  "relative_attention_max_distance": 128,
+  "relative_attention_num_buckets": 32,
+  "task_specific_params": {
+    "summarization": {
+      "early_stopping": true,
+      "length_penalty": 2.0,
+      "max_length": 200,
+      "min_length": 30,
+      "no_repeat_ngram_size": 3,
+      "num_beams": 4,
+      "prefix": "summarize: "
+    },
+    "translation_en_to_de": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to German: "
+    },
+    "translation_en_to_fr": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to French: "
+    },
+    "translation_en_to_ro": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to Romanian: "
+    }
+  },
+  "transformers_version": "4.28.1",
+  "use_cache": true,
+  "vocab_size": 32128
+}
+05/24/2024 14:50:20 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
+05/24/2024 14:50:20 - INFO - datasets.info - Loading Dataset info from /Users/matteo/.cache/huggingface/datasets/squad/plain_text/0.0.0/7b6d24c440a36b6815f21b70d25016731768db1f
+05/24/2024 14:50:20 - INFO - datasets.builder - Found cached dataset squad (/Users/matteo/.cache/huggingface/datasets/squad/plain_text/0.0.0/7b6d24c440a36b6815f21b70d25016731768db1f)
+05/24/2024 14:50:20 - INFO - datasets.info - Loading Dataset info from /Users/matteo/.cache/huggingface/datasets/squad/plain_text/0.0.0/7b6d24c440a36b6815f21b70d25016731768db1f
+[INFO|tokenization_utils_base.py:1809] 2024-05-24 14:50:21,118 >> loading file spiece.model from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/spiece.model
+[INFO|tokenization_utils_base.py:1809] 2024-05-24 14:50:21,118 >> loading file tokenizer.json from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/tokenizer.json
+[INFO|tokenization_utils_base.py:1809] 2024-05-24 14:50:21,118 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:1809] 2024-05-24 14:50:21,119 >> loading file special_tokens_map.json from cache at None
+[INFO|tokenization_utils_base.py:1809] 2024-05-24 14:50:21,119 >> loading file tokenizer_config.json from cache at None
+[INFO|configuration_utils.py:668] 2024-05-24 14:50:21,119 >> loading configuration file config.json from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/config.json
+[INFO|configuration_utils.py:720] 2024-05-24 14:50:21,120 >> Model config T5Config {
+  "_name_or_path": "google-t5/t5-large",
+  "architectures": [
+    "T5ForConditionalGeneration"
+  ],
+  "d_ff": 4096,
+  "d_kv": 64,
+  "d_model": 1024,
+  "decoder_start_token_id": 0,
+  "dense_act_fn": "relu",
+  "dropout_rate": 0.1,
+  "eos_token_id": 1,
+  "feed_forward_proj": "relu",
+  "initializer_factor": 1.0,
+  "is_encoder_decoder": true,
+  "is_gated_act": false,
+  "layer_norm_epsilon": 1e-06,
+  "model_type": "t5",
+  "n_positions": 512,
+  "num_decoder_layers": 24,
+  "num_heads": 16,
+  "num_layers": 24,
+  "output_past": true,
+  "pad_token_id": 0,
+  "relative_attention_max_distance": 128,
+  "relative_attention_num_buckets": 32,
+  "task_specific_params": {
+    "summarization": {
+      "early_stopping": true,
+      "length_penalty": 2.0,
+      "max_length": 200,
+      "min_length": 30,
+      "no_repeat_ngram_size": 3,
+      "num_beams": 4,
+      "prefix": "summarize: "
+    },
+    "translation_en_to_de": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to German: "
+    },
+    "translation_en_to_fr": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to French: "
+    },
+    "translation_en_to_ro": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to Romanian: "
+    }
+  },
+  "transformers_version": "4.28.1",
+  "use_cache": true,
+  "vocab_size": 32128
+}
+[INFO|modeling_utils.py:2534] 2024-05-24 14:50:21,157 >> loading weights file model.safetensors from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/model.safetensors
+[INFO|configuration_utils.py:575] 2024-05-24 14:50:21,275 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "decoder_start_token_id": 0,
+  "eos_token_id": 1,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.1"
+}
+[INFO|modeling_utils.py:3190] 2024-05-24 14:50:31,176 >> All model checkpoint weights were used when initializing DeployT5ForConditionalGeneration.
+[INFO|modeling_utils.py:3198] 2024-05-24 14:50:31,176 >> All the weights of DeployT5ForConditionalGeneration were initialized from the model checkpoint at google-t5/t5-large.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use DeployT5ForConditionalGeneration for predictions without further training.
+[INFO|configuration_utils.py:537] 2024-05-24 14:50:31,343 >> loading configuration file generation_config.json from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/generation_config.json
+[INFO|configuration_utils.py:575] 2024-05-24 14:50:31,343 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "decoder_start_token_id": 0,
+  "eos_token_id": 1,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.1"
+}
+Loading cached processed dataset at /Users/matteo/.cache/huggingface/datasets/squad/plain_text/0.0.0/7b6d24c440a36b6815f21b70d25016731768db1f/cache-409e54ab36806d61.arrow
+[INFO|tokenization_auto.py:502] 2024-05-24 14:50:32,379 >> Could not locate the tokenizer configuration file, will try to use the model config instead.
+[INFO|configuration_utils.py:668] 2024-05-24 14:50:32,491 >> loading configuration file config.json from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/config.json
+[INFO|configuration_utils.py:720] 2024-05-24 14:50:32,492 >> Model config T5Config {
+  "_name_or_path": "google-t5/t5-large",
+  "architectures": [
+    "T5ForConditionalGeneration"
+  ],
+  "d_ff": 4096,
+  "d_kv": 64,
+  "d_model": 1024,
+  "decoder_start_token_id": 0,
+  "dense_act_fn": "relu",
+  "dropout_rate": 0.1,
+  "eos_token_id": 1,
+  "feed_forward_proj": "relu",
+  "initializer_factor": 1.0,
+  "is_encoder_decoder": true,
+  "is_gated_act": false,
+  "layer_norm_epsilon": 1e-06,
+  "model_type": "t5",
+  "n_positions": 512,
+  "num_decoder_layers": 24,
+  "num_heads": 16,
+  "num_layers": 24,
+  "output_past": true,
+  "pad_token_id": 0,
+  "relative_attention_max_distance": 128,
+  "relative_attention_num_buckets": 32,
+  "task_specific_params": {
+    "summarization": {
+      "early_stopping": true,
+      "length_penalty": 2.0,
+      "max_length": 200,
+      "min_length": 30,
+      "no_repeat_ngram_size": 3,
+      "num_beams": 4,
+      "prefix": "summarize: "
+    },
+    "translation_en_to_de": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to German: "
+    },
+    "translation_en_to_fr": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to French: "
+    },
+    "translation_en_to_ro": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to Romanian: "
+    }
+  },
+  "transformers_version": "4.28.1",
+  "use_cache": true,
+  "vocab_size": 32128
+}
+[INFO|tokenization_utils_base.py:1809] 2024-05-24 14:50:32,735 >> loading file spiece.model from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/spiece.model
+[INFO|tokenization_utils_base.py:1809] 2024-05-24 14:50:32,736 >> loading file tokenizer.json from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/tokenizer.json
+[INFO|tokenization_utils_base.py:1809] 2024-05-24 14:50:32,736 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:1809] 2024-05-24 14:50:32,736 >> loading file special_tokens_map.json from cache at None
+[INFO|tokenization_utils_base.py:1809] 2024-05-24 14:50:32,736 >> loading file tokenizer_config.json from cache at None
+[INFO|configuration_utils.py:668] 2024-05-24 14:50:32,736 >> loading configuration file config.json from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/config.json
+[INFO|configuration_utils.py:720] 2024-05-24 14:50:32,737 >> Model config T5Config {
+  "_name_or_path": "google-t5/t5-large",
+  "architectures": [
+    "T5ForConditionalGeneration"
+  ],
+  "d_ff": 4096,
+  "d_kv": 64,
+  "d_model": 1024,
+  "decoder_start_token_id": 0,
+  "dense_act_fn": "relu",
+  "dropout_rate": 0.1,
+  "eos_token_id": 1,
+  "feed_forward_proj": "relu",
+  "initializer_factor": 1.0,
+  "is_encoder_decoder": true,
+  "is_gated_act": false,
+  "layer_norm_epsilon": 1e-06,
+  "model_type": "t5",
+  "n_positions": 512,
+  "num_decoder_layers": 24,
+  "num_heads": 16,
+  "num_layers": 24,
+  "output_past": true,
+  "pad_token_id": 0,
+  "relative_attention_max_distance": 128,
+  "relative_attention_num_buckets": 32,
+  "task_specific_params": {
+    "summarization": {
+      "early_stopping": true,
+      "length_penalty": 2.0,
+      "max_length": 200,
+      "min_length": 30,
+      "no_repeat_ngram_size": 3,
+      "num_beams": 4,
+      "prefix": "summarize: "
+    },
+    "translation_en_to_de": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to German: "
+    },
+    "translation_en_to_fr": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to French: "
+    },
+    "translation_en_to_ro": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to Romanian: "
+    }
+  },
+  "transformers_version": "4.28.1",
+  "use_cache": true,
+  "vocab_size": 32128
+}
+[INFO|trainer.py:762] 2024-05-24 14:50:32,773 >> The following columns in the evaluation set don't have a corresponding argument in `DeployT5ForConditionalGeneration.forward` and have been ignored: offset_mapping, example_id. If offset_mapping, example_id are not expected by `DeployT5ForConditionalGeneration.forward`,  you can safely ignore this message.
+[WARNING|logging.py:280] 2024-05-24 14:50:32,777 >> You're using a T5TokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+[INFO|configuration_utils.py:575] 2024-05-24 14:50:32,779 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "decoder_start_token_id": 0,
+  "eos_token_id": 1,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.1"
+}
+05/24/2024 14:50:31 - INFO - datasets.arrow_dataset - Loading cached processed dataset at /Users/matteo/.cache/huggingface/datasets/squad/plain_text/0.0.0/7b6d24c440a36b6815f21b70d25016731768db1f/cache-409e54ab36806d61.arrow
+05/24/2024 14:50:32 - INFO - __main__ - *** Evaluate ***
+Traceback (most recent call last):
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/run_question_answering.py", line 759, in <module>
+    main(model_args, data_args, training_args, additional_args, model_cls, trainer_cls)
+  File "/Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/run_question_answering.py", line 629, in main
+    output = trainer.evaluate(max_length=max_length, num_beams=num_beams, metric_key_prefix="eval")
+  File "/Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/qa_lib/trainer_qa.py", line 114, in evaluate
+    output = eval_loop(
+  File "/Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/qa_lib/trainer_qa.py", line 269, in evaluation_loop
+    loss, logits, labels = self.prediction_step(model, inputs, prediction_loss_only, ignore_keys=ignore_keys)
+  File "/Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/qa_lib/trainer_qa.py", line 451, in prediction_step
+    generated_tokens = gen_model.generate(
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 115, in decorate_context
+    return func(*args, **kwargs)
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/transformers/generation/utils.py", line 1437, in generate
+    return self.greedy_search(
+  File "/Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/models/deploying_t5.py", line 1648, in greedy_search
+    outputs = self(
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/models/deploying_t5.py", line 1398, in forward
+    encoder_outputs, decoder_outputs = self.forward_impl(input_ids, attention_mask, decoder_input_ids, decoder_attention_mask,
+  File "/Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/models/deploying_t5.py", line 1518, in forward_impl
+    decoder_outputs = self.decoder(
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/models/deploying_t5.py", line 1132, in forward
+    out = get_skip_mask_cd(
+  File "/Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/util/skip_conf.py", line 385, in get_skip_mask_cd
+    conf, jsds = conf_measure(
+  File "/Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/util/skip_conf.py", line 233, in JSD_contrastive_confidence
+    print("logits", lm_logits)
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/wandb/sdk/lib/redirect.py", line 643, in write
+    cb(data)
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 2259, in <lambda>
+    lambda data: self._console_raw_callback("stdout", data),
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 371, in wrapper_fn
+    return func(self, *args, **kwargs)
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/wandb/sdk/wandb_run.py", line 1500, in _console_raw_callback
+    self._backend.interface.publish_output_raw(name, data)
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/wandb/sdk/interface/interface.py", line 674, in publish_output_raw
+    self._publish_output_raw(o)
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/wandb/sdk/interface/interface_shared.py", line 79, in _publish_output_raw
+    self._publish(rec)
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 50, in _publish
+    self._assign(record)
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/wandb/sdk/interface/interface_sock.py", line 47, in _assign
+    record._info.stream_id = self._stream_id
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/google/protobuf/internal/python_message.py", line 758, in getter
+    field_value = self._fields.setdefault(field, field_value)
+KeyboardInterrupt
+Iteration :  2
+inside jsd contrastive confidenc
+logits tensor([[[ -2.8988, -10.7682,  -8.4435,  ..., -17.2924, -17.2124, -17.4139]]])
+mask tensor([ True, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.0020, 0.0009, 0.0010, 0.0007, 0.0007, 0.0009, 0.0008, 0.0007, 0.0008,
+        0.0007, 0.0011, 0.0012, 0.0010, 0.0007, 0.0007, 0.0007, 0.0011, 0.0010,
+        0.0015, 0.0007, 0.0007, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007,
+        0.0007, 0.0016, 0.0006, 0.0007, 0.0009, 0.0009, 0.0009, 0.0007, 0.0008,
+        0.0011, 0.0009, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007, 0.0006,
+        0.0011, 0.0006, 0.0007, 0.0006, 0.0007, 0.0010, 0.0008, 0.0008, 0.0009,
+        0.0007, 0.0012, 0.0007, 0.0007, 0.0012, 0.0012, 0.0064])
+Iteration :  3
+inside jsd contrastive confidenc
+logits tensor([[[ -2.8988, -10.7682,  -8.4435,  ..., -17.2924, -17.2124, -17.4139]]])
+mask tensor([ True, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.0020, 0.0009, 0.0010, 0.0007, 0.0007, 0.0009, 0.0008, 0.0007, 0.0008,
+        0.0007, 0.0011, 0.0012, 0.0010, 0.0007, 0.0007, 0.0007, 0.0011, 0.0010,
+        0.0015, 0.0007, 0.0007, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007,
+        0.0007, 0.0016, 0.0006, 0.0007, 0.0009, 0.0009, 0.0009, 0.0007, 0.0008,
+        0.0011, 0.0009, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007, 0.0006,
+        0.0011, 0.0006, 0.0007, 0.0006, 0.0007, 0.0010, 0.0008, 0.0008, 0.0009,
+        0.0007, 0.0012, 0.0007, 0.0007, 0.0012, 0.0012, 0.0064])
+Iteration :  4
+inside jsd contrastive confidenc
+logits tensor([[[ -2.8988, -10.7682,  -8.4435,  ..., -17.2924, -17.2124, -17.4139]]])
+mask tensor([ True, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.0020, 0.0009, 0.0010, 0.0007, 0.0007, 0.0009, 0.0008, 0.0007, 0.0008,
+        0.0007, 0.0011, 0.0012, 0.0010, 0.0007, 0.0007, 0.0007, 0.0011, 0.0010,
+        0.0015, 0.0007, 0.0007, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007,
+        0.0007, 0.0016, 0.0006, 0.0007, 0.0009, 0.0009, 0.0009, 0.0007, 0.0008,
+        0.0011, 0.0009, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007, 0.0006,
+        0.0011, 0.0006, 0.0007, 0.0006, 0.0007, 0.0010, 0.0008, 0.0008, 0.0009,
+        0.0007, 0.0012, 0.0007, 0.0007, 0.0012, 0.0012, 0.0064])
+Iteration :  5
+inside jsd contrastive confidenc
+logits tensor([[[ -2.8988, -10.7682,  -8.4435,  ..., -17.2924, -17.2124, -17.4139]]])
+mask tensor([ True, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.0020, 0.0009, 0.0010, 0.0007, 0.0007, 0.0009, 0.0008, 0.0007, 0.0008,
+        0.0007, 0.0011, 0.0012, 0.0010, 0.0007, 0.0007, 0.0007, 0.0011, 0.0010,
+        0.0015, 0.0007, 0.0007, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007,
+        0.0007, 0.0016, 0.0006, 0.0007, 0.0009, 0.0009, 0.0009, 0.0007, 0.0008,
+        0.0011, 0.0009, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007, 0.0006,
+        0.0011, 0.0006, 0.0007, 0.0006, 0.0007, 0.0010, 0.0008, 0.0008, 0.0009,
+        0.0007, 0.0012, 0.0007, 0.0007, 0.0012, 0.0012, 0.0064])
+Iteration :  6
+inside jsd contrastive confidenc
+logits tensor([[[ -2.8988, -10.7682,  -8.4435,  ..., -17.2924, -17.2124, -17.4139]]])
+mask tensor([ True, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.0020, 0.0009, 0.0010, 0.0007, 0.0007, 0.0009, 0.0008, 0.0007, 0.0008,
+        0.0007, 0.0011, 0.0012, 0.0010, 0.0007, 0.0007, 0.0007, 0.0011, 0.0010,
+        0.0015, 0.0007, 0.0007, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007,
+        0.0007, 0.0016, 0.0006, 0.0007, 0.0009, 0.0009, 0.0009, 0.0007, 0.0008,
+        0.0011, 0.0009, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007, 0.0006,
+        0.0011, 0.0006, 0.0007, 0.0006, 0.0007, 0.0010, 0.0008, 0.0008, 0.0009,
+        0.0007, 0.0012, 0.0007, 0.0007, 0.0012, 0.0012, 0.0064])
+Iteration :  7
+inside jsd contrastive confidenc
+logits tensor([[[ -2.8988, -10.7682,  -8.4435,  ..., -17.2924, -17.2124, -17.4139]]])
+mask tensor([ True, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.0020, 0.0009, 0.0010, 0.0007, 0.0007, 0.0009, 0.0008, 0.0007, 0.0008,
+        0.0007, 0.0011, 0.0012, 0.0010, 0.0007, 0.0007, 0.0007, 0.0011, 0.0010,
+        0.0015, 0.0007, 0.0007, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007,
+        0.0007, 0.0016, 0.0006, 0.0007, 0.0009, 0.0009, 0.0009, 0.0007, 0.0008,
+        0.0011, 0.0009, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007, 0.0006,
+        0.0011, 0.0006, 0.0007, 0.0006, 0.0007, 0.0010, 0.0008, 0.0008, 0.0009,
+        0.0007, 0.0012, 0.0007, 0.0007, 0.0012, 0.0012, 0.0064])
+Iteration :  8
+inside jsd contrastive confidenc
+logits tensor([[[ -2.8988, -10.7682,  -8.4435,  ..., -17.2924, -17.2124, -17.4139]]])
+mask tensor([ True, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.0020, 0.0009, 0.0010, 0.0007, 0.0007, 0.0009, 0.0008, 0.0007, 0.0008,
+        0.0007, 0.0011, 0.0012, 0.0010, 0.0007, 0.0007, 0.0007, 0.0011, 0.0010,
+        0.0015, 0.0007, 0.0007, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007,
+        0.0007, 0.0016, 0.0006, 0.0007, 0.0009, 0.0009, 0.0009, 0.0007, 0.0008,
+        0.0011, 0.0009, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007, 0.0006,
+        0.0011, 0.0006, 0.0007, 0.0006, 0.0007, 0.0010, 0.0008, 0.0008, 0.0009,
+        0.0007, 0.0012, 0.0007, 0.0007, 0.0012, 0.0012, 0.0064])
+Iteration :  9
+inside jsd contrastive confidenc
+logits tensor([[[ -2.8988, -10.7682,  -8.4435,  ..., -17.2924, -17.2124, -17.4139]]])
+mask tensor([ True, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.0020, 0.0009, 0.0010, 0.0007, 0.0007, 0.0009, 0.0008, 0.0007, 0.0008,
+        0.0007, 0.0011, 0.0012, 0.0010, 0.0007, 0.0007, 0.0007, 0.0011, 0.0010,
+        0.0015, 0.0007, 0.0007, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007,
+        0.0007, 0.0016, 0.0006, 0.0007, 0.0009, 0.0009, 0.0009, 0.0007, 0.0008,
+        0.0011, 0.0009, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007, 0.0006,
+        0.0011, 0.0006, 0.0007, 0.0006, 0.0007, 0.0010, 0.0008, 0.0008, 0.0009,
+        0.0007, 0.0012, 0.0007, 0.0007, 0.0012, 0.0012, 0.0064])
+Iteration :  10
+inside jsd contrastive confidenc
+logits tensor([[[ -2.8988, -10.7682,  -8.4435,  ..., -17.2924, -17.2124, -17.4139]]])
+mask tensor([ True, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.0020, 0.0009, 0.0010, 0.0007, 0.0007, 0.0009, 0.0008, 0.0007, 0.0008,
+        0.0007, 0.0011, 0.0012, 0.0010, 0.0007, 0.0007, 0.0007, 0.0011, 0.0010,
+        0.0015, 0.0007, 0.0007, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007,
+        0.0007, 0.0016, 0.0006, 0.0007, 0.0009, 0.0009, 0.0009, 0.0007, 0.0008,
+        0.0011, 0.0009, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007, 0.0006,
+        0.0011, 0.0006, 0.0007, 0.0006, 0.0007, 0.0010, 0.0008, 0.0008, 0.0009,
+        0.0007, 0.0012, 0.0007, 0.0007, 0.0012, 0.0012, 0.0064])
+Iteration :  11
+inside jsd contrastive confidenc
+logits tensor([[[ -2.8988, -10.7682,  -8.4435,  ..., -17.2924, -17.2124, -17.4139]]])
+mask tensor([ True, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.0020, 0.0009, 0.0010, 0.0007, 0.0007, 0.0009, 0.0008, 0.0007, 0.0008,
+        0.0007, 0.0011, 0.0012, 0.0010, 0.0007, 0.0007, 0.0007, 0.0011, 0.0010,
+        0.0015, 0.0007, 0.0007, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007,
+        0.0007, 0.0016, 0.0006, 0.0007, 0.0009, 0.0009, 0.0009, 0.0007, 0.0008,
+        0.0011, 0.0009, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007, 0.0006,
+        0.0011, 0.0006, 0.0007, 0.0006, 0.0007, 0.0010, 0.0008, 0.0008, 0.0009,
+        0.0007, 0.0012, 0.0007, 0.0007, 0.0012, 0.0012, 0.0064])
+Iteration :  12
+inside jsd contrastive confidenc
+logits tensor([[[ -2.8988, -10.7682,  -8.4435,  ..., -17.2924, -17.2124, -17.4139]]])
+mask tensor([ True, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.0020, 0.0009, 0.0010, 0.0007, 0.0007, 0.0009, 0.0008, 0.0007, 0.0008,
+        0.0007, 0.0011, 0.0012, 0.0010, 0.0007, 0.0007, 0.0007, 0.0011, 0.0010,
+        0.0015, 0.0007, 0.0007, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007,
+        0.0007, 0.0016, 0.0006, 0.0007, 0.0009, 0.0009, 0.0009, 0.0007, 0.0008,
+        0.0011, 0.0009, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007, 0.0006,
+        0.0011, 0.0006, 0.0007, 0.0006, 0.0007, 0.0010, 0.0008, 0.0008, 0.0009,
+        0.0007, 0.0012, 0.0007, 0.0007, 0.0012, 0.0012, 0.0064])
+Iteration :  13
+inside jsd contrastive confidenc
+logits tensor([[[ -2.8988, -10.7682,  -8.4435,  ..., -17.2924, -17.2124, -17.4139]]])
+mask tensor([ True, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.0020, 0.0009, 0.0010, 0.0007, 0.0007, 0.0009, 0.0008, 0.0007, 0.0008,
+        0.0007, 0.0011, 0.0012, 0.0010, 0.0007, 0.0007, 0.0007, 0.0011, 0.0010,
+        0.0015, 0.0007, 0.0007, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007,
+        0.0007, 0.0016, 0.0006, 0.0007, 0.0009, 0.0009, 0.0009, 0.0007, 0.0008,
+        0.0011, 0.0009, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007, 0.0006,
+        0.0011, 0.0006, 0.0007, 0.0006, 0.0007, 0.0010, 0.0008, 0.0008, 0.0009,
+        0.0007, 0.0012, 0.0007, 0.0007, 0.0012, 0.0012, 0.0064])
+Iteration :  14
+inside jsd contrastive confidenc
+logits tensor([[[ -2.8988, -10.7682,  -8.4435,  ..., -17.2924, -17.2124, -17.4139]]])
+mask tensor([ True, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.0020, 0.0009, 0.0010, 0.0007, 0.0007, 0.0009, 0.0008, 0.0007, 0.0008,
+        0.0007, 0.0011, 0.0012, 0.0010, 0.0007, 0.0007, 0.0007, 0.0011, 0.0010,
+        0.0015, 0.0007, 0.0007, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007,
+        0.0007, 0.0016, 0.0006, 0.0007, 0.0009, 0.0009, 0.0009, 0.0007, 0.0008,
+        0.0011, 0.0009, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007, 0.0006,
+        0.0011, 0.0006, 0.0007, 0.0006, 0.0007, 0.0010, 0.0008, 0.0008, 0.0009,
+        0.0007, 0.0012, 0.0007, 0.0007, 0.0012, 0.0012, 0.0064])
+Iteration :  15
+inside jsd contrastive confidenc
+logits tensor([[[ -2.8988, -10.7682,  -8.4435,  ..., -17.2924, -17.2124, -17.4139]]])
+mask tensor([ True, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.0020, 0.0009, 0.0010, 0.0007, 0.0007, 0.0009, 0.0008, 0.0007, 0.0008,
+        0.0007, 0.0011, 0.0012, 0.0010, 0.0007, 0.0007, 0.0007, 0.0011, 0.0010,
+        0.0015, 0.0007, 0.0007, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007,
+        0.0007, 0.0016, 0.0006, 0.0007, 0.0009, 0.0009, 0.0009, 0.0007, 0.0008,
+        0.0011, 0.0009, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007, 0.0006,
+        0.0011, 0.0006, 0.0007, 0.0006, 0.0007, 0.0010, 0.0008, 0.0008, 0.0009,
+        0.0007, 0.0012, 0.0007, 0.0007, 0.0012, 0.0012, 0.0064])
+Iteration :  16
+inside jsd contrastive confidenc
+logits tensor([[[ -2.8988, -10.7682,  -8.4435,  ..., -17.2924, -17.2124, -17.4139]]])
+mask tensor([ True, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.0020, 0.0009, 0.0010, 0.0007, 0.0007, 0.0009, 0.0008, 0.0007, 0.0008,
+        0.0007, 0.0011, 0.0012, 0.0010, 0.0007, 0.0007, 0.0007, 0.0011, 0.0010,
+        0.0015, 0.0007, 0.0007, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007,
+        0.0007, 0.0016, 0.0006, 0.0007, 0.0009, 0.0009, 0.0009, 0.0007, 0.0008,
+        0.0011, 0.0009, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007, 0.0006,
+        0.0011, 0.0006, 0.0007, 0.0006, 0.0007, 0.0010, 0.0008, 0.0008, 0.0009,
+        0.0007, 0.0012, 0.0007, 0.0007, 0.0012, 0.0012, 0.0064])
+Iteration :  17
+inside jsd contrastive confidenc
+logits tensor([[[ -2.8988, -10.7682,  -8.4435,  ..., -17.2924, -17.2124, -17.4139]]])
+mask tensor([ True, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.0020, 0.0009, 0.0010, 0.0007, 0.0007, 0.0009, 0.0008, 0.0007, 0.0008,
+        0.0007, 0.0011, 0.0012, 0.0010, 0.0007, 0.0007, 0.0007, 0.0011, 0.0010,
+        0.0015, 0.0007, 0.0007, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007,
+        0.0007, 0.0016, 0.0006, 0.0007, 0.0009, 0.0009, 0.0009, 0.0007, 0.0008,
+        0.0011, 0.0009, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007, 0.0006,
+        0.0011, 0.0006, 0.0007, 0.0006, 0.0007, 0.0010, 0.0008, 0.0008, 0.0009,
+        0.0007, 0.0012, 0.0007, 0.0007, 0.0012, 0.0012, 0.0064])
+Iteration :  18
+inside jsd contrastive confidenc
+logits tensor([[[ -2.8988, -10.7682,  -8.4435,  ..., -17.2924, -17.2124, -17.4139]]])
+mask tensor([ True, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.0020, 0.0009, 0.0010, 0.0007, 0.0007, 0.0009, 0.0008, 0.0007, 0.0008,
+        0.0007, 0.0011, 0.0012, 0.0010, 0.0007, 0.0007, 0.0007, 0.0011, 0.0010,
+        0.0015, 0.0007, 0.0007, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007,
+        0.0007, 0.0016, 0.0006, 0.0007, 0.0009, 0.0009, 0.0009, 0.0007, 0.0008,
+        0.0011, 0.0009, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007, 0.0006,
+        0.0011, 0.0006, 0.0007, 0.0006, 0.0007, 0.0010, 0.0008, 0.0008, 0.0009,
+        0.0007, 0.0012, 0.0007, 0.0007, 0.0012, 0.0012, 0.0064])
+Iteration :  19
+inside jsd contrastive confidenc
+logits tensor([[[ -2.8988, -10.7682,  -8.4435,  ..., -17.2924, -17.2124, -17.4139]]])
+mask tensor([ True, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.0020, 0.0009, 0.0010, 0.0007, 0.0007, 0.0009, 0.0008, 0.0007, 0.0008,
+        0.0007, 0.0011, 0.0012, 0.0010, 0.0007, 0.0007, 0.0007, 0.0011, 0.0010,
+        0.0015, 0.0007, 0.0007, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007,
+        0.0007, 0.0016, 0.0006, 0.0007, 0.0009, 0.0009, 0.0009, 0.0007, 0.0008,
+        0.0011, 0.0009, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007, 0.0006,
+        0.0011, 0.0006, 0.0007, 0.0006, 0.0007, 0.0010, 0.0008, 0.0008, 0.0009,
+        0.0007, 0.0012, 0.0007, 0.0007, 0.0012, 0.0012, 0.0064])
+Iteration :  20
+inside jsd contrastive confidenc
+logits tensor([[[ -2.8988, -10.7682,  -8.4435,  ..., -17.2924, -17.2124, -17.4139]]])
+mask tensor([ True, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.0020, 0.0009, 0.0010, 0.0007, 0.0007, 0.0009, 0.0008, 0.0007, 0.0008,
+        0.0007, 0.0011, 0.0012, 0.0010, 0.0007, 0.0007, 0.0007, 0.0011, 0.0010,
+        0.0015, 0.0007, 0.0007, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007,
+        0.0007, 0.0016, 0.0006, 0.0007, 0.0009, 0.0009, 0.0009, 0.0007, 0.0008,
+        0.0011, 0.0009, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007, 0.0006,
+        0.0011, 0.0006, 0.0007, 0.0006, 0.0007, 0.0010, 0.0008, 0.0008, 0.0009,
+        0.0007, 0.0012, 0.0007, 0.0007, 0.0012, 0.0012, 0.0064])
+Iteration :  21
+inside jsd contrastive confidenc
+logits tensor([[[ -2.8988, -10.7682,  -8.4435,  ..., -17.2924, -17.2124, -17.4139]]])
+mask tensor([ True, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.0020, 0.0009, 0.0010, 0.0007, 0.0007, 0.0009, 0.0008, 0.0007, 0.0008,
+        0.0007, 0.0011, 0.0012, 0.0010, 0.0007, 0.0007, 0.0007, 0.0011, 0.0010,
+        0.0015, 0.0007, 0.0007, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007,
+        0.0007, 0.0016, 0.0006, 0.0007, 0.0009, 0.0009, 0.0009, 0.0007, 0.0008,
+        0.0011, 0.0009, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007, 0.0006,
+        0.0011, 0.0006, 0.0007, 0.0006, 0.0007, 0.0010, 0.0008, 0.0008, 0.0009,
+        0.0007, 0.0012, 0.0007, 0.0007, 0.0012, 0.0012, 0.0064])
+Iteration :  22
+inside jsd contrastive confidenc
+logits tensor([[[ -2.8988, -10.7682,  -8.4435,  ..., -17.2924, -17.2124, -17.4139]]])
+mask tensor([ True, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.0020, 0.0009, 0.0010, 0.0007, 0.0007, 0.0009, 0.0008, 0.0007, 0.0008,
+        0.0007, 0.0011, 0.0012, 0.0010, 0.0007, 0.0007, 0.0007, 0.0011, 0.0010,
+        0.0015, 0.0007, 0.0007, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007,
+        0.0007, 0.0016, 0.0006, 0.0007, 0.0009, 0.0009, 0.0009, 0.0007, 0.0008,
+        0.0011, 0.0009, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007, 0.0006,
+        0.0011, 0.0006, 0.0007, 0.0006, 0.0007, 0.0010, 0.0008, 0.0008, 0.0009,
+        0.0007, 0.0012, 0.0007, 0.0007, 0.0012, 0.0012, 0.0064])
+Iteration :  23
+inside jsd contrastive confidenc
+logits tensor([[[ -2.8988, -10.7682,  -8.4435,  ..., -17.2924, -17.2124, -17.4139]]])
+mask tensor([ True, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.0020, 0.0009, 0.0010, 0.0007, 0.0007, 0.0009, 0.0008, 0.0007, 0.0008,
+        0.0007, 0.0011, 0.0012, 0.0010, 0.0007, 0.0007, 0.0007, 0.0011, 0.0010,
+        0.0015, 0.0007, 0.0007, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007,
+        0.0007, 0.0016, 0.0006, 0.0007, 0.0009, 0.0009, 0.0009, 0.0007, 0.0008,
+        0.0011, 0.0009, 0.0007, 0.0009, 0.0007, 0.0011, 0.0010, 0.0007, 0.0006,
+        0.0011, 0.0006, 0.0007, 0.0006, 0.0007, 0.0010, 0.0008, 0.0008, 0.0009,
+        0.0007, 0.0012, 0.0007, 0.0007, 0.0012, 0.0012, 0.0064])
+Iteration :  2
+inside jsd contrastive confidenc
+logits tensor([[[-25.6136, -12.3867, -12.7179,  ..., -27.1075, -26.9192, -27.1967]]])
+mask tensor([False, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.9885])
+Iteration :  2
+inside jsd contrastive confidenc
+logits tensor([[[-24.9197, -11.9109, -12.3026,  ..., -26.5798, -26.3625, -26.6591]]])
+mask tensor([False, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.9872])
+Iteration :  2
+inside jsd contrastive confidenc
+logits tensor([[[-24.8580, -11.8104, -12.2459,  ..., -26.5223, -26.2999, -26.5965]]])
+mask tensor([False, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.9860])
+Iteration :  2
+inside jsd contrastive confidenc
+logits tensor([[[-24.8272, -11.7182, -12.2353,  ..., -26.4873, -26.2652, -26.5582]]])
+mask tensor([False, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.9848])
+Iteration :  2
+inside jsd contrastive confidenc
+logits tensor([[[-24.8065, -11.6284, -12.2330,  ..., -26.4441, -26.2214, -26.5124]]])
+mask tensor([False, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.9838])
+Iteration :  2
+inside jsd contrastive confidenc
+logits tensor([[[-24.8160, -11.5605, -12.2345,  ..., -26.4338, -26.2126, -26.5011]]])
+mask tensor([False, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.9831])
+Iteration :  2
+inside jsd contrastive confidenc
+logits tensor([[[-24.7982, -11.4937, -12.2232,  ..., -26.3920, -26.1714, -26.4586]]])
+mask tensor([False, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.9825])
+Iteration :  2
+inside jsd contrastive confidenc
+logits tensor([[[-24.8519, -11.4383, -12.2208,  ..., -26.3596, -26.1411, -26.4271]]])
+mask tensor([False, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.9824])
+Iteration :  2
+inside jsd contrastive confidenc
+logits tensor([[[-24.8212, -11.3657, -12.1996,  ..., -26.2980, -26.0800, -26.3654]]])
+mask tensor([False, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.9821])
+Iteration :  2
+inside jsd contrastive confidenc
+logits tensor([[[-24.8486, -11.2899, -12.1688,  ..., -26.2219, -26.0049, -26.2894]]])
+mask tensor([False, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.9818])
+Iteration :  2
+inside jsd contrastive confidenc
+logits tensor([[[-24.7433, -11.2045, -12.1315,  ..., -26.1121, -25.8952, -26.1798]]])
+mask tensor([False, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.9813])
+Iteration :  2
+inside jsd contrastive confidenc
+logits tensor([[[-25.0101, -11.2631, -12.1959,  ..., -26.2048, -25.9915, -26.2728]]])
+mask tensor([False, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.9822])
+Iteration :  2
+inside jsd contrastive confidenc
+logits tensor([[[-24.9931, -11.2316, -12.1812,  ..., -26.1578, -25.9445, -26.2261]]])
+mask tensor([False, False, False,  ..., False, False, False])
+probits_exp[mask] tensor([0.9822])
+Iteration :  2
+inside jsd contrastive confidenc
+logits

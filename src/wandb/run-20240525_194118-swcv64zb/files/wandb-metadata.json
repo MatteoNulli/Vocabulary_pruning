@@ -1,0 +1,76 @@
+{
+    "os": "macOS-14.5-arm64-arm-64bit",
+    "python": "3.10.12",
+    "heartbeatAt": "2024-05-25T17:41:20.394945",
+    "startedAt": "2024-05-25T17:41:18.941480",
+    "docker": null,
+    "cuda": null,
+    "args": [
+        "--model_name_or_path",
+        "jvelja/t5-squad",
+        "--do_eval",
+        "--dataset_name",
+        "squad",
+        "--context_column",
+        "context",
+        "--question_column",
+        "question",
+        "--answer_column",
+        "answers",
+        "--output_dir",
+        "./save/squad_t5-base/",
+        "--per_device_eval_batch_size",
+        "1",
+        "--deploy_scenario",
+        "True",
+        "--use_synchronize",
+        "False",
+        "--overwrite_output_dir",
+        "--predict_with_generate",
+        "--max_seq_length",
+        "512",
+        "--use_early_exit",
+        "True",
+        "--exit_conf_type",
+        "softmax",
+        "--exit_conf_threshold",
+        "0.9",
+        "--exit_min_layer",
+        "1",
+        "--include_inputs_for_metrics",
+        "True",
+        "--max_eval_samples",
+        "100",
+        "--use_auth_token",
+        "True",
+        "--count_flops",
+        "True"
+    ],
+    "state": "running",
+    "program": "-m run_question_answering",
+    "codePathLocal": null,
+    "git": {
+        "remote": "https://github.com/joanvelja/Confidently_Exiting.git",
+        "commit": "dcfd578531319c65c22be1f46f80f2365e265a6d"
+    },
+    "email": "matteo.nulli@gmail.com",
+    "root": "/Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting",
+    "host": "re-byods-146-50-208-41.wireless.uva.nl",
+    "username": "matteo",
+    "executable": "/Users/matteo/anaconda3/envs/dl2/bin/python",
+    "cpu_count": 10,
+    "cpu_count_logical": 10,
+    "disk": {
+        "/": {
+            "total": 460.4317207336426,
+            "used": 423.55101776123047
+        }
+    },
+    "gpuapple": {
+        "type": "arm",
+        "vendor": "Apple"
+    },
+    "memory": {
+        "total": 32.0
+    }
+}

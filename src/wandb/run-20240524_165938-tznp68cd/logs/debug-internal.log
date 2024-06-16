@@ -1,0 +1,487 @@
+2024-05-24 16:59:39,773 INFO    StreamThr :86150 [internal.py:wandb_internal():86] W&B internal server running at pid: 86150, started at: 2024-05-24 16:59:39.772625
+2024-05-24 16:59:39,774 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status
+2024-05-24 16:59:39,776 INFO    WriterThread:86150 [datastore.py:open_for_write():87] open: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/run-tznp68cd.wandb
+2024-05-24 16:59:39,777 DEBUG   SenderThread:86150 [sender.py:send():379] send: header
+2024-05-24 16:59:39,777 DEBUG   SenderThread:86150 [sender.py:send():379] send: run
+2024-05-24 16:59:40,176 INFO    SenderThread:86150 [dir_watcher.py:__init__():211] watching files in: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files
+2024-05-24 16:59:40,176 INFO    SenderThread:86150 [sender.py:_start_run_threads():1124] run started: tznp68cd with start time 1716562778.83384
+2024-05-24 16:59:40,196 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: check_version
+2024-05-24 16:59:40,196 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: check_version
+2024-05-24 16:59:40,260 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: run_start
+2024-05-24 16:59:40,261 DEBUG   HandlerThread:86150 [system_info.py:__init__():26] System info init
+2024-05-24 16:59:40,261 DEBUG   HandlerThread:86150 [system_info.py:__init__():41] System info init done
+2024-05-24 16:59:40,261 INFO    HandlerThread:86150 [system_monitor.py:start():194] Starting system monitor
+2024-05-24 16:59:40,262 INFO    SystemMonitor:86150 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2024-05-24 16:59:40,262 INFO    HandlerThread:86150 [system_monitor.py:probe():214] Collecting system info
+2024-05-24 16:59:40,262 INFO    SystemMonitor:86150 [interfaces.py:start():190] Started cpu monitoring
+2024-05-24 16:59:40,262 DEBUG   HandlerThread:86150 [system_info.py:probe():150] Probing system
+2024-05-24 16:59:40,262 INFO    SystemMonitor:86150 [interfaces.py:start():190] Started disk monitoring
+2024-05-24 16:59:40,264 INFO    SystemMonitor:86150 [interfaces.py:start():190] Started gpuapple monitoring
+2024-05-24 16:59:40,269 INFO    SystemMonitor:86150 [interfaces.py:start():190] Started memory monitoring
+2024-05-24 16:59:40,270 INFO    SystemMonitor:86150 [interfaces.py:start():190] Started network monitoring
+2024-05-24 16:59:40,271 DEBUG   HandlerThread:86150 [system_info.py:_probe_git():135] Probing git
+2024-05-24 16:59:40,298 DEBUG   HandlerThread:86150 [system_info.py:_probe_git():143] Probing git done
+2024-05-24 16:59:40,298 DEBUG   HandlerThread:86150 [system_info.py:probe():198] Probing system done
+2024-05-24 16:59:40,298 DEBUG   HandlerThread:86150 [system_monitor.py:probe():223] {'os': 'macOS-14.5-arm64-arm-64bit', 'python': '3.10.12', 'heartbeatAt': '2024-05-24T14:59:40.264104', 'startedAt': '2024-05-24T14:59:38.821307', 'docker': None, 'cuda': None, 'args': ('--model_name_or_path', 'google-t5/t5-large', '--do_eval', '--dataset_name', 'samsum', '--output_dir', './save/jvelja_t5-large/', '--per_device_eval_batch_size', '1', '--deploy_scenario', 'True', '--use_synchronize', 'False', '--overwrite_output_dir', '--predict_with_generate', '--source_prefix', 'summarize: ', '--use_early_exit', 'True', '--exit_conf_type', 'JSD_contrastive_confidence', '--exit_conf_threshold', '0.9', '--exit_min_layer', '20', '--max_eval_samples', '100', '--include_inputs_for_metrics', 'True', '--use_auth_token', 'True'), 'state': 'running', 'program': '-m run_summarization', 'codePathLocal': None, 'git': {'remote': 'https://github.com/joanvelja/Confidently_Exiting.git', 'commit': 'dcfd578531319c65c22be1f46f80f2365e265a6d'}, 'email': 'matteo.nulli@gmail.com', 'root': '/Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting', 'host': 'sp-byods-145-109-14-79.wireless.uva.nl', 'username': 'matteo', 'executable': '/Users/matteo/anaconda3/envs/dl2/bin/python', 'cpu_count': 10, 'cpu_count_logical': 10, 'disk': {'/': {'total': 460.4317207336426, 'used': 420.4560356140137}}, 'gpuapple': {'type': 'arm', 'vendor': 'Apple'}, 'memory': {'total': 32.0}}
+2024-05-24 16:59:40,299 INFO    HandlerThread:86150 [system_monitor.py:probe():224] Finished collecting system info
+2024-05-24 16:59:40,299 INFO    HandlerThread:86150 [system_monitor.py:probe():227] Publishing system info
+2024-05-24 16:59:40,299 DEBUG   HandlerThread:86150 [system_info.py:_save_conda():207] Saving list of conda packages installed into the current environment
+2024-05-24 16:59:41,181 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_created():271] file/dir created: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/conda-environment.yaml
+2024-05-24 16:59:42,014 DEBUG   HandlerThread:86150 [system_info.py:_save_conda():222] Saving conda packages done
+2024-05-24 16:59:42,014 INFO    HandlerThread:86150 [system_monitor.py:probe():229] Finished publishing system info
+2024-05-24 16:59:42,015 DEBUG   SenderThread:86150 [sender.py:send():379] send: files
+2024-05-24 16:59:42,015 INFO    SenderThread:86150 [sender.py:_save_file():1390] saving file wandb-metadata.json with policy now
+2024-05-24 16:59:42,070 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: python_packages
+2024-05-24 16:59:42,070 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: python_packages
+2024-05-24 16:59:42,070 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-24 16:59:42,071 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: stop_status
+2024-05-24 16:59:42,071 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 16:59:42,185 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/conda-environment.yaml
+2024-05-24 16:59:42,186 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_created():271] file/dir created: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/wandb-metadata.json
+2024-05-24 16:59:42,186 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_created():271] file/dir created: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/requirements.txt
+2024-05-24 16:59:42,260 DEBUG   SenderThread:86150 [sender.py:send():379] send: telemetry
+2024-05-24 16:59:42,586 INFO    wandb-upload_0:86150 [upload_job.py:push():131] Uploaded file /var/folders/vz/f1jf304n3fxfxhc14yfh_l_c0000gn/T/tmpbbw0covhwandb/a2h3lpl0-wandb-metadata.json
+2024-05-24 16:59:43,192 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_created():271] file/dir created: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 16:59:44,789 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 16:59:45,203 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 16:59:47,210 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 16:59:50,585 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 16:59:55,606 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 16:59:57,072 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-24 16:59:57,072 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 16:59:57,072 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: stop_status
+2024-05-24 17:00:01,278 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:00:01,412 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:00:07,229 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:00:07,310 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:00:11,332 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:00:12,076 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-24 17:00:12,076 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 17:00:12,077 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: stop_status
+2024-05-24 17:00:12,498 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:00:13,342 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/config.yaml
+2024-05-24 17:00:15,353 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:00:17,895 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:00:18,369 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:00:20,377 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:00:22,383 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:00:22,907 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:00:24,390 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:00:26,400 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:00:27,077 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 17:00:27,080 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-24 17:00:27,080 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: stop_status
+2024-05-24 17:00:28,226 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:00:28,410 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:00:33,252 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:00:36,450 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:00:38,461 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:00:38,961 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:00:40,271 DEBUG   SystemMonitor:86150 [system_monitor.py:_start():172] Starting system metrics aggregation loop
+2024-05-24 17:00:40,272 DEBUG   SenderThread:86150 [sender.py:send():379] send: telemetry
+2024-05-24 17:00:40,273 DEBUG   SenderThread:86150 [sender.py:send():379] send: stats
+2024-05-24 17:00:42,082 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 17:00:42,082 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-24 17:00:42,082 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: stop_status
+2024-05-24 17:00:42,479 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:00:44,297 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:00:44,489 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/config.yaml
+2024-05-24 17:00:48,510 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:00:50,172 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:00:54,541 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:00:56,139 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:00:57,087 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-24 17:00:57,088 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 17:00:57,088 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: stop_status
+2024-05-24 17:00:58,561 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:01:01,783 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:01:02,582 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:01:04,593 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:01:06,604 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:01:07,490 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:01:10,278 DEBUG   SenderThread:86150 [sender.py:send():379] send: stats
+2024-05-24 17:01:10,622 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:01:12,092 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-24 17:01:12,093 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 17:01:12,093 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: stop_status
+2024-05-24 17:01:12,633 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:01:13,289 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:01:16,646 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:01:18,653 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:01:19,249 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:01:24,274 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:01:27,097 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 17:01:27,097 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-24 17:01:27,098 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: stop_status
+2024-05-24 17:01:28,703 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:01:29,416 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:01:32,724 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:01:34,647 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:01:36,739 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:01:40,132 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:01:40,284 DEBUG   SenderThread:86150 [sender.py:send():379] send: stats
+2024-05-24 17:01:42,098 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-24 17:01:42,098 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 17:01:42,099 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: stop_status
+2024-05-24 17:01:42,767 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:01:45,320 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:01:48,793 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:01:51,027 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:01:54,816 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:01:56,498 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:01:57,104 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 17:01:57,104 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-24 17:01:57,104 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: stop_status
+2024-05-24 17:01:58,834 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:02:01,741 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:02:02,852 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:02:06,764 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:02:08,884 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:02:10,289 DEBUG   SenderThread:86150 [sender.py:send():379] send: stats
+2024-05-24 17:02:10,894 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:02:12,109 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-24 17:02:12,109 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 17:02:12,110 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:02:12,110 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: stop_status
+2024-05-24 17:02:14,907 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:02:16,918 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:02:17,833 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:02:18,928 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:02:23,729 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:02:24,958 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:02:26,969 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:02:27,113 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 17:02:27,114 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-24 17:02:27,114 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: stop_status
+2024-05-24 17:02:28,980 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:02:29,678 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:02:33,001 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:02:34,934 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:02:37,021 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:02:40,295 DEBUG   SenderThread:86150 [sender.py:send():379] send: stats
+2024-05-24 17:02:40,296 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:02:42,119 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-24 17:02:42,119 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 17:02:42,120 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: stop_status
+2024-05-24 17:02:43,051 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:02:45,809 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:02:47,070 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:02:51,091 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:02:51,246 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:02:57,049 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:02:57,118 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:02:57,124 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 17:02:57,124 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-24 17:02:57,124 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: stop_status
+2024-05-24 17:02:59,128 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:03:01,137 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:03:02,901 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:03:03,148 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:03:07,169 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:03:08,654 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:03:09,180 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:03:10,301 DEBUG   SenderThread:86150 [sender.py:send():379] send: stats
+2024-05-24 17:03:12,129 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-24 17:03:12,129 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 17:03:12,130 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: stop_status
+2024-05-24 17:03:14,308 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:03:17,217 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:03:19,225 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:03:20,279 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:03:25,302 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:03:27,129 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 17:03:27,133 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-24 17:03:27,133 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: stop_status
+2024-05-24 17:03:27,266 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:03:31,263 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:03:31,283 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:03:33,291 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:03:35,297 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:03:36,319 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:03:39,317 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:03:40,307 DEBUG   SenderThread:86150 [sender.py:send():379] send: stats
+2024-05-24 17:03:42,134 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 17:03:42,134 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-24 17:03:42,135 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: stop_status
+2024-05-24 17:03:42,333 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:03:45,349 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:03:47,563 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:03:49,369 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:03:53,218 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:03:53,385 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:03:57,139 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 17:03:57,140 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-24 17:03:57,140 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: stop_status
+2024-05-24 17:03:57,406 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:03:58,469 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:04:01,427 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:04:03,437 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:04:04,030 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:04:09,053 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:04:10,313 DEBUG   SenderThread:86150 [sender.py:send():379] send: stats
+2024-05-24 17:04:11,475 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:04:12,144 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 17:04:12,144 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-24 17:04:12,145 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: stop_status
+2024-05-24 17:04:14,397 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:04:17,503 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:04:19,422 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:04:21,524 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:04:23,535 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:04:25,376 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:04:25,545 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:04:27,149 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 17:04:27,150 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-24 17:04:27,150 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: stop_status
+2024-05-24 17:04:29,567 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:04:31,304 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:04:33,586 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:04:36,960 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:04:37,602 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:04:39,613 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:04:40,318 DEBUG   SenderThread:86150 [sender.py:send():379] send: stats
+2024-05-24 17:04:42,154 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 17:04:42,155 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-24 17:04:42,156 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: stop_status
+2024-05-24 17:04:42,156 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:04:43,631 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:04:47,713 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:04:53,065 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:04:53,679 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:04:55,687 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:04:57,159 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-24 17:04:57,160 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 17:04:57,160 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: stop_status
+2024-05-24 17:04:58,314 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:05:03,725 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:05:04,127 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:05:07,746 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:05:10,013 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:05:10,324 DEBUG   SenderThread:86150 [sender.py:send():379] send: stats
+2024-05-24 17:05:12,165 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-24 17:05:12,165 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 17:05:12,166 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: stop_status
+2024-05-24 17:05:15,233 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:05:15,788 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:05:21,163 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:05:21,821 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:05:23,830 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:05:26,982 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:05:27,164 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 17:05:27,168 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-24 17:05:27,169 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: stop_status
+2024-05-24 17:05:27,851 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:05:31,871 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:05:32,444 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:05:33,879 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:05:37,540 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:05:37,899 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:05:39,910 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:05:40,330 DEBUG   SenderThread:86150 [sender.py:send():379] send: stats
+2024-05-24 17:05:41,920 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:05:42,170 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-24 17:05:42,170 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 17:05:42,171 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: stop_status
+2024-05-24 17:05:43,385 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:05:48,409 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:05:51,971 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:05:53,907 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:05:53,981 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:05:55,990 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:05:57,174 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 17:05:57,174 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-24 17:05:57,175 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: stop_status
+2024-05-24 17:05:59,428 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:06:02,020 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:06:05,187 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:06:06,041 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:06:10,213 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:06:10,335 DEBUG   SenderThread:86150 [sender.py:send():379] send: stats
+2024-05-24 17:06:12,179 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 17:06:12,179 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-24 17:06:12,180 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: stop_status
+2024-05-24 17:06:15,818 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:06:16,090 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:06:20,843 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:06:26,046 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:06:26,142 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:06:27,184 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 17:06:27,184 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-24 17:06:27,185 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: stop_status
+2024-05-24 17:06:31,351 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:06:34,184 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:06:36,195 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:06:36,592 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:06:40,341 DEBUG   SenderThread:86150 [sender.py:send():379] send: stats
+2024-05-24 17:06:42,185 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:06:42,188 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 17:06:42,188 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-24 17:06:42,188 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: stop_status
+2024-05-24 17:06:42,221 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:06:45,364 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: partial_history
+2024-05-24 17:06:45,365 DEBUG   SenderThread:86150 [sender.py:send():379] send: config
+2024-05-24 17:06:45,369 DEBUG   SenderThread:86150 [sender.py:send():379] send: metric
+2024-05-24 17:06:45,370 DEBUG   SenderThread:86150 [sender.py:send():379] send: telemetry
+2024-05-24 17:06:45,370 DEBUG   SenderThread:86150 [sender.py:send():379] send: metric
+2024-05-24 17:06:45,370 WARNING SenderThread:86150 [sender.py:send_metric():1341] Seen metric with glob (shouldn't happen)
+2024-05-24 17:06:45,370 DEBUG   SenderThread:86150 [sender.py:send():379] send: metric
+2024-05-24 17:06:45,370 DEBUG   SenderThread:86150 [sender.py:send():379] send: metric
+2024-05-24 17:06:45,371 DEBUG   SenderThread:86150 [sender.py:send():379] send: metric
+2024-05-24 17:06:45,371 DEBUG   SenderThread:86150 [sender.py:send():379] send: metric
+2024-05-24 17:06:45,371 DEBUG   SenderThread:86150 [sender.py:send():379] send: metric
+2024-05-24 17:06:45,371 DEBUG   SenderThread:86150 [sender.py:send():379] send: metric
+2024-05-24 17:06:45,371 DEBUG   SenderThread:86150 [sender.py:send():379] send: metric
+2024-05-24 17:06:45,371 DEBUG   SenderThread:86150 [sender.py:send():379] send: metric
+2024-05-24 17:06:45,371 DEBUG   SenderThread:86150 [sender.py:send():379] send: metric
+2024-05-24 17:06:45,371 DEBUG   SenderThread:86150 [sender.py:send():379] send: metric
+2024-05-24 17:06:45,371 DEBUG   SenderThread:86150 [sender.py:send():379] send: metric
+2024-05-24 17:06:45,371 DEBUG   SenderThread:86150 [sender.py:send():379] send: metric
+2024-05-24 17:06:45,371 DEBUG   SenderThread:86150 [sender.py:send():379] send: metric
+2024-05-24 17:06:45,371 DEBUG   SenderThread:86150 [sender.py:send():379] send: metric
+2024-05-24 17:06:45,371 DEBUG   SenderThread:86150 [sender.py:send():379] send: metric
+2024-05-24 17:06:45,371 DEBUG   SenderThread:86150 [sender.py:send():379] send: metric
+2024-05-24 17:06:45,371 DEBUG   SenderThread:86150 [sender.py:send():379] send: metric
+2024-05-24 17:06:45,371 DEBUG   SenderThread:86150 [sender.py:send():379] send: metric
+2024-05-24 17:06:45,371 DEBUG   SenderThread:86150 [sender.py:send():379] send: metric
+2024-05-24 17:06:45,371 DEBUG   SenderThread:86150 [sender.py:send():379] send: metric
+2024-05-24 17:06:45,371 DEBUG   SenderThread:86150 [sender.py:send():379] send: metric
+2024-05-24 17:06:45,371 DEBUG   SenderThread:86150 [sender.py:send():379] send: metric
+2024-05-24 17:06:45,371 DEBUG   SenderThread:86150 [sender.py:send():379] send: metric
+2024-05-24 17:06:45,371 DEBUG   SenderThread:86150 [sender.py:send():379] send: history
+2024-05-24 17:06:45,371 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: summary_record
+2024-05-24 17:06:45,371 INFO    SenderThread:86150 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-24 17:06:45,673 DEBUG   SenderThread:86150 [sender.py:send():379] send: telemetry
+2024-05-24 17:06:45,674 DEBUG   SenderThread:86150 [sender.py:send():379] send: exit
+2024-05-24 17:06:45,674 INFO    SenderThread:86150 [sender.py:send_exit():586] handling exit code: 0
+2024-05-24 17:06:45,674 INFO    SenderThread:86150 [sender.py:send_exit():588] handling runtime: 425
+2024-05-24 17:06:45,674 INFO    SenderThread:86150 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-24 17:06:45,674 INFO    SenderThread:86150 [sender.py:send_exit():594] send defer
+2024-05-24 17:06:45,674 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: defer
+2024-05-24 17:06:45,674 INFO    HandlerThread:86150 [handler.py:handle_request_defer():172] handle defer: 0
+2024-05-24 17:06:45,674 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: defer
+2024-05-24 17:06:45,674 INFO    SenderThread:86150 [sender.py:send_request_defer():610] handle sender defer: 0
+2024-05-24 17:06:45,674 INFO    SenderThread:86150 [sender.py:transition_state():614] send defer: 1
+2024-05-24 17:06:45,674 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: defer
+2024-05-24 17:06:45,674 INFO    HandlerThread:86150 [handler.py:handle_request_defer():172] handle defer: 1
+2024-05-24 17:06:45,674 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: defer
+2024-05-24 17:06:45,674 INFO    SenderThread:86150 [sender.py:send_request_defer():610] handle sender defer: 1
+2024-05-24 17:06:45,674 INFO    SenderThread:86150 [sender.py:transition_state():614] send defer: 2
+2024-05-24 17:06:45,674 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: defer
+2024-05-24 17:06:45,675 INFO    HandlerThread:86150 [handler.py:handle_request_defer():172] handle defer: 2
+2024-05-24 17:06:45,675 INFO    HandlerThread:86150 [system_monitor.py:finish():203] Stopping system monitor
+2024-05-24 17:06:45,675 DEBUG   SystemMonitor:86150 [system_monitor.py:_start():179] Finished system metrics aggregation loop
+2024-05-24 17:06:45,675 DEBUG   SystemMonitor:86150 [system_monitor.py:_start():183] Publishing last batch of metrics
+2024-05-24 17:06:45,675 INFO    HandlerThread:86150 [interfaces.py:finish():202] Joined cpu monitor
+2024-05-24 17:06:45,675 INFO    HandlerThread:86150 [interfaces.py:finish():202] Joined disk monitor
+2024-05-24 17:06:45,675 INFO    HandlerThread:86150 [interfaces.py:finish():202] Joined gpuapple monitor
+2024-05-24 17:06:45,675 INFO    HandlerThread:86150 [interfaces.py:finish():202] Joined memory monitor
+2024-05-24 17:06:45,675 INFO    HandlerThread:86150 [interfaces.py:finish():202] Joined network monitor
+2024-05-24 17:06:45,675 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: defer
+2024-05-24 17:06:45,675 INFO    SenderThread:86150 [sender.py:send_request_defer():610] handle sender defer: 2
+2024-05-24 17:06:45,675 INFO    SenderThread:86150 [sender.py:transition_state():614] send defer: 3
+2024-05-24 17:06:45,676 DEBUG   SenderThread:86150 [sender.py:send():379] send: stats
+2024-05-24 17:06:45,676 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: defer
+2024-05-24 17:06:45,676 INFO    HandlerThread:86150 [handler.py:handle_request_defer():172] handle defer: 3
+2024-05-24 17:06:45,676 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: defer
+2024-05-24 17:06:45,676 INFO    SenderThread:86150 [sender.py:send_request_defer():610] handle sender defer: 3
+2024-05-24 17:06:45,676 INFO    SenderThread:86150 [sender.py:transition_state():614] send defer: 4
+2024-05-24 17:06:45,676 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: defer
+2024-05-24 17:06:45,676 INFO    HandlerThread:86150 [handler.py:handle_request_defer():172] handle defer: 4
+2024-05-24 17:06:45,676 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: defer
+2024-05-24 17:06:45,676 INFO    SenderThread:86150 [sender.py:send_request_defer():610] handle sender defer: 4
+2024-05-24 17:06:45,676 INFO    SenderThread:86150 [sender.py:transition_state():614] send defer: 5
+2024-05-24 17:06:45,676 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: defer
+2024-05-24 17:06:45,676 INFO    HandlerThread:86150 [handler.py:handle_request_defer():172] handle defer: 5
+2024-05-24 17:06:45,676 DEBUG   SenderThread:86150 [sender.py:send():379] send: summary
+2024-05-24 17:06:45,676 INFO    SenderThread:86150 [sender.py:_save_file():1390] saving file wandb-summary.json with policy end
+2024-05-24 17:06:45,677 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: defer
+2024-05-24 17:06:45,677 INFO    SenderThread:86150 [sender.py:send_request_defer():610] handle sender defer: 5
+2024-05-24 17:06:45,677 INFO    SenderThread:86150 [sender.py:transition_state():614] send defer: 6
+2024-05-24 17:06:45,677 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: defer
+2024-05-24 17:06:45,677 INFO    HandlerThread:86150 [handler.py:handle_request_defer():172] handle defer: 6
+2024-05-24 17:06:45,677 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: defer
+2024-05-24 17:06:45,677 INFO    SenderThread:86150 [sender.py:send_request_defer():610] handle sender defer: 6
+2024-05-24 17:06:45,679 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: status_report
+2024-05-24 17:06:46,013 INFO    SenderThread:86150 [sender.py:transition_state():614] send defer: 7
+2024-05-24 17:06:46,013 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: defer
+2024-05-24 17:06:46,014 INFO    HandlerThread:86150 [handler.py:handle_request_defer():172] handle defer: 7
+2024-05-24 17:06:46,014 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: defer
+2024-05-24 17:06:46,014 INFO    SenderThread:86150 [sender.py:send_request_defer():610] handle sender defer: 7
+2024-05-24 17:06:46,240 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/config.yaml
+2024-05-24 17:06:46,241 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:06:46,241 INFO    Thread-48 :86150 [dir_watcher.py:_on_file_created():271] file/dir created: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/wandb-summary.json
+2024-05-24 17:06:46,678 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: poll_exit
+2024-05-24 17:06:47,712 INFO    SenderThread:86150 [sender.py:transition_state():614] send defer: 8
+2024-05-24 17:06:47,712 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: poll_exit
+2024-05-24 17:06:47,712 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: defer
+2024-05-24 17:06:47,713 INFO    HandlerThread:86150 [handler.py:handle_request_defer():172] handle defer: 8
+2024-05-24 17:06:47,713 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: defer
+2024-05-24 17:06:47,713 INFO    SenderThread:86150 [sender.py:send_request_defer():610] handle sender defer: 8
+2024-05-24 17:06:47,713 INFO    SenderThread:86150 [job_builder.py:build():318] Attempting to build job artifact
+2024-05-24 17:06:47,715 INFO    SenderThread:86150 [job_builder.py:_get_source_type():455] is repo sourced job
+2024-05-24 17:06:47,715 WARNING SenderThread:86150 [job_builder.py:_log_if_verbose():210] No program path found, not creating job artifact. See https://docs.wandb.ai/guides/launch/create-job
+2024-05-24 17:06:47,715 INFO    SenderThread:86150 [sender.py:transition_state():614] send defer: 9
+2024-05-24 17:06:47,715 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: defer
+2024-05-24 17:06:47,715 INFO    HandlerThread:86150 [handler.py:handle_request_defer():172] handle defer: 9
+2024-05-24 17:06:47,715 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: defer
+2024-05-24 17:06:47,715 INFO    SenderThread:86150 [sender.py:send_request_defer():610] handle sender defer: 9
+2024-05-24 17:06:47,715 INFO    SenderThread:86150 [dir_watcher.py:finish():358] shutting down directory watcher
+2024-05-24 17:06:48,252 INFO    SenderThread:86150 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:06:48,253 INFO    SenderThread:86150 [dir_watcher.py:finish():388] scan: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files
+2024-05-24 17:06:48,254 INFO    SenderThread:86150 [dir_watcher.py:finish():402] scan save: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/requirements.txt requirements.txt
+2024-05-24 17:06:48,254 INFO    SenderThread:86150 [dir_watcher.py:finish():402] scan save: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log output.log
+2024-05-24 17:06:48,257 INFO    SenderThread:86150 [dir_watcher.py:finish():402] scan save: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/config.yaml config.yaml
+2024-05-24 17:06:48,260 INFO    SenderThread:86150 [dir_watcher.py:finish():402] scan save: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/wandb-summary.json wandb-summary.json
+2024-05-24 17:06:48,263 INFO    SenderThread:86150 [dir_watcher.py:finish():402] scan save: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/conda-environment.yaml conda-environment.yaml
+2024-05-24 17:06:48,264 INFO    SenderThread:86150 [dir_watcher.py:finish():402] scan save: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/wandb-metadata.json wandb-metadata.json
+2024-05-24 17:06:48,264 INFO    SenderThread:86150 [sender.py:transition_state():614] send defer: 10
+2024-05-24 17:06:48,265 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: defer
+2024-05-24 17:06:48,266 INFO    HandlerThread:86150 [handler.py:handle_request_defer():172] handle defer: 10
+2024-05-24 17:06:48,267 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: defer
+2024-05-24 17:06:48,267 INFO    SenderThread:86150 [sender.py:send_request_defer():610] handle sender defer: 10
+2024-05-24 17:06:48,267 INFO    SenderThread:86150 [file_pusher.py:finish():172] shutting down file pusher
+2024-05-24 17:06:48,688 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: poll_exit
+2024-05-24 17:06:48,689 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: poll_exit
+2024-05-24 17:06:48,740 INFO    wandb-upload_0:86150 [upload_job.py:push():131] Uploaded file /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/requirements.txt
+2024-05-24 17:06:48,748 INFO    wandb-upload_1:86150 [upload_job.py:push():131] Uploaded file /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/output.log
+2024-05-24 17:06:48,755 INFO    wandb-upload_4:86150 [upload_job.py:push():131] Uploaded file /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/conda-environment.yaml
+2024-05-24 17:06:48,759 INFO    wandb-upload_3:86150 [upload_job.py:push():131] Uploaded file /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/wandb-summary.json
+2024-05-24 17:06:48,800 INFO    wandb-upload_2:86150 [upload_job.py:push():131] Uploaded file /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/files/config.yaml
+2024-05-24 17:06:49,002 INFO    Thread-47 (_thread_body):86150 [sender.py:transition_state():614] send defer: 11
+2024-05-24 17:06:49,003 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: defer
+2024-05-24 17:06:49,003 INFO    HandlerThread:86150 [handler.py:handle_request_defer():172] handle defer: 11
+2024-05-24 17:06:49,004 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: defer
+2024-05-24 17:06:49,004 INFO    SenderThread:86150 [sender.py:send_request_defer():610] handle sender defer: 11
+2024-05-24 17:06:49,004 INFO    SenderThread:86150 [file_pusher.py:join():178] waiting for file pusher
+2024-05-24 17:06:49,005 INFO    SenderThread:86150 [sender.py:transition_state():614] send defer: 12
+2024-05-24 17:06:49,006 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: defer
+2024-05-24 17:06:49,006 INFO    HandlerThread:86150 [handler.py:handle_request_defer():172] handle defer: 12
+2024-05-24 17:06:49,006 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: defer
+2024-05-24 17:06:49,006 INFO    SenderThread:86150 [sender.py:send_request_defer():610] handle sender defer: 12
+2024-05-24 17:06:49,006 INFO    SenderThread:86150 [file_stream.py:finish():614] file stream finish called
+2024-05-24 17:06:49,445 INFO    SenderThread:86150 [file_stream.py:finish():618] file stream finish is done
+2024-05-24 17:06:49,446 INFO    SenderThread:86150 [sender.py:transition_state():614] send defer: 13
+2024-05-24 17:06:49,447 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: defer
+2024-05-24 17:06:49,447 INFO    HandlerThread:86150 [handler.py:handle_request_defer():172] handle defer: 13
+2024-05-24 17:06:49,448 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: defer
+2024-05-24 17:06:49,448 INFO    SenderThread:86150 [sender.py:send_request_defer():610] handle sender defer: 13
+2024-05-24 17:06:49,448 INFO    SenderThread:86150 [sender.py:transition_state():614] send defer: 14
+2024-05-24 17:06:49,448 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: defer
+2024-05-24 17:06:49,448 INFO    HandlerThread:86150 [handler.py:handle_request_defer():172] handle defer: 14
+2024-05-24 17:06:49,449 DEBUG   SenderThread:86150 [sender.py:send():379] send: final
+2024-05-24 17:06:49,449 DEBUG   SenderThread:86150 [sender.py:send():379] send: footer
+2024-05-24 17:06:49,449 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: defer
+2024-05-24 17:06:49,449 INFO    SenderThread:86150 [sender.py:send_request_defer():610] handle sender defer: 14
+2024-05-24 17:06:49,452 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: poll_exit
+2024-05-24 17:06:49,452 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: poll_exit
+2024-05-24 17:06:49,454 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-24 17:06:49,456 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: server_info
+2024-05-24 17:06:49,457 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: get_summary
+2024-05-24 17:06:49,458 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: sampled_history
+2024-05-24 17:06:49,458 DEBUG   SenderThread:86150 [sender.py:send_request():406] send_request: server_info
+2024-05-24 17:06:49,687 DEBUG   HandlerThread:86150 [handler.py:handle_request():146] handle_request: shutdown
+2024-05-24 17:06:49,687 INFO    HandlerThread:86150 [handler.py:finish():866] shutting down handler
+2024-05-24 17:06:50,460 INFO    WriterThread:86150 [datastore.py:close():296] close: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240524_165938-tznp68cd/run-tznp68cd.wandb
+2024-05-24 17:06:50,689 INFO    SenderThread:86150 [sender.py:finish():1546] shutting down sender
+2024-05-24 17:06:50,690 INFO    SenderThread:86150 [file_pusher.py:finish():172] shutting down file pusher
+2024-05-24 17:06:50,690 INFO    SenderThread:86150 [file_pusher.py:join():178] waiting for file pusher

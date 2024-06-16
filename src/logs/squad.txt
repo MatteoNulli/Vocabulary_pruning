@@ -1,0 +1,1133 @@
+05/14/2024 15:38:56 - WARNING - __main__ - Process rank: -1, device: mps, n_gpu: 0distributed training: False, 16-bits training: False
+05/14/2024 15:38:56 - INFO - __main__ - Training/evaluation parameters Seq2SeqTrainingArguments(
+_n_gpu=0,
+adafactor=False,
+adam_beta1=0.9,
+adam_beta2=0.999,
+adam_epsilon=1e-08,
+auto_find_batch_size=False,
+bf16=False,
+bf16_full_eval=False,
+data_seed=None,
+dataloader_drop_last=False,
+dataloader_num_workers=0,
+dataloader_pin_memory=True,
+ddp_bucket_cap_mb=None,
+ddp_find_unused_parameters=None,
+ddp_timeout=1800,
+debug=[],
+deepspeed=None,
+disable_tqdm=False,
+do_eval=True,
+do_predict=False,
+do_train=False,
+eval_accumulation_steps=None,
+eval_delay=0,
+eval_steps=None,
+evaluation_strategy=no,
+fp16=False,
+fp16_backend=auto,
+fp16_full_eval=False,
+fp16_opt_level=O1,
+fsdp=[],
+fsdp_config={'fsdp_min_num_params': 0, 'xla': False, 'xla_fsdp_grad_ckpt': False},
+fsdp_min_num_params=0,
+fsdp_transformer_layer_cls_to_wrap=None,
+full_determinism=False,
+generation_config=None,
+generation_max_length=None,
+generation_num_beams=None,
+gradient_accumulation_steps=1,
+gradient_checkpointing=False,
+greater_is_better=None,
+group_by_length=False,
+half_precision_backend=auto,
+hub_model_id=None,
+hub_private_repo=False,
+hub_strategy=every_save,
+hub_token=<HUB_TOKEN>,
+ignore_data_skip=False,
+include_inputs_for_metrics=True,
+jit_mode_eval=False,
+label_names=None,
+label_smoothing_factor=0.0,
+learning_rate=5e-05,
+length_column_name=length,
+load_best_model_at_end=False,
+local_rank=-1,
+log_level=passive,
+log_level_replica=warning,
+log_on_each_node=True,
+logging_dir=./save/squad_t5-large/runs/May14_15-38-54_re-byods-146-50-207-24.wireless.uva.nl,
+logging_first_step=False,
+logging_nan_inf_filter=True,
+logging_steps=500,
+logging_strategy=steps,
+lr_scheduler_type=linear,
+max_grad_norm=1.0,
+max_steps=-1,
+metric_for_best_model=None,
+mp_parameters=,
+no_cuda=False,
+num_train_epochs=3.0,
+optim=adamw_hf,
+optim_args=None,
+output_dir=./save/squad_t5-large/,
+overwrite_output_dir=True,
+past_index=-1,
+per_device_eval_batch_size=1,
+per_device_train_batch_size=8,
+predict_with_generate=True,
+prediction_loss_only=False,
+push_to_hub=False,
+push_to_hub_model_id=None,
+push_to_hub_organization=None,
+push_to_hub_token=<PUSH_TO_HUB_TOKEN>,
+ray_scope=last,
+remove_unused_columns=True,
+report_to=['wandb'],
+resume_from_checkpoint=None,
+run_name=./save/squad_t5-large/,
+save_on_each_node=False,
+save_safetensors=False,
+save_steps=500,
+save_strategy=steps,
+save_total_limit=None,
+seed=42,
+sharded_ddp=[],
+skip_memory_metrics=True,
+sortish_sampler=False,
+tf32=None,
+torch_compile=False,
+torch_compile_backend=None,
+torch_compile_mode=None,
+torchdynamo=None,
+tpu_metrics_debug=False,
+tpu_num_cores=None,
+use_ipex=False,
+use_legacy_prediction_loop=False,
+use_mps_device=False,
+warmup_ratio=0.0,
+warmup_steps=0,
+weight_decay=0.0,
+xpu_backend=None,
+)
+05/14/2024 15:39:08 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
+05/14/2024 15:39:08 - INFO - datasets.info - Loading Dataset info from /Users/joanvelja/.cache/huggingface/datasets/squad/plain_text/0.0.0/7b6d24c440a36b6815f21b70d25016731768db1f
+05/14/2024 15:39:08 - INFO - datasets.builder - Found cached dataset squad (/Users/joanvelja/.cache/huggingface/datasets/squad/plain_text/0.0.0/7b6d24c440a36b6815f21b70d25016731768db1f)
+05/14/2024 15:39:08 - INFO - datasets.info - Loading Dataset info from /Users/joanvelja/.cache/huggingface/datasets/squad/plain_text/0.0.0/7b6d24c440a36b6815f21b70d25016731768db1f
+05/14/2024 15:39:24 - INFO - datasets.arrow_dataset - Loading cached processed dataset at /Users/joanvelja/.cache/huggingface/datasets/squad/plain_text/0.0.0/7b6d24c440a36b6815f21b70d25016731768db1f/cache-a32c99ac66024432.arrow
+05/14/2024 15:39:27 - INFO - __main__ - *** Evaluate ***
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Denver  Token_id:  12154
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Bro  Token_id:  4027
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  n  Token_id:  29
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  co  Token_id:  509
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  s  Token_id:  7
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Which NFL team represented the AFC at Super Bowl 50? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Carolina  Token_id:  5089
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Panther  Token_id:  21149
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  s  Token_id:  7
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Which NFL team represented the NFC at Super Bowl 50? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Levi  Token_id:  16755
+JSDS:  {2: tensor(0.0026, dtype=torch.float64), 3: tensor(0., dtype=torch.float64)}
+Word:  '  Token_id:  31
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  s  Token_id:  7
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Stadium  Token_id:  12750
+JSDS:  {2: tensor(0.2012, dtype=torch.float64), 3: tensor(0.0255, dtype=torch.float64), 4: tensor(0.0035, dtype=torch.float64), 5: tensor(0., dtype=torch.float64)}
+Word:  in  Token_id:  16
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  the  Token_id:  8
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  San  Token_id:  1051
+JSDS:  {2: tensor(0.1247, dtype=torch.float64), 3: tensor(0., dtype=torch.float64)}
+Word:  Francisco  Token_id:  5901
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Bay  Token_id:  2474
+JSDS:  {2: tensor(0.0224, dtype=torch.float64), 3: tensor(0., dtype=torch.float64)}
+Word:  Area  Token_id:  5690
+JSDS:  {2: tensor(0.1781, dtype=torch.float64), 3: tensor(0., dtype=torch.float64)}
+Word:  at  Token_id:  44
+JSDS:  {2: tensor(0.3065, dtype=torch.float64), 3: tensor(0., dtype=torch.float64)}
+Word:  Santa  Token_id:  4625
+JSDS:  {2: tensor(0.2755, dtype=torch.float64), 3: tensor(0., dtype=torch.float64)}
+Word:  Clar  Token_id:  9908
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  a  Token_id:  9
+JSDS:  {2: tensor(0.0082, dtype=torch.float64), 3: tensor(0., dtype=torch.float64)}
+Word:  ,  Token_id:  6
+JSDS:  {2: tensor(0.2555, dtype=torch.float64), 3: tensor(0., dtype=torch.float64)}
+Word:  California  Token_id:  1826
+JSDS:  {2: tensor(0.0028, dtype=torch.float64), 3: tensor(0.0062, dtype=torch.float64), 4: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Where did Super Bowl 50 take place? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Denver  Token_id:  12154
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Bro  Token_id:  4027
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  n  Token_id:  29
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  co  Token_id:  509
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  s  Token_id:  7
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Which NFL team won Super Bowl 50? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  gold  Token_id:  2045
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What color was used to emphasize the 50th anniversary of the Super Bowl? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0.0039, dtype=torch.float64), 3: tensor(0., dtype=torch.float64)}
+Word:  gold  Token_id:  2045
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What was the theme of Super Bowl 50? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  February  Token_id:  2083
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  7,  Token_id:  7973
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  2016  Token_id:  1421
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What day was the game played on? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  American  Token_id:  797
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Football  Token_id:  10929
+JSDS:  {2: tensor(0.0123, dtype=torch.float64), 3: tensor(0., dtype=torch.float64)}
+Word:  Conference  Token_id:  4379
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What is the AFC short for? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0.0039, dtype=torch.float64), 3: tensor(0., dtype=torch.float64)}
+Word:  gold  Token_id:  2045
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What was the theme of Super Bowl 50? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  American  Token_id:  797
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Football  Token_id:  10929
+JSDS:  {2: tensor(0.0027, dtype=torch.float64), 3: tensor(0., dtype=torch.float64)}
+Word:  Conference  Token_id:  4379
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What does AFC stand for? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  February  Token_id:  2083
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  7,  Token_id:  7973
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  2016  Token_id:  1421
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What day was the Super Bowl played on? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0.0586, dtype=torch.float64), 3: tensor(0., dtype=torch.float64)}
+Word:  champion  Token_id:  6336
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  of  Token_id:  13
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  the  Token_id:  8
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  National  Token_id:  868
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Football  Token_id:  10929
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  League  Token_id:  3815
+question: Who won Super Bowl 50? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Levi  Token_id:  16755
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  '  Token_id:  31
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  s  Token_id:  7
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Stadium  Token_id:  12750
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What venue did Super Bowl 50 take place in? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Santa  Token_id:  4625
+JSDS:  {2: tensor(0.0364, dtype=torch.float64), 3: tensor(0., dtype=torch.float64)}
+Word:  Clar  Token_id:  9908
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  a  Token_id:  9
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  ,  Token_id:  6
+JSDS:  {2: tensor(0.0799, dtype=torch.float64), 3: tensor(0., dtype=torch.float64)}
+Word:  California  Token_id:  1826
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What city did Super Bowl 50 take place in? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Super  Token_id:  2011
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Bowl  Token_id:  9713
+JSDS:  {2: tensor(0.0562, dtype=torch.float64), 3: tensor(0., dtype=torch.float64)}
+Word:  L  Token_id:  301
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: If Roman numerals were used, what would Super Bowl 50 have been called? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  2015  Token_id:  1230
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Super Bowl 50 decided the NFL champion for what season? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  2016  Token_id:  1421
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What year did the Denver Broncos secure a Super Bowl title for the third time? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Santa  Token_id:  4625
+JSDS:  {2: tensor(0.0364, dtype=torch.float64), 3: tensor(0., dtype=torch.float64)}
+Word:  Clar  Token_id:  9908
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  a  Token_id:  9
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  ,  Token_id:  6
+JSDS:  {2: tensor(0.0799, dtype=torch.float64), 3: tensor(0., dtype=torch.float64)}
+Word:  California  Token_id:  1826
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What city did Super Bowl 50 take place in? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Levi  Token_id:  16755
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  '  Token_id:  31
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  s  Token_id:  7
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Stadium  Token_id:  12750
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What stadium did Super Bowl 50 take place in? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  24  Token_id:  997
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  –  Token_id:  104
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  10  Token_id:  1714
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What was the final score of Super Bowl 50? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  February  Token_id:  2083
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  7,  Token_id:  7973
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  2016  Token_id:  1421
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What month, day and year did Super Bowl 50 take place? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  2015  Token_id:  1230
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What year was Super Bowl 50? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Denver  Token_id:  12154
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Bro  Token_id:  4027
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  n  Token_id:  29
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  co  Token_id:  509
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  s  Token_id:  7
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What team was the AFC champion? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Carolina  Token_id:  5089
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Panther  Token_id:  21149
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  s  Token_id:  7
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What team was the NFC champion? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0.0586, dtype=torch.float64), 3: tensor(0., dtype=torch.float64)}
+Word:  champion  Token_id:  6336
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  of  Token_id:  13
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  the  Token_id:  8
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  National  Token_id:  868
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Football  Token_id:  10929
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  League  Token_id:  3815
+question: Who won Super Bowl 50? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  2015  Token_id:  1230
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Super Bowl 50 determined the NFL champion for what season? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Denver  Token_id:  12154
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Bro  Token_id:  4027
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  n  Token_id:  29
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  co  Token_id:  509
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  s  Token_id:  7
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Which team won Super Bowl 50. context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Levi  Token_id:  16755
+JSDS:  {2: tensor(0.0011, dtype=torch.float64), 3: tensor(0., dtype=torch.float64)}
+Word:  '  Token_id:  31
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  s  Token_id:  7
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Stadium  Token_id:  12750
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Where was Super Bowl 50 held? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Super  Token_id:  2011
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Bowl  Token_id:  9713
+JSDS:  {2: tensor(0.0399, dtype=torch.float64), 3: tensor(0., dtype=torch.float64)}
+Word:  50  Token_id:  943
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: The name of the NFL championship game is? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Denver  Token_id:  12154
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Bro  Token_id:  4027
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  n  Token_id:  29
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  co  Token_id:  509
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  s  Token_id:  7
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What 2015 NFL team one the AFC playoff? context: Super Bowl 50 was an American football game to determine the champion of the National Football League (NFL) for the 2015 season. The American Football Conference (AFC) champion Denver Broncos defeated the National Football Conference (NFC) champion Carolina Panthers 24–10 to earn their third Super Bowl title. The game was played on February 7, 2016, at Levi's Stadium in the San Francisco Bay Area at Santa Clara, California. As this was the 50th Super Bowl, the league emphasized the "golden anniversary" with various gold-themed initiatives, as well as temporarily suspending the tradition of naming each Super Bowl game with Roman numerals (under which the game would have been known as "Super Bowl L"), so that the logo could prominently feature the Arabic numerals 50.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Cam  Token_id:  5184
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Newton  Token_id:  20126
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Which Carolina Panthers player was named Most Valuable Player? context: The Panthers finished the regular season with a 15–1 record, and quarterback Cam Newton was named the NFL Most Valuable Player (MVP). They defeated the Arizona Cardinals 49–15 in the NFC Championship Game and advanced to their second Super Bowl appearance since the franchise was founded in 1995. The Broncos finished the regular season with a 12–4 record, and denied the New England Patriots a chance to defend their title from Super Bowl XLIX by defeating them 20–18 in the AFC Championship Game. They joined the Patriots, Dallas Cowboys, and Pittsburgh Steelers as one of four teams that have made eight appearances in the Super Bowl.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  eight  Token_id:  2641
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: How many appearances have the Denver Broncos made in the Super Bowl? context: The Panthers finished the regular season with a 15–1 record, and quarterback Cam Newton was named the NFL Most Valuable Player (MVP). They defeated the Arizona Cardinals 49–15 in the NFC Championship Game and advanced to their second Super Bowl appearance since the franchise was founded in 1995. The Broncos finished the regular season with a 12–4 record, and denied the New England Patriots a chance to defend their title from Super Bowl XLIX by defeating them 20–18 in the AFC Championship Game. They joined the Patriots, Dallas Cowboys, and Pittsburgh Steelers as one of four teams that have made eight appearances in the Super Bowl.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  1995  Token_id:  7273
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What year was the Carolina Panthers franchise founded? context: The Panthers finished the regular season with a 15–1 record, and quarterback Cam Newton was named the NFL Most Valuable Player (MVP). They defeated the Arizona Cardinals 49–15 in the NFC Championship Game and advanced to their second Super Bowl appearance since the franchise was founded in 1995. The Broncos finished the regular season with a 12–4 record, and denied the New England Patriots a chance to defend their title from Super Bowl XLIX by defeating them 20–18 in the AFC Championship Game. They joined the Patriots, Dallas Cowboys, and Pittsburgh Steelers as one of four teams that have made eight appearances in the Super Bowl.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Arizona  Token_id:  7601
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Cardinal  Token_id:  21967
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  s  Token_id:  7
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What team did the Panthers defeat? context: The Panthers finished the regular season with a 15–1 record, and quarterback Cam Newton was named the NFL Most Valuable Player (MVP). They defeated the Arizona Cardinals 49–15 in the NFC Championship Game and advanced to their second Super Bowl appearance since the franchise was founded in 1995. The Broncos finished the regular season with a 12–4 record, and denied the New England Patriots a chance to defend their title from Super Bowl XLIX by defeating them 20–18 in the AFC Championship Game. They joined the Patriots, Dallas Cowboys, and Pittsburgh Steelers as one of four teams that have made eight appearances in the Super Bowl.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  New  Token_id:  368
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  England  Token_id:  2789
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Patriot  Token_id:  20109
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  s  Token_id:  7
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Who did the Broncos prevent from going to the Super Bowl? context: The Panthers finished the regular season with a 15–1 record, and quarterback Cam Newton was named the NFL Most Valuable Player (MVP). They defeated the Arizona Cardinals 49–15 in the NFC Championship Game and advanced to their second Super Bowl appearance since the franchise was founded in 1995. The Broncos finished the regular season with a 12–4 record, and denied the New England Patriots a chance to defend their title from Super Bowl XLIX by defeating them 20–18 in the AFC Championship Game. They joined the Patriots, Dallas Cowboys, and Pittsburgh Steelers as one of four teams that have made eight appearances in the Super Bowl.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Arizona  Token_id:  7601
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Cardinal  Token_id:  21967
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  s  Token_id:  7
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Who did the Panthers beat in the NFC Championship Game? context: The Panthers finished the regular season with a 15–1 record, and quarterback Cam Newton was named the NFL Most Valuable Player (MVP). They defeated the Arizona Cardinals 49–15 in the NFC Championship Game and advanced to their second Super Bowl appearance since the franchise was founded in 1995. The Broncos finished the regular season with a 12–4 record, and denied the New England Patriots a chance to defend their title from Super Bowl XLIX by defeating them 20–18 in the AFC Championship Game. They joined the Patriots, Dallas Cowboys, and Pittsburgh Steelers as one of four teams that have made eight appearances in the Super Bowl.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  New  Token_id:  368
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  England  Token_id:  2789
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Patriot  Token_id:  20109
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  s  Token_id:  7
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Who lost to the Broncos in the AFC Championship? context: The Panthers finished the regular season with a 15–1 record, and quarterback Cam Newton was named the NFL Most Valuable Player (MVP). They defeated the Arizona Cardinals 49–15 in the NFC Championship Game and advanced to their second Super Bowl appearance since the franchise was founded in 1995. The Broncos finished the regular season with a 12–4 record, and denied the New England Patriots a chance to defend their title from Super Bowl XLIX by defeating them 20–18 in the AFC Championship Game. They joined the Patriots, Dallas Cowboys, and Pittsburgh Steelers as one of four teams that have made eight appearances in the Super Bowl.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  New  Token_id:  368
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  England  Token_id:  2789
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Patriot  Token_id:  20109
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  s  Token_id:  7
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Who were the defending Super Bowl champions? context: The Panthers finished the regular season with a 15–1 record, and quarterback Cam Newton was named the NFL Most Valuable Player (MVP). They defeated the Arizona Cardinals 49–15 in the NFC Championship Game and advanced to their second Super Bowl appearance since the franchise was founded in 1995. The Broncos finished the regular season with a 12–4 record, and denied the New England Patriots a chance to defend their title from Super Bowl XLIX by defeating them 20–18 in the AFC Championship Game. They joined the Patriots, Dallas Cowboys, and Pittsburgh Steelers as one of four teams that have made eight appearances in the Super Bowl.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  four  Token_id:  662
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: How many teams have been in the Super Bowl eight times? context: The Panthers finished the regular season with a 15–1 record, and quarterback Cam Newton was named the NFL Most Valuable Player (MVP). They defeated the Arizona Cardinals 49–15 in the NFC Championship Game and advanced to their second Super Bowl appearance since the franchise was founded in 1995. The Broncos finished the regular season with a 12–4 record, and denied the New England Patriots a chance to defend their title from Super Bowl XLIX by defeating them 20–18 in the AFC Championship Game. They joined the Patriots, Dallas Cowboys, and Pittsburgh Steelers as one of four teams that have made eight appearances in the Super Bowl.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Cam  Token_id:  5184
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Newton  Token_id:  20126
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Who was this season's NFL MVP? context: The Panthers finished the regular season with a 15–1 record, and quarterback Cam Newton was named the NFL Most Valuable Player (MVP). They defeated the Arizona Cardinals 49–15 in the NFC Championship Game and advanced to their second Super Bowl appearance since the franchise was founded in 1995. The Broncos finished the regular season with a 12–4 record, and denied the New England Patriots a chance to defend their title from Super Bowl XLIX by defeating them 20–18 in the AFC Championship Game. They joined the Patriots, Dallas Cowboys, and Pittsburgh Steelers as one of four teams that have made eight appearances in the Super Bowl.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  15  Token_id:  627
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  –  Token_id:  104
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  1  Token_id:  536
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What was the win/loss ratio in 2015 for the Carolina Panthers during their regular season? context: The Panthers finished the regular season with a 15–1 record, and quarterback Cam Newton was named the NFL Most Valuable Player (MVP). They defeated the Arizona Cardinals 49–15 in the NFC Championship Game and advanced to their second Super Bowl appearance since the franchise was founded in 1995. The Broncos finished the regular season with a 12–4 record, and denied the New England Patriots a chance to defend their title from Super Bowl XLIX by defeating them 20–18 in the AFC Championship Game. They joined the Patriots, Dallas Cowboys, and Pittsburgh Steelers as one of four teams that have made eight appearances in the Super Bowl.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Cam  Token_id:  5184
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Newton  Token_id:  20126
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Which Carolina Panthers team member was picked as the team's MVP in 2015? context: The Panthers finished the regular season with a 15–1 record, and quarterback Cam Newton was named the NFL Most Valuable Player (MVP). They defeated the Arizona Cardinals 49–15 in the NFC Championship Game and advanced to their second Super Bowl appearance since the franchise was founded in 1995. The Broncos finished the regular season with a 12–4 record, and denied the New England Patriots a chance to defend their title from Super Bowl XLIX by defeating them 20–18 in the AFC Championship Game. They joined the Patriots, Dallas Cowboys, and Pittsburgh Steelers as one of four teams that have made eight appearances in the Super Bowl.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  12  Token_id:  586
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  –  Token_id:  104
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  4  Token_id:  591
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What were the win/loss game stats for the Denver Bronco's regular season in 2015? context: The Panthers finished the regular season with a 15–1 record, and quarterback Cam Newton was named the NFL Most Valuable Player (MVP). They defeated the Arizona Cardinals 49–15 in the NFC Championship Game and advanced to their second Super Bowl appearance since the franchise was founded in 1995. The Broncos finished the regular season with a 12–4 record, and denied the New England Patriots a chance to defend their title from Super Bowl XLIX by defeating them 20–18 in the AFC Championship Game. They joined the Patriots, Dallas Cowboys, and Pittsburgh Steelers as one of four teams that have made eight appearances in the Super Bowl.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  four  Token_id:  662
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: How many teams have played in the Super Bowl eight times? context: The Panthers finished the regular season with a 15–1 record, and quarterback Cam Newton was named the NFL Most Valuable Player (MVP). They defeated the Arizona Cardinals 49–15 in the NFC Championship Game and advanced to their second Super Bowl appearance since the franchise was founded in 1995. The Broncos finished the regular season with a 12–4 record, and denied the New England Patriots a chance to defend their title from Super Bowl XLIX by defeating them 20–18 in the AFC Championship Game. They joined the Patriots, Dallas Cowboys, and Pittsburgh Steelers as one of four teams that have made eight appearances in the Super Bowl.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  New  Token_id:  368
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  England  Token_id:  2789
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Patriot  Token_id:  20109
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  s  Token_id:  7
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Which team did not get a chance to defend their Super Bowl XLIX win in Super Bowl 50? context: The Panthers finished the regular season with a 15–1 record, and quarterback Cam Newton was named the NFL Most Valuable Player (MVP). They defeated the Arizona Cardinals 49–15 in the NFC Championship Game and advanced to their second Super Bowl appearance since the franchise was founded in 1995. The Broncos finished the regular season with a 12–4 record, and denied the New England Patriots a chance to defend their title from Super Bowl XLIX by defeating them 20–18 in the AFC Championship Game. They joined the Patriots, Dallas Cowboys, and Pittsburgh Steelers as one of four teams that have made eight appearances in the Super Bowl.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Cam  Token_id:  5184
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Newton  Token_id:  20126
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Who is the quarterback for the Panthers? context: The Panthers finished the regular season with a 15–1 record, and quarterback Cam Newton was named the NFL Most Valuable Player (MVP). They defeated the Arizona Cardinals 49–15 in the NFC Championship Game and advanced to their second Super Bowl appearance since the franchise was founded in 1995. The Broncos finished the regular season with a 12–4 record, and denied the New England Patriots a chance to defend their title from Super Bowl XLIX by defeating them 20–18 in the AFC Championship Game. They joined the Patriots, Dallas Cowboys, and Pittsburgh Steelers as one of four teams that have made eight appearances in the Super Bowl.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Arizona  Token_id:  7601
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Cardinal  Token_id:  21967
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  s  Token_id:  7
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Who did Carolina beat in the NFC championship game? context: The Panthers finished the regular season with a 15–1 record, and quarterback Cam Newton was named the NFL Most Valuable Player (MVP). They defeated the Arizona Cardinals 49–15 in the NFC Championship Game and advanced to their second Super Bowl appearance since the franchise was founded in 1995. The Broncos finished the regular season with a 12–4 record, and denied the New England Patriots a chance to defend their title from Super Bowl XLIX by defeating them 20–18 in the AFC Championship Game. They joined the Patriots, Dallas Cowboys, and Pittsburgh Steelers as one of four teams that have made eight appearances in the Super Bowl.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  eight  Token_id:  2641
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: How many times have the Panthers been in the Super Bowl? context: The Panthers finished the regular season with a 15–1 record, and quarterback Cam Newton was named the NFL Most Valuable Player (MVP). They defeated the Arizona Cardinals 49–15 in the NFC Championship Game and advanced to their second Super Bowl appearance since the franchise was founded in 1995. The Broncos finished the regular season with a 12–4 record, and denied the New England Patriots a chance to defend their title from Super Bowl XLIX by defeating them 20–18 in the AFC Championship Game. They joined the Patriots, Dallas Cowboys, and Pittsburgh Steelers as one of four teams that have made eight appearances in the Super Bowl.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  New  Token_id:  368
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  England  Token_id:  2789
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Patriot  Token_id:  20109
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  s  Token_id:  7
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Who did Denver beat in the AFC championship? context: The Panthers finished the regular season with a 15–1 record, and quarterback Cam Newton was named the NFL Most Valuable Player (MVP). They defeated the Arizona Cardinals 49–15 in the NFC Championship Game and advanced to their second Super Bowl appearance since the franchise was founded in 1995. The Broncos finished the regular season with a 12–4 record, and denied the New England Patriots a chance to defend their title from Super Bowl XLIX by defeating them 20–18 in the AFC Championship Game. They joined the Patriots, Dallas Cowboys, and Pittsburgh Steelers as one of four teams that have made eight appearances in the Super Bowl.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Cam  Token_id:  5184
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Newton  Token_id:  20126
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Who was the Most Valuable Player for the 2015 NFL season? context: The Panthers finished the regular season with a 15–1 record, and quarterback Cam Newton was named the NFL Most Valuable Player (MVP). They defeated the Arizona Cardinals 49–15 in the NFC Championship Game and advanced to their second Super Bowl appearance since the franchise was founded in 1995. The Broncos finished the regular season with a 12–4 record, and denied the New England Patriots a chance to defend their title from Super Bowl XLIX by defeating them 20–18 in the AFC Championship Game. They joined the Patriots, Dallas Cowboys, and Pittsburgh Steelers as one of four teams that have made eight appearances in the Super Bowl.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  New  Token_id:  368
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  England  Token_id:  2789
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Patriot  Token_id:  20109
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  s  Token_id:  7
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Who did Denver beat in the 2015 AFC Championship game? context: The Panthers finished the regular season with a 15–1 record, and quarterback Cam Newton was named the NFL Most Valuable Player (MVP). They defeated the Arizona Cardinals 49–15 in the NFC Championship Game and advanced to their second Super Bowl appearance since the franchise was founded in 1995. The Broncos finished the regular season with a 12–4 record, and denied the New England Patriots a chance to defend their title from Super Bowl XLIX by defeating them 20–18 in the AFC Championship Game. They joined the Patriots, Dallas Cowboys, and Pittsburgh Steelers as one of four teams that have made eight appearances in the Super Bowl.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Arizona  Token_id:  7601
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Cardinal  Token_id:  21967
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  s  Token_id:  7
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Who did the Carolina Panthers beat in the 2015 NFC Championship game? context: The Panthers finished the regular season with a 15–1 record, and quarterback Cam Newton was named the NFL Most Valuable Player (MVP). They defeated the Arizona Cardinals 49–15 in the NFC Championship Game and advanced to their second Super Bowl appearance since the franchise was founded in 1995. The Broncos finished the regular season with a 12–4 record, and denied the New England Patriots a chance to defend their title from Super Bowl XLIX by defeating them 20–18 in the AFC Championship Game. They joined the Patriots, Dallas Cowboys, and Pittsburgh Steelers as one of four teams that have made eight appearances in the Super Bowl.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Cam  Token_id:  5184
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Newton  Token_id:  20126
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Who was the 2015 NFL MVP? context: The Panthers finished the regular season with a 15–1 record, and quarterback Cam Newton was named the NFL Most Valuable Player (MVP). They defeated the Arizona Cardinals 49–15 in the NFC Championship Game and advanced to their second Super Bowl appearance since the franchise was founded in 1995. The Broncos finished the regular season with a 12–4 record, and denied the New England Patriots a chance to defend their title from Super Bowl XLIX by defeating them 20–18 in the AFC Championship Game. They joined the Patriots, Dallas Cowboys, and Pittsburgh Steelers as one of four teams that have made eight appearances in the Super Bowl.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Arizona  Token_id:  7601
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Cardinal  Token_id:  21967
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  s  Token_id:  7
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Who did the Panthers beat to become the NFC champs? context: The Panthers finished the regular season with a 15–1 record, and quarterback Cam Newton was named the NFL Most Valuable Player (MVP). They defeated the Arizona Cardinals 49–15 in the NFC Championship Game and advanced to their second Super Bowl appearance since the franchise was founded in 1995. The Broncos finished the regular season with a 12–4 record, and denied the New England Patriots a chance to defend their title from Super Bowl XLIX by defeating them 20–18 in the AFC Championship Game. They joined the Patriots, Dallas Cowboys, and Pittsburgh Steelers as one of four teams that have made eight appearances in the Super Bowl.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  1995  Token_id:  7273
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What year did the Carolina Panthers form? context: The Panthers finished the regular season with a 15–1 record, and quarterback Cam Newton was named the NFL Most Valuable Player (MVP). They defeated the Arizona Cardinals 49–15 in the NFC Championship Game and advanced to their second Super Bowl appearance since the franchise was founded in 1995. The Broncos finished the regular season with a 12–4 record, and denied the New England Patriots a chance to defend their title from Super Bowl XLIX by defeating them 20–18 in the AFC Championship Game. They joined the Patriots, Dallas Cowboys, and Pittsburgh Steelers as one of four teams that have made eight appearances in the Super Bowl.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Von  Token_id:  6560
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Miller  Token_id:  9429
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Who was the Super Bowl 50 MVP? context: The Broncos took an early lead in Super Bowl 50 and never trailed. Newton was limited by Denver's defense, which sacked him seven times and forced him into three turnovers, including a fumble which they recovered for a touchdown. Denver linebacker Von Miller was named Super Bowl MVP, recording five solo tackles, 212 sacks, and two forced fumbles.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  two  Token_id:  192
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: How many fumbles did Von Miller force in Super Bowl 50? context: The Broncos took an early lead in Super Bowl 50 and never trailed. Newton was limited by Denver's defense, which sacked him seven times and forced him into three turnovers, including a fumble which they recovered for a touchdown. Denver linebacker Von Miller was named Super Bowl MVP, recording five solo tackles, 212 sacks, and two forced fumbles.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  The  Token_id:  37
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Bro  Token_id:  4027
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  n  Token_id:  29
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  co  Token_id:  509
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  s  Token_id:  7
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Which team held the scoring lead throughout the entire game? context: The Broncos took an early lead in Super Bowl 50 and never trailed. Newton was limited by Denver's defense, which sacked him seven times and forced him into three turnovers, including a fumble which they recovered for a touchdown. Denver linebacker Von Miller was named Super Bowl MVP, recording five solo tackles, 212 sacks, and two forced fumbles.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Von  Token_id:  6560
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Miller  Token_id:  9429
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Which Denver linebacker was named Super Bowl MVP? context: The Broncos took an early lead in Super Bowl 50 and never trailed. Newton was limited by Denver's defense, which sacked him seven times and forced him into three turnovers, including a fumble which they recovered for a touchdown. Denver linebacker Von Miller was named Super Bowl MVP, recording five solo tackles, 212 sacks, and two forced fumbles.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  five  Token_id:  874
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: How many solo tackles did Von Miller make at Super Bowl 50? context: The Broncos took an early lead in Super Bowl 50 and never trailed. Newton was limited by Denver's defense, which sacked him seven times and forced him into three turnovers, including a fumble which they recovered for a touchdown. Denver linebacker Von Miller was named Super Bowl MVP, recording five solo tackles, 212 sacks, and two forced fumbles.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Newton  Token_id:  20126
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Who was limited by Denver's defense? context: The Broncos took an early lead in Super Bowl 50 and never trailed. Newton was limited by Denver's defense, which sacked him seven times and forced him into three turnovers, including a fumble which they recovered for a touchdown. Denver linebacker Von Miller was named Super Bowl MVP, recording five solo tackles, 212 sacks, and two forced fumbles.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  seven  Token_id:  2391
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: How many times was Cam Newton sacked? context: The Broncos took an early lead in Super Bowl 50 and never trailed. Newton was limited by Denver's defense, which sacked him seven times and forced him into three turnovers, including a fumble which they recovered for a touchdown. Denver linebacker Von Miller was named Super Bowl MVP, recording five solo tackles, 212 sacks, and two forced fumbles.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Von  Token_id:  6560
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Miller  Token_id:  9429
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Who won the Super Bowl MVP? context: The Broncos took an early lead in Super Bowl 50 and never trailed. Newton was limited by Denver's defense, which sacked him seven times and forced him into three turnovers, including a fumble which they recovered for a touchdown. Denver linebacker Von Miller was named Super Bowl MVP, recording five solo tackles, 212 sacks, and two forced fumbles.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  three  Token_id:  386
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: How many turnovers did Cam Newton have? context: The Broncos took an early lead in Super Bowl 50 and never trailed. Newton was limited by Denver's defense, which sacked him seven times and forced him into three turnovers, including a fumble which they recovered for a touchdown. Denver linebacker Von Miller was named Super Bowl MVP, recording five solo tackles, 212 sacks, and two forced fumbles.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  two  Token_id:  192
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: How many fumbles did Von Miller force? context: The Broncos took an early lead in Super Bowl 50 and never trailed. Newton was limited by Denver's defense, which sacked him seven times and forced him into three turnovers, including a fumble which they recovered for a touchdown. Denver linebacker Von Miller was named Super Bowl MVP, recording five solo tackles, 212 sacks, and two forced fumbles.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Von  Token_id:  6560
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Miller  Token_id:  9429
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Who was given the esteemed status of MVP for Super Bowl 50? context: The Broncos took an early lead in Super Bowl 50 and never trailed. Newton was limited by Denver's defense, which sacked him seven times and forced him into three turnovers, including a fumble which they recovered for a touchdown. Denver linebacker Von Miller was named Super Bowl MVP, recording five solo tackles, 212 sacks, and two forced fumbles.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  line  Token_id:  689
+JSDS:  {2: tensor(0.0584, dtype=torch.float64), 3: tensor(0., dtype=torch.float64)}
+Word:  back  Token_id:  1549
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  er  Token_id:  49
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What position does Von Miller play for the Denver Broncos? context: The Broncos took an early lead in Super Bowl 50 and never trailed. Newton was limited by Denver's defense, which sacked him seven times and forced him into three turnovers, including a fumble which they recovered for a touchdown. Denver linebacker Von Miller was named Super Bowl MVP, recording five solo tackles, 212 sacks, and two forced fumbles.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  five  Token_id:  874
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What was the number of solo tackles that Von Miller had in Super Bowl 50? context: The Broncos took an early lead in Super Bowl 50 and never trailed. Newton was limited by Denver's defense, which sacked him seven times and forced him into three turnovers, including a fumble which they recovered for a touchdown. Denver linebacker Von Miller was named Super Bowl MVP, recording five solo tackles, 212 sacks, and two forced fumbles.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  two  Token_id:  192
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: How many forced fumbles did Von Miller have during the Super Bowl 50 game? context: The Broncos took an early lead in Super Bowl 50 and never trailed. Newton was limited by Denver's defense, which sacked him seven times and forced him into three turnovers, including a fumble which they recovered for a touchdown. Denver linebacker Von Miller was named Super Bowl MVP, recording five solo tackles, 212 sacks, and two forced fumbles.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Von  Token_id:  6560
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Miller  Token_id:  9429
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Who won the MVP for the Super Bowl? context: The Broncos took an early lead in Super Bowl 50 and never trailed. Newton was limited by Denver's defense, which sacked him seven times and forced him into three turnovers, including a fumble which they recovered for a touchdown. Denver linebacker Von Miller was named Super Bowl MVP, recording five solo tackles, 212 sacks, and two forced fumbles.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  five  Token_id:  874
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: How many tackles did Von Miller get during the game? context: The Broncos took an early lead in Super Bowl 50 and never trailed. Newton was limited by Denver's defense, which sacked him seven times and forced him into three turnovers, including a fumble which they recovered for a touchdown. Denver linebacker Von Miller was named Super Bowl MVP, recording five solo tackles, 212 sacks, and two forced fumbles.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  seven  Token_id:  2391
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: How many times was Cam Newton sacked in Super Bowl 50? context: The Broncos took an early lead in Super Bowl 50 and never trailed. Newton was limited by Denver's defense, which sacked him seven times and forced him into three turnovers, including a fumble which they recovered for a touchdown. Denver linebacker Von Miller was named Super Bowl MVP, recording five solo tackles, 212 sacks, and two forced fumbles.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  three  Token_id:  386
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: How many times did the Denver defense force Newton into turnovers? context: The Broncos took an early lead in Super Bowl 50 and never trailed. Newton was limited by Denver's defense, which sacked him seven times and forced him into three turnovers, including a fumble which they recovered for a touchdown. Denver linebacker Von Miller was named Super Bowl MVP, recording five solo tackles, 212 sacks, and two forced fumbles.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:    Token_id:  3
+JSDS:  {2: tensor(0.1701, dtype=torch.float64), 3: tensor(0.1745, dtype=torch.float64), 4: tensor(0.0918, dtype=torch.float64), 5: tensor(0.0414, dtype=torch.float64), 6: tensor(0., dtype=torch.float64)}
+Word:  a  Token_id:  9
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:    Token_id:  3
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  f  Token_id:  89
+JSDS:  {2: tensor(0.3142, dtype=torch.float64), 3: tensor(0.0797, dtype=torch.float64), 4: tensor(0.0022, dtype=torch.float64), 5: tensor(0., dtype=torch.float64)}
+Word:  umble  Token_id:  13514
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Which Newton turnover resulted in seven points for Denver? context: The Broncos took an early lead in Super Bowl 50 and never trailed. Newton was limited by Denver's defense, which sacked him seven times and forced him into three turnovers, including a fumble which they recovered for a touchdown. Denver linebacker Von Miller was named Super Bowl MVP, recording five solo tackles, 212 sacks, and two forced fumbles.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Von  Token_id:  6560
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Miller  Token_id:  9429
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Who was the Most Valuable Player of Super Bowl 50? context: The Broncos took an early lead in Super Bowl 50 and never trailed. Newton was limited by Denver's defense, which sacked him seven times and forced him into three turnovers, including a fumble which they recovered for a touchdown. Denver linebacker Von Miller was named Super Bowl MVP, recording five solo tackles, 212 sacks, and two forced fumbles.
+-END CONTEXT-
+JSDS:  {2: tensor(0.0508, dtype=torch.float64), 3: tensor(0., dtype=torch.float64)}
+Word:  line  Token_id:  689
+JSDS:  {2: tensor(0.1195, dtype=torch.float64), 3: tensor(0., dtype=torch.float64)}
+Word:  back  Token_id:  1549
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  er  Token_id:  49
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What position does Von Miller play? context: The Broncos took an early lead in Super Bowl 50 and never trailed. Newton was limited by Denver's defense, which sacked him seven times and forced him into three turnovers, including a fumble which they recovered for a touchdown. Denver linebacker Von Miller was named Super Bowl MVP, recording five solo tackles, 212 sacks, and two forced fumbles.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  seven  Token_id:  2391
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: How many times was the Panthers' quarterback sacked? context: The Broncos took an early lead in Super Bowl 50 and never trailed. Newton was limited by Denver's defense, which sacked him seven times and forced him into three turnovers, including a fumble which they recovered for a touchdown. Denver linebacker Von Miller was named Super Bowl MVP, recording five solo tackles, 212 sacks, and two forced fumbles.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  three  Token_id:  386
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: How many times did the Broncos cause turnovers in the game? context: The Broncos took an early lead in Super Bowl 50 and never trailed. Newton was limited by Denver's defense, which sacked him seven times and forced him into three turnovers, including a fumble which they recovered for a touchdown. Denver linebacker Von Miller was named Super Bowl MVP, recording five solo tackles, 212 sacks, and two forced fumbles.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Von  Token_id:  6560
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Miller  Token_id:  9429
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What Denver player caused two fumbles for the Panthers? context: The Broncos took an early lead in Super Bowl 50 and never trailed. Newton was limited by Denver's defense, which sacked him seven times and forced him into three turnovers, including a fumble which they recovered for a touchdown. Denver linebacker Von Miller was named Super Bowl MVP, recording five solo tackles, 212 sacks, and two forced fumbles.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  five  Token_id:  874
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: How many tackles did Von Miller accomlish by himself in the game? context: The Broncos took an early lead in Super Bowl 50 and never trailed. Newton was limited by Denver's defense, which sacked him seven times and forced him into three turnovers, including a fumble which they recovered for a touchdown. Denver linebacker Von Miller was named Super Bowl MVP, recording five solo tackles, 212 sacks, and two forced fumbles.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  CBS  Token_id:  19856
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Which network broadcasted Super Bowl 50 in the U.S.? context: CBS broadcast Super Bowl 50 in the U.S., and charged an average of $5 million for a 30-second commercial during the game. The Super Bowl 50 halftime show was headlined by the British rock group Coldplay with special guest performers Beyoncé and Bruno Mars, who headlined the Super Bowl XLVII and Super Bowl XLVIII halftime shows, respectively. It was the third-most watched U.S. broadcast ever.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  $5  Token_id:  6422
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  million  Token_id:  770
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What was the average cost for a 30 second commercial during Super Bowl 50? context: CBS broadcast Super Bowl 50 in the U.S., and charged an average of $5 million for a 30-second commercial during the game. The Super Bowl 50 halftime show was headlined by the British rock group Coldplay with special guest performers Beyoncé and Bruno Mars, who headlined the Super Bowl XLVII and Super Bowl XLVIII halftime shows, respectively. It was the third-most watched U.S. broadcast ever.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Cold  Token_id:  13331
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  play  Token_id:  4895
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Which group headlined the Super Bowl 50 halftime show? context: CBS broadcast Super Bowl 50 in the U.S., and charged an average of $5 million for a 30-second commercial during the game. The Super Bowl 50 halftime show was headlined by the British rock group Coldplay with special guest performers Beyoncé and Bruno Mars, who headlined the Super Bowl XLVII and Super Bowl XLVIII halftime shows, respectively. It was the third-most watched U.S. broadcast ever.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Be  Token_id:  493
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  y  Token_id:  63
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  on  Token_id:  106
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  c  Token_id:  75
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  é  Token_id:  154
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  and  Token_id:  11
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Bruno  Token_id:  22425
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Mars  Token_id:  11856
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Which performers joined the headliner during the Super Bowl 50 halftime show? context: CBS broadcast Super Bowl 50 in the U.S., and charged an average of $5 million for a 30-second commercial during the game. The Super Bowl 50 halftime show was headlined by the British rock group Coldplay with special guest performers Beyoncé and Bruno Mars, who headlined the Super Bowl XLVII and Super Bowl XLVIII halftime shows, respectively. It was the third-most watched U.S. broadcast ever.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  50  Token_id:  943
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: At which Super Bowl did Beyonce headline the halftime show? context: CBS broadcast Super Bowl 50 in the U.S., and charged an average of $5 million for a 30-second commercial during the game. The Super Bowl 50 halftime show was headlined by the British rock group Coldplay with special guest performers Beyoncé and Bruno Mars, who headlined the Super Bowl XLVII and Super Bowl XLVIII halftime shows, respectively. It was the third-most watched U.S. broadcast ever.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  CBS  Token_id:  19856
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Who was the broadcaster for Super Bowl 50 in the United States? context: CBS broadcast Super Bowl 50 in the U.S., and charged an average of $5 million for a 30-second commercial during the game. The Super Bowl 50 halftime show was headlined by the British rock group Coldplay with special guest performers Beyoncé and Bruno Mars, who headlined the Super Bowl XLVII and Super Bowl XLVIII halftime shows, respectively. It was the third-most watched U.S. broadcast ever.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  $5  Token_id:  6422
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  million  Token_id:  770
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What was the average cost of a 30-second commercial? context: CBS broadcast Super Bowl 50 in the U.S., and charged an average of $5 million for a 30-second commercial during the game. The Super Bowl 50 halftime show was headlined by the British rock group Coldplay with special guest performers Beyoncé and Bruno Mars, who headlined the Super Bowl XLVII and Super Bowl XLVIII halftime shows, respectively. It was the third-most watched U.S. broadcast ever.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Be  Token_id:  493
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  y  Token_id:  63
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  on  Token_id:  106
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  c  Token_id:  75
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  é  Token_id:  154
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What halftime performer previously headlined Super Bowl XLVII? context: CBS broadcast Super Bowl 50 in the U.S., and charged an average of $5 million for a 30-second commercial during the game. The Super Bowl 50 halftime show was headlined by the British rock group Coldplay with special guest performers Beyoncé and Bruno Mars, who headlined the Super Bowl XLVII and Super Bowl XLVIII halftime shows, respectively. It was the third-most watched U.S. broadcast ever.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Bruno  Token_id:  22425
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Mars  Token_id:  11856
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What halftime performer previously headlined Super Bowl XLVIII? context: CBS broadcast Super Bowl 50 in the U.S., and charged an average of $5 million for a 30-second commercial during the game. The Super Bowl 50 halftime show was headlined by the British rock group Coldplay with special guest performers Beyoncé and Bruno Mars, who headlined the Super Bowl XLVII and Super Bowl XLVIII halftime shows, respectively. It was the third-most watched U.S. broadcast ever.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Be  Token_id:  493
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  y  Token_id:  63
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  on  Token_id:  106
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  c  Token_id:  75
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  é  Token_id:  154
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Who was the main performer at this year's halftime show? context: CBS broadcast Super Bowl 50 in the U.S., and charged an average of $5 million for a 30-second commercial during the game. The Super Bowl 50 halftime show was headlined by the British rock group Coldplay with special guest performers Beyoncé and Bruno Mars, who headlined the Super Bowl XLVII and Super Bowl XLVIII halftime shows, respectively. It was the third-most watched U.S. broadcast ever.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  CBS  Token_id:  19856
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Which network broadcasted the 50th Super Bowl game? context: CBS broadcast Super Bowl 50 in the U.S., and charged an average of $5 million for a 30-second commercial during the game. The Super Bowl 50 halftime show was headlined by the British rock group Coldplay with special guest performers Beyoncé and Bruno Mars, who headlined the Super Bowl XLVII and Super Bowl XLVIII halftime shows, respectively. It was the third-most watched U.S. broadcast ever.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  $5  Token_id:  6422
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  million  Token_id:  770
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What was the average cost for a TV ad lasting 30 seconds during Super Bowl 50? context: CBS broadcast Super Bowl 50 in the U.S., and charged an average of $5 million for a 30-second commercial during the game. The Super Bowl 50 halftime show was headlined by the British rock group Coldplay with special guest performers Beyoncé and Bruno Mars, who headlined the Super Bowl XLVII and Super Bowl XLVIII halftime shows, respectively. It was the third-most watched U.S. broadcast ever.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Bruno  Token_id:  22425
+JSDS:  {2: tensor(0.0104, dtype=torch.float64), 3: tensor(0., dtype=torch.float64)}
+Word:  Mars  Token_id:  11856
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Who was the male singer who performed as a special guest during Super Bowl 50? context: CBS broadcast Super Bowl 50 in the U.S., and charged an average of $5 million for a 30-second commercial during the game. The Super Bowl 50 halftime show was headlined by the British rock group Coldplay with special guest performers Beyoncé and Bruno Mars, who headlined the Super Bowl XLVII and Super Bowl XLVIII halftime shows, respectively. It was the third-most watched U.S. broadcast ever.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  third  Token_id:  1025
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  -  Token_id:  18
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  most  Token_id:  5463
+JSDS:  {2: tensor(0.3273, dtype=torch.float64), 3: tensor(0.0443, dtype=torch.float64), 4: tensor(0.0264, dtype=torch.float64), 5: tensor(0., dtype=torch.float64)}
+Word:  watched  Token_id:  7533
+JSDS:  {2: tensor(0.2049, dtype=torch.float64), 3: tensor(0., dtype=torch.float64)}
+Word:  U  Token_id:  412
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  .  Token_id:  5
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  S  Token_id:  134
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  .  Token_id:  5
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  broadcast  Token_id:  6878
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  broadcast  Token_id:  6878
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  broadcast  Token_id:  6878
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  broadcast  Token_id:  6878
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  broadcast  Token_id:  6878
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  broadcast  Token_id:  6878
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  broadcast  Token_id:  6878
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  broadcast  Token_id:  6878
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  broadcast  Token_id:  6878
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  broadcast  Token_id:  6878
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  broadcast  Token_id:  6878
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  broadcast  Token_id:  6878
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  broadcast  Token_id:  6878
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  broadcast  Token_id:  6878
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  broadcast  Token_id:  6878
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  broadcast  Token_id:  6878
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  broadcast  Token_id:  6878
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  broadcast  Token_id:  6878
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  broadcast  Token_id:  6878
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  broadcast  Token_id:  6878
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  broadcast  Token_id:  6878
+question: What ranking does the Super Bowl 50 halftime show have on the list of most watched TV broadcasts? context: CBS broadcast Super Bowl 50 in the U.S., and charged an average of $5 million for a 30-second commercial during the game. The Super Bowl 50 halftime show was headlined by the British rock group Coldplay with special guest performers Beyoncé and Bruno Mars, who headlined the Super Bowl XLVII and Super Bowl XLVIII halftime shows, respectively. It was the third-most watched U.S. broadcast ever.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  CBS  Token_id:  19856
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What station aired the Super Bowl? context: CBS broadcast Super Bowl 50 in the U.S., and charged an average of $5 million for a 30-second commercial during the game. The Super Bowl 50 halftime show was headlined by the British rock group Coldplay with special guest performers Beyoncé and Bruno Mars, who headlined the Super Bowl XLVII and Super Bowl XLVIII halftime shows, respectively. It was the third-most watched U.S. broadcast ever.
+-END CONTEXT-
+JSDS:  {2: tensor(0.2432, dtype=torch.float64), 3: tensor(0.0781, dtype=torch.float64), 4: tensor(0.0068, dtype=torch.float64), 5: tensor(0.0196, dtype=torch.float64), 6: tensor(0.0033, dtype=torch.float64), 7: tensor(0.0018, dtype=torch.float64), 8: tensor(0.0010, dtype=torch.float64), 9: tensor(0.0004, dtype=torch.float64), 10: tensor(0., dtype=torch.float64)}
+Word:  $5  Token_id:  6422
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  million  Token_id:  770
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: How much money did a 1/2 minute commercial cost? context: CBS broadcast Super Bowl 50 in the U.S., and charged an average of $5 million for a 30-second commercial during the game. The Super Bowl 50 halftime show was headlined by the British rock group Coldplay with special guest performers Beyoncé and Bruno Mars, who headlined the Super Bowl XLVII and Super Bowl XLVIII halftime shows, respectively. It was the third-most watched U.S. broadcast ever.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Cold  Token_id:  13331
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  play  Token_id:  4895
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What band headlined half-time during Super Bowl 50? context: CBS broadcast Super Bowl 50 in the U.S., and charged an average of $5 million for a 30-second commercial during the game. The Super Bowl 50 halftime show was headlined by the British rock group Coldplay with special guest performers Beyoncé and Bruno Mars, who headlined the Super Bowl XLVII and Super Bowl XLVIII halftime shows, respectively. It was the third-most watched U.S. broadcast ever.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Be  Token_id:  493
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  y  Token_id:  63
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  on  Token_id:  106
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  c  Token_id:  75
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  é  Token_id:  154
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  and  Token_id:  11
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Bruno  Token_id:  22425
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Mars  Token_id:  11856
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: What two artists came out with Coldplay during the half-time show? context: CBS broadcast Super Bowl 50 in the U.S., and charged an average of $5 million for a 30-second commercial during the game. The Super Bowl 50 halftime show was headlined by the British rock group Coldplay with special guest performers Beyoncé and Bruno Mars, who headlined the Super Bowl XLVII and Super Bowl XLVIII halftime shows, respectively. It was the third-most watched U.S. broadcast ever.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  CBS  Token_id:  19856
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Who broadcast the Super Bowl on TV? context: CBS broadcast Super Bowl 50 in the U.S., and charged an average of $5 million for a 30-second commercial during the game. The Super Bowl 50 halftime show was headlined by the British rock group Coldplay with special guest performers Beyoncé and Bruno Mars, who headlined the Super Bowl XLVII and Super Bowl XLVIII halftime shows, respectively. It was the third-most watched U.S. broadcast ever.
+-END CONTEXT-
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  Cold  Token_id:  13331
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  play  Token_id:  4895
+JSDS:  {2: tensor(0., dtype=torch.float64)}
+Word:  </s>  Token_id:  1
+question: Who headlined the halftime show for Super Bowl 50? context: CBS broadcast Super Bowl 50 in the U.S., and charged an average of $5 million for a 30-second commercial during the game. The Super Bowl 50 halftime show was headlined by the British rock group Coldplay with special guest performers Beyoncé and Bruno Mars, who headlined the Super Bowl XLVII and Super Bowl XLVIII halftime shows, respectively. It was the third-most watched U.S. broadcast ever.
+-END CONTEXT-
+['Denver Broncos', 'Carolina Panthers', "Levi's Stadium in the San Francisco Bay Area at Santa Clara, California", 'Denver Broncos', 'gold', 'gold', 'February 7, 2016', 'American Football Conference', 'gold', 'American Football Conference', 'February 7, 2016', 'champion of the National Football League', "Levi's Stadium", 'Santa Clara, California', 'Super Bowl L', '2015', '2016', 'Santa Clara, California', "Levi's Stadium", '24–10', 'February 7, 2016', '2015', 'Denver Broncos', 'Carolina Panthers', 'champion of the National Football League', '2015', 'Denver Broncos', "Levi's Stadium", 'Super Bowl 50', 'Denver Broncos', 'Cam Newton', 'eight', '1995', 'Arizona Cardinals', 'New England Patriots', 'Arizona Cardinals', 'New England Patriots', 'New England Patriots', 'four', 'Cam Newton', '15–1', 'Cam Newton', '12–4', 'four', 'New England Patriots', 'Cam Newton', 'Arizona Cardinals', 'eight', 'New England Patriots', 'Cam Newton', 'New England Patriots', 'Arizona Cardinals', 'Cam Newton', 'Arizona Cardinals', '1995', 'Von Miller', 'two', 'The Broncos', 'Von Miller', 'five', 'Newton', 'seven', 'Von Miller', 'three', 'two', 'Von Miller', 'linebacker', 'five', 'two', 'Von Miller', 'five', 'seven', 'three', 'a fumble', 'Von Miller', 'linebacker', 'seven', 'three', 'Von Miller', 'five', 'CBS', '$5 million', 'Coldplay', 'Beyoncé and Bruno Mars', '50', 'CBS', '$5 million', 'Beyoncé', 'Bruno Mars', 'Beyoncé', 'CBS', '$5 million', 'Bruno Mars', 'third-most watched U.S. broadcast broadcast broadcast broadcast broadcast broadcast broadcast broadcast broadcast broadcast broadcast broadcast broadcast broadcast broadcast broadcast broadcast broadcast broadcast broadcast broadcast', 'CBS', '$5 million', 'Coldplay', 'Beyoncé and Bruno Mars', 'CBS', 'Coldplay']
+***** eval metrics *****
+  eval_block_avg              =                 2.2343
+  eval_exact_match            =                   90.0
+  eval_f1                     =                   92.4
+  eval_runtime                =             0:00:29.93
+  eval_samples                =                    100
+  eval_samples_per_second     =                   3.34
+  eval_steps_per_second       =                   3.34
+  time_attn                   = ['0:00:03', '0:00:00']
+  time_confidence             =                0:00:03
+  time_decoder_forward        =                0:00:13
+  time_encoder_forward        =                0:00:00
+  time_estimate_conf          =                0:00:00
+  time_exit_attn              = ['0:00:01', '0:00:00']
+  time_exit_ffn               =                0:00:00
+  time_exit_key_value_gen     = ['0:00:01', '0:00:00']
+  time_ffn                    =                0:00:00
+  time_key_value_gen          = ['0:00:00', '0:00:00']
+  time_others                 =                0:00:00
+  time_parallel_attn          = ['0:00:00', '0:00:00']
+  time_parallel_ffn           =                0:00:00
+  time_parallel_key_value_gen = ['0:00:00', '0:00:00']

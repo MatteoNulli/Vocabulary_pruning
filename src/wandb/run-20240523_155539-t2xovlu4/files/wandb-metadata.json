@@ -1,0 +1,74 @@
+{
+    "os": "macOS-14.5-arm64-arm-64bit",
+    "python": "3.10.12",
+    "heartbeatAt": "2024-05-23T13:55:39.793148",
+    "startedAt": "2024-05-23T13:55:39.318770",
+    "docker": null,
+    "cuda": null,
+    "args": [
+        "--model_name_or_path",
+        "google-t5/t5-large",
+        "--do_eval",
+        "--dataset_name",
+        "squad",
+        "--context_column",
+        "context",
+        "--question_column",
+        "question",
+        "--answer_column",
+        "answers",
+        "--output_dir",
+        "./save/squad_t5-base/",
+        "--per_device_eval_batch_size",
+        "1",
+        "--deploy_scenario",
+        "True",
+        "--use_synchronize",
+        "False",
+        "--overwrite_output_dir",
+        "--predict_with_generate",
+        "--max_seq_length",
+        "512",
+        "--use_early_exit",
+        "True",
+        "--exit_conf_type",
+        "reweight_contrastive_decoding",
+        "--exit_conf_threshold",
+        "0.9",
+        "--exit_min_layer",
+        "1",
+        "--include_inputs_for_metrics",
+        "True",
+        "--max_eval_samples",
+        "100",
+        "--use_auth_token",
+        "True"
+    ],
+    "state": "running",
+    "program": "-m run_question_answering",
+    "codePathLocal": null,
+    "git": {
+        "remote": "https://github.com/joanvelja/Confidently_Exiting.git",
+        "commit": "4e7ce21942da8fdb283800c7632e24a577000f59"
+    },
+    "email": "matteo.nulli@gmail.com",
+    "root": "/Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting",
+    "host": "sp-byods-145-109-14-79.wireless.uva.nl",
+    "username": "matteo",
+    "executable": "/Users/matteo/anaconda3/envs/dl2/bin/python",
+    "cpu_count": 10,
+    "cpu_count_logical": 10,
+    "disk": {
+        "/": {
+            "total": 460.4317207336426,
+            "used": 421.58044052124023
+        }
+    },
+    "gpuapple": {
+        "type": "arm",
+        "vendor": "Apple"
+    },
+    "memory": {
+        "total": 32.0
+    }
+}

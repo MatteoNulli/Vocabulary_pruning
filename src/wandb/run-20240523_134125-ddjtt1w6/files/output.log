@@ -1,0 +1,666 @@
+/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/datasets/load.py:2547: FutureWarning: 'use_auth_token' was deprecated in favor of 'token' in version 2.14.0 and will be removed in 3.0.0.
+You can remove this warning by passing 'token=<use_auth_token>' instead.
+  warnings.warn(
+05/23/2024 13:41:29 - WARNING - __main__ - Process rank: -1, device: cpu, n_gpu: 0distributed training: False, 16-bits training: False
+05/23/2024 13:41:29 - INFO - __main__ - Training/evaluation parameters Seq2SeqTrainingArguments(
+_n_gpu=0,
+adafactor=False,
+adam_beta1=0.9,
+adam_beta2=0.999,
+adam_epsilon=1e-08,
+auto_find_batch_size=False,
+bf16=False,
+bf16_full_eval=False,
+data_seed=None,
+dataloader_drop_last=False,
+dataloader_num_workers=0,
+dataloader_pin_memory=True,
+ddp_bucket_cap_mb=None,
+ddp_find_unused_parameters=None,
+ddp_timeout=1800,
+debug=[],
+deepspeed=None,
+disable_tqdm=False,
+do_eval=True,
+do_predict=False,
+do_train=False,
+eval_accumulation_steps=None,
+eval_delay=0,
+eval_steps=500,
+evaluation_strategy=steps,
+fp16=False,
+fp16_backend=auto,
+fp16_full_eval=False,
+fp16_opt_level=O1,
+fsdp=[],
+fsdp_config={'fsdp_min_num_params': 0, 'xla': False, 'xla_fsdp_grad_ckpt': False},
+fsdp_min_num_params=0,
+fsdp_transformer_layer_cls_to_wrap=None,
+full_determinism=False,
+generation_config=None,
+generation_max_length=128,
+generation_num_beams=None,
+gradient_accumulation_steps=1,
+gradient_checkpointing=False,
+greater_is_better=True,
+group_by_length=False,
+half_precision_backend=auto,
+hub_model_id=None,
+hub_private_repo=False,
+hub_strategy=every_save,
+hub_token=<HUB_TOKEN>,
+ignore_data_skip=False,
+include_inputs_for_metrics=True,
+jit_mode_eval=False,
+label_names=None,
+label_smoothing_factor=0.0,
+learning_rate=5e-05,
+length_column_name=length,
+load_best_model_at_end=True,
+local_rank=-1,
+log_level=passive,
+log_level_replica=warning,
+log_on_each_node=True,
+logging_dir=./save/jvelja_t5-large/runs/May23_13-39-18_sp-byods-145-109-14-79.wireless.uva.nl,
+logging_first_step=False,
+logging_nan_inf_filter=True,
+logging_steps=500,
+logging_strategy=steps,
+lr_scheduler_type=linear,
+max_grad_norm=1.0,
+max_steps=-1,
+metric_for_best_model=rougeLsum,
+mp_parameters=,
+no_cuda=False,
+num_train_epochs=3.0,
+optim=adafactor,
+optim_args=None,
+output_dir=./save/jvelja_t5-large/,
+overwrite_output_dir=True,
+past_index=-1,
+per_device_eval_batch_size=1,
+per_device_train_batch_size=8,
+predict_with_generate=True,
+prediction_loss_only=False,
+push_to_hub=False,
+push_to_hub_model_id=None,
+push_to_hub_organization=None,
+push_to_hub_token=<PUSH_TO_HUB_TOKEN>,
+ray_scope=last,
+remove_unused_columns=True,
+report_to=['wandb'],
+resume_from_checkpoint=None,
+run_name=./save/jvelja_t5-large/,
+save_on_each_node=False,
+save_safetensors=False,
+save_steps=500,
+save_strategy=steps,
+save_total_limit=1,
+seed=42,
+sharded_ddp=[],
+skip_memory_metrics=True,
+sortish_sampler=False,
+tf32=None,
+torch_compile=False,
+torch_compile_backend=None,
+torch_compile_mode=None,
+torchdynamo=None,
+tpu_metrics_debug=False,
+tpu_num_cores=None,
+use_ipex=False,
+use_legacy_prediction_loop=False,
+use_mps_device=False,
+warmup_ratio=0.0,
+warmup_steps=0,
+weight_decay=0.0,
+xpu_backend=None,
+)
+/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/datasets/load.py:1486: FutureWarning: The repository for samsum contains custom code which must be executed to correctly load the dataset. You can inspect the repository content at https://hf.co/datasets/samsum
+You can avoid this message in future by passing the argument `trust_remote_code=True`.
+Passing `trust_remote_code=True` will be mandatory to load this dataset from the next major release of `datasets`.
+  warnings.warn(
+No config specified, defaulting to the single config: samsum/samsum
+Loading Dataset Infos from /Users/matteo/.cache/huggingface/modules/datasets_modules/datasets/samsum/f1d7c6b7353e6de335d444e424dc002ef70d1277109031327bc9cc6af5d3d46e
+Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /Users/matteo/.cache/huggingface/datasets/samsum/samsum/0.0.0/f1d7c6b7353e6de335d444e424dc002ef70d1277109031327bc9cc6af5d3d46e
+Found cached dataset samsum (/Users/matteo/.cache/huggingface/datasets/samsum/samsum/0.0.0/f1d7c6b7353e6de335d444e424dc002ef70d1277109031327bc9cc6af5d3d46e)
+Loading Dataset info from /Users/matteo/.cache/huggingface/datasets/samsum/samsum/0.0.0/f1d7c6b7353e6de335d444e424dc002ef70d1277109031327bc9cc6af5d3d46e
+[INFO|configuration_utils.py:668] 2024-05-23 13:41:31,977 >> loading configuration file config.json from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/config.json
+[INFO|configuration_utils.py:720] 2024-05-23 13:41:31,980 >> Model config T5Config {
+  "_name_or_path": "google-t5/t5-large",
+  "architectures": [
+    "T5ForConditionalGeneration"
+  ],
+  "d_ff": 4096,
+  "d_kv": 64,
+  "d_model": 1024,
+  "decoder_start_token_id": 0,
+  "dense_act_fn": "relu",
+  "dropout_rate": 0.1,
+  "eos_token_id": 1,
+  "feed_forward_proj": "relu",
+  "initializer_factor": 1.0,
+  "is_encoder_decoder": true,
+  "is_gated_act": false,
+  "layer_norm_epsilon": 1e-06,
+  "model_type": "t5",
+  "n_positions": 512,
+  "num_decoder_layers": 24,
+  "num_heads": 16,
+  "num_layers": 24,
+  "output_past": true,
+  "pad_token_id": 0,
+  "relative_attention_max_distance": 128,
+  "relative_attention_num_buckets": 32,
+  "task_specific_params": {
+    "summarization": {
+      "early_stopping": true,
+      "length_penalty": 2.0,
+      "max_length": 200,
+      "min_length": 30,
+      "no_repeat_ngram_size": 3,
+      "num_beams": 4,
+      "prefix": "summarize: "
+    },
+    "translation_en_to_de": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to German: "
+    },
+    "translation_en_to_fr": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to French: "
+    },
+    "translation_en_to_ro": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to Romanian: "
+    }
+  },
+  "transformers_version": "4.28.1",
+  "use_cache": true,
+  "vocab_size": 32128
+}
+[INFO|tokenization_auto.py:502] 2024-05-23 13:41:32,106 >> Could not locate the tokenizer configuration file, will try to use the model config instead.
+[INFO|configuration_utils.py:668] 2024-05-23 13:41:32,234 >> loading configuration file config.json from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/config.json
+[INFO|configuration_utils.py:720] 2024-05-23 13:41:32,236 >> Model config T5Config {
+  "_name_or_path": "google-t5/t5-large",
+  "architectures": [
+    "T5ForConditionalGeneration"
+  ],
+  "d_ff": 4096,
+  "d_kv": 64,
+  "d_model": 1024,
+  "decoder_start_token_id": 0,
+  "dense_act_fn": "relu",
+  "dropout_rate": 0.1,
+  "eos_token_id": 1,
+  "feed_forward_proj": "relu",
+  "initializer_factor": 1.0,
+  "is_encoder_decoder": true,
+  "is_gated_act": false,
+  "layer_norm_epsilon": 1e-06,
+  "model_type": "t5",
+  "n_positions": 512,
+  "num_decoder_layers": 24,
+  "num_heads": 16,
+  "num_layers": 24,
+  "output_past": true,
+  "pad_token_id": 0,
+  "relative_attention_max_distance": 128,
+  "relative_attention_num_buckets": 32,
+  "task_specific_params": {
+    "summarization": {
+      "early_stopping": true,
+      "length_penalty": 2.0,
+      "max_length": 200,
+      "min_length": 30,
+      "no_repeat_ngram_size": 3,
+      "num_beams": 4,
+      "prefix": "summarize: "
+    },
+    "translation_en_to_de": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to German: "
+    },
+    "translation_en_to_fr": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to French: "
+    },
+    "translation_en_to_ro": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to Romanian: "
+    }
+  },
+  "transformers_version": "4.28.1",
+  "use_cache": true,
+  "vocab_size": 32128
+}
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 13:41:32,490 >> loading file spiece.model from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/spiece.model
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 13:41:32,491 >> loading file tokenizer.json from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/tokenizer.json
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 13:41:32,492 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 13:41:32,492 >> loading file special_tokens_map.json from cache at None
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 13:41:32,493 >> loading file tokenizer_config.json from cache at None
+[INFO|configuration_utils.py:668] 2024-05-23 13:41:32,495 >> loading configuration file config.json from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/config.json
+[INFO|configuration_utils.py:720] 2024-05-23 13:41:32,497 >> Model config T5Config {
+  "_name_or_path": "google-t5/t5-large",
+  "architectures": [
+    "T5ForConditionalGeneration"
+  ],
+  "d_ff": 4096,
+  "d_kv": 64,
+  "d_model": 1024,
+  "decoder_start_token_id": 0,
+  "dense_act_fn": "relu",
+  "dropout_rate": 0.1,
+  "eos_token_id": 1,
+  "feed_forward_proj": "relu",
+  "initializer_factor": 1.0,
+  "is_encoder_decoder": true,
+  "is_gated_act": false,
+  "layer_norm_epsilon": 1e-06,
+  "model_type": "t5",
+  "n_positions": 512,
+  "num_decoder_layers": 24,
+  "num_heads": 16,
+  "num_layers": 24,
+  "output_past": true,
+  "pad_token_id": 0,
+  "relative_attention_max_distance": 128,
+  "relative_attention_num_buckets": 32,
+  "task_specific_params": {
+    "summarization": {
+      "early_stopping": true,
+      "length_penalty": 2.0,
+      "max_length": 200,
+      "min_length": 30,
+      "no_repeat_ngram_size": 3,
+      "num_beams": 4,
+      "prefix": "summarize: "
+    },
+    "translation_en_to_de": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to German: "
+    },
+    "translation_en_to_fr": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to French: "
+    },
+    "translation_en_to_ro": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to Romanian: "
+    }
+  },
+  "transformers_version": "4.28.1",
+  "use_cache": true,
+  "vocab_size": 32128
+}
+[INFO|modeling_utils.py:2534] 2024-05-23 13:41:32,552 >> loading weights file model.safetensors from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/model.safetensors
+[INFO|configuration_utils.py:575] 2024-05-23 13:41:32,671 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "decoder_start_token_id": 0,
+  "eos_token_id": 1,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.1"
+}
+05/23/2024 13:41:31 - INFO - datasets.builder - No config specified, defaulting to the single config: samsum/samsum
+05/23/2024 13:41:31 - INFO - datasets.info - Loading Dataset Infos from /Users/matteo/.cache/huggingface/modules/datasets_modules/datasets/samsum/f1d7c6b7353e6de335d444e424dc002ef70d1277109031327bc9cc6af5d3d46e
+05/23/2024 13:41:31 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
+05/23/2024 13:41:31 - INFO - datasets.info - Loading Dataset info from /Users/matteo/.cache/huggingface/datasets/samsum/samsum/0.0.0/f1d7c6b7353e6de335d444e424dc002ef70d1277109031327bc9cc6af5d3d46e
+05/23/2024 13:41:31 - INFO - datasets.builder - Found cached dataset samsum (/Users/matteo/.cache/huggingface/datasets/samsum/samsum/0.0.0/f1d7c6b7353e6de335d444e424dc002ef70d1277109031327bc9cc6af5d3d46e)
+05/23/2024 13:41:31 - INFO - datasets.info - Loading Dataset info from /Users/matteo/.cache/huggingface/datasets/samsum/samsum/0.0.0/f1d7c6b7353e6de335d444e424dc002ef70d1277109031327bc9cc6af5d3d46e
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 13:41:38,324 >> loading file spiece.model from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/spiece.model
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 13:41:38,325 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 13:41:38,325 >> loading file special_tokens_map.json from cache at None
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 13:41:38,325 >> loading file tokenizer_config.json from cache at None
+[INFO|configuration_utils.py:668] 2024-05-23 13:41:38,325 >> loading configuration file config.json from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/config.json
+[INFO|configuration_utils.py:720] 2024-05-23 13:41:38,326 >> Model config T5Config {
+  "_name_or_path": "google-t5/t5-large",
+  "architectures": [
+    "T5ForConditionalGeneration"
+  ],
+  "d_ff": 4096,
+  "d_kv": 64,
+  "d_model": 1024,
+  "decoder_start_token_id": 0,
+  "dense_act_fn": "relu",
+  "dropout_rate": 0.1,
+  "eos_token_id": 1,
+  "feed_forward_proj": "relu",
+  "initializer_factor": 1.0,
+  "is_encoder_decoder": true,
+  "is_gated_act": false,
+  "layer_norm_epsilon": 1e-06,
+  "model_type": "t5",
+  "n_positions": 512,
+  "num_decoder_layers": 24,
+  "num_heads": 16,
+  "num_layers": 24,
+  "output_past": true,
+  "pad_token_id": 0,
+  "relative_attention_max_distance": 128,
+  "relative_attention_num_buckets": 32,
+  "task_specific_params": {
+    "summarization": {
+      "early_stopping": true,
+      "length_penalty": 2.0,
+      "max_length": 200,
+      "min_length": 30,
+      "no_repeat_ngram_size": 3,
+      "num_beams": 4,
+      "prefix": "summarize: "
+    },
+    "translation_en_to_de": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to German: "
+    },
+    "translation_en_to_fr": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to French: "
+    },
+    "translation_en_to_ro": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to Romanian: "
+    }
+  },
+  "transformers_version": "4.28.1",
+  "use_cache": true,
+  "vocab_size": 32128
+}
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 13:41:42,552 >> loading file spiece.model from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/spiece.model
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 13:41:42,552 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 13:41:42,552 >> loading file special_tokens_map.json from cache at None
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 13:41:42,552 >> loading file tokenizer_config.json from cache at None
+[INFO|configuration_utils.py:668] 2024-05-23 13:41:42,553 >> loading configuration file config.json from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/config.json
+[INFO|configuration_utils.py:720] 2024-05-23 13:41:42,553 >> Model config T5Config {
+  "_name_or_path": "google-t5/t5-large",
+  "architectures": [
+    "T5ForConditionalGeneration"
+  ],
+  "d_ff": 4096,
+  "d_kv": 64,
+  "d_model": 1024,
+  "decoder_start_token_id": 0,
+  "dense_act_fn": "relu",
+  "dropout_rate": 0.1,
+  "eos_token_id": 1,
+  "feed_forward_proj": "relu",
+  "initializer_factor": 1.0,
+  "is_encoder_decoder": true,
+  "is_gated_act": false,
+  "layer_norm_epsilon": 1e-06,
+  "model_type": "t5",
+  "n_positions": 512,
+  "num_decoder_layers": 24,
+  "num_heads": 16,
+  "num_layers": 24,
+  "output_past": true,
+  "pad_token_id": 0,
+  "relative_attention_max_distance": 128,
+  "relative_attention_num_buckets": 32,
+  "task_specific_params": {
+    "summarization": {
+      "early_stopping": true,
+      "length_penalty": 2.0,
+      "max_length": 200,
+      "min_length": 30,
+      "no_repeat_ngram_size": 3,
+      "num_beams": 4,
+      "prefix": "summarize: "
+    },
+    "translation_en_to_de": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to German: "
+    },
+    "translation_en_to_fr": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to French: "
+    },
+    "translation_en_to_ro": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to Romanian: "
+    }
+  },
+  "transformers_version": "4.28.1",
+  "use_cache": true,
+  "vocab_size": 32128
+}
+05/23/2024 13:41:43 - INFO - datasets.arrow_dataset - Loading cached processed dataset at /Users/matteo/.cache/huggingface/datasets/samsum/samsum/0.0.0/f1d7c6b7353e6de335d444e424dc002ef70d1277109031327bc9cc6af5d3d46e/cache-2df4c9fc0749c332.arrow
+05/23/2024 13:41:44 - INFO - __main__ - *** Evaluate ***
+[INFO|modeling_utils.py:3190] 2024-05-23 13:41:43,345 >> All model checkpoint weights were used when initializing DeployT5ForConditionalGeneration.
+[INFO|modeling_utils.py:3198] 2024-05-23 13:41:43,346 >> All the weights of DeployT5ForConditionalGeneration were initialized from the model checkpoint at google-t5/t5-large.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use DeployT5ForConditionalGeneration for predictions without further training.
+[INFO|configuration_utils.py:537] 2024-05-23 13:41:43,463 >> loading configuration file generation_config.json from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/generation_config.json
+[INFO|configuration_utils.py:575] 2024-05-23 13:41:43,463 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "decoder_start_token_id": 0,
+  "eos_token_id": 1,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.1"
+}
+Loading cached processed dataset at /Users/matteo/.cache/huggingface/datasets/samsum/samsum/0.0.0/f1d7c6b7353e6de335d444e424dc002ef70d1277109031327bc9cc6af5d3d46e/cache-2df4c9fc0749c332.arrow
+[INFO|tokenization_auto.py:502] 2024-05-23 13:41:44,237 >> Could not locate the tokenizer configuration file, will try to use the model config instead.
+[INFO|configuration_utils.py:668] 2024-05-23 13:41:44,372 >> loading configuration file config.json from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/config.json
+[INFO|configuration_utils.py:720] 2024-05-23 13:41:44,375 >> Model config T5Config {
+  "_name_or_path": "google-t5/t5-large",
+  "architectures": [
+    "T5ForConditionalGeneration"
+  ],
+  "d_ff": 4096,
+  "d_kv": 64,
+  "d_model": 1024,
+  "decoder_start_token_id": 0,
+  "dense_act_fn": "relu",
+  "dropout_rate": 0.1,
+  "eos_token_id": 1,
+  "feed_forward_proj": "relu",
+  "initializer_factor": 1.0,
+  "is_encoder_decoder": true,
+  "is_gated_act": false,
+  "layer_norm_epsilon": 1e-06,
+  "model_type": "t5",
+  "n_positions": 512,
+  "num_decoder_layers": 24,
+  "num_heads": 16,
+  "num_layers": 24,
+  "output_past": true,
+  "pad_token_id": 0,
+  "relative_attention_max_distance": 128,
+  "relative_attention_num_buckets": 32,
+  "task_specific_params": {
+    "summarization": {
+      "early_stopping": true,
+      "length_penalty": 2.0,
+      "max_length": 200,
+      "min_length": 30,
+      "no_repeat_ngram_size": 3,
+      "num_beams": 4,
+      "prefix": "summarize: "
+    },
+    "translation_en_to_de": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to German: "
+    },
+    "translation_en_to_fr": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to French: "
+    },
+    "translation_en_to_ro": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to Romanian: "
+    }
+  },
+  "transformers_version": "4.28.1",
+  "use_cache": true,
+  "vocab_size": 32128
+}
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 13:41:44,591 >> loading file spiece.model from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/spiece.model
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 13:41:44,592 >> loading file tokenizer.json from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/tokenizer.json
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 13:41:44,593 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 13:41:44,593 >> loading file special_tokens_map.json from cache at None
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 13:41:44,594 >> loading file tokenizer_config.json from cache at None
+[INFO|configuration_utils.py:668] 2024-05-23 13:41:44,595 >> loading configuration file config.json from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/config.json
+[INFO|configuration_utils.py:720] 2024-05-23 13:41:44,596 >> Model config T5Config {
+  "_name_or_path": "google-t5/t5-large",
+  "architectures": [
+    "T5ForConditionalGeneration"
+  ],
+  "d_ff": 4096,
+  "d_kv": 64,
+  "d_model": 1024,
+  "decoder_start_token_id": 0,
+  "dense_act_fn": "relu",
+  "dropout_rate": 0.1,
+  "eos_token_id": 1,
+  "feed_forward_proj": "relu",
+  "initializer_factor": 1.0,
+  "is_encoder_decoder": true,
+  "is_gated_act": false,
+  "layer_norm_epsilon": 1e-06,
+  "model_type": "t5",
+  "n_positions": 512,
+  "num_decoder_layers": 24,
+  "num_heads": 16,
+  "num_layers": 24,
+  "output_past": true,
+  "pad_token_id": 0,
+  "relative_attention_max_distance": 128,
+  "relative_attention_num_buckets": 32,
+  "task_specific_params": {
+    "summarization": {
+      "early_stopping": true,
+      "length_penalty": 2.0,
+      "max_length": 200,
+      "min_length": 30,
+      "no_repeat_ngram_size": 3,
+      "num_beams": 4,
+      "prefix": "summarize: "
+    },
+    "translation_en_to_de": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to German: "
+    },
+    "translation_en_to_fr": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to French: "
+    },
+    "translation_en_to_ro": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to Romanian: "
+    }
+  },
+  "transformers_version": "4.28.1",
+  "use_cache": true,
+  "vocab_size": 32128
+}
+[WARNING|logging.py:280] 2024-05-23 13:41:44,658 >> You're using a T5TokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+[INFO|configuration_utils.py:575] 2024-05-23 13:41:44,659 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "decoder_start_token_id": 0,
+  "eos_token_id": 1,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.1"
+}
+
+100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [00:07<00:00,  2.75s/it][INFO|integrations.py:720] 2024-05-23 13:41:58,485 >> Automatic Weights & Biases logging enabled, to disable set os.environ["WANDB_DISABLED"] = "true"
+100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3/3 [00:07<00:00,  2.62s/it]
+[INFO|modelcard.py:451] 2024-05-23 13:41:58,623 >> Dropping the following result as it does not have all the necessary fields:
+{'task': {'name': 'Summarization', 'type': 'summarization'}, 'dataset': {'name': 'samsum', 'type': 'samsum', 'config': 'samsum', 'split': 'validation', 'args': 'samsum'}}
+preds [[    0     3     9    10     3    23   241    12   129     3     9 17351
+     21    82   520     5   272    10    24    56   143   376    78  1095
+      3     5     3   115    10    27    31   195   129   376    80    13
+    273   385  3887     5    80    24   751    31    17  1604    95   396
+    600     3     5     3    88  3217   140    80    24   255   310  6528
+      3     5     1     0     0     0     0     0     0     0     0     0
+      0     0     0     0     0     0     0     0     0     0     0     0
+      0     0     0     0     0     0     0     0     0     0     0     0
+      0     0     0     0     0     0     0     0     0     0     0     0
+      0     0     0     0     0     0     0     0     0     0     0     0
+      0     0     0     0     0     0     0     0]
+ [    0     3     9  1196    13 23693  4793     7    33   347    12   805
+    367     3     5    79    54    36  3002    87  5726     6  1814  2944
+     87 13178     3     5    79    54    36  3353    28   796  2005     3
+      5     1     0     0     0     0     0     0     0     0     0     0
+      0     0     0     0     0     0     0     0     0     0     0     0
+      0     0     0     0     0     0     0     0     0     0     0     0
+      0     0     0     0     0     0     0     0     0     0     0     0
+      0     0     0     0     0     0     0     0     0     0     0     0
+      0     0     0     0     0     0     0     0     0     0     0     0
+      0     0     0     0     0     0     0     0     0     0     0     0
+      0     0     0     0     0     0     0     0]
+ [    0    27  9559    10     3    23  1800    79   130   256  3357  3357
+   3357  3357  3357  3357  3357  1462    11    27  2654    31    17  1554
+     48  1158    38  1362 26868    10   125     3     9 29519 26868    10
+    255   816   255    47  9841     3     5     1     0     0     0     0
+      0     0     0     0     0     0     0     0     0     0     0     0
+      0     0     0     0     0     0     0     0     0     0     0     0
+      0     0     0     0     0     0     0     0     0     0     0     0
+      0     0     0     0     0     0     0     0     0     0     0     0
+      0     0     0     0     0     0     0     0     0     0     0     0
+      0     0     0     0     0     0     0     0     0     0     0     0
+      0     0     0     0     0     0     0     0]]
+***** eval metrics *****
+  eval_block_avg              =                20.1761
+  eval_gen_len                =                47.3333
+  eval_rouge1                 =                23.6137
+  eval_rouge2                 =                11.0727
+  eval_rougeL                 =                20.0217
+  eval_rougeLsum              =                22.1952
+  eval_runtime                =             0:00:13.82
+  eval_samples                =                      3
+  eval_samples_per_second     =                  0.217
+  eval_steps_per_second       =                  0.217
+  time_attn                   = ['0:00:00', '0:00:01']
+  time_confidence             =                0:00:05
+  time_decoder_forward        =                0:00:13
+  time_encoder_forward        =                0:00:00
+  time_estimate_conf          =                0:00:00
+  time_exit_attn              = ['0:00:00', '0:00:00']
+  time_exit_ffn               =                0:00:00
+  time_exit_key_value_gen     = ['0:00:00', '0:00:00']
+  time_ffn                    =                0:00:01
+  time_key_value_gen          = ['0:00:00', '0:00:00']
+  time_others                 =                0:00:00
+  time_parallel_attn          = ['0:00:00', '0:00:00']
+  time_parallel_ffn           =                0:00:00
+  time_parallel_key_value_gen = ['0:00:00', '0:00:00']

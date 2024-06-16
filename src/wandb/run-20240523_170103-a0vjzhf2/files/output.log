@@ -1,0 +1,661 @@
+05/23/2024 17:01:07 - WARNING - __main__ - Process rank: -1, device: cpu, n_gpu: 0distributed training: False, 16-bits training: False
+05/23/2024 17:01:07 - INFO - __main__ - Training/evaluation parameters Seq2SeqTrainingArguments(
+_n_gpu=0,
+adafactor=False,
+adam_beta1=0.9,
+adam_beta2=0.999,
+adam_epsilon=1e-08,
+auto_find_batch_size=False,
+bf16=False,
+bf16_full_eval=False,
+data_seed=None,
+dataloader_drop_last=False,
+dataloader_num_workers=0,
+dataloader_pin_memory=True,
+ddp_bucket_cap_mb=None,
+ddp_find_unused_parameters=None,
+ddp_timeout=1800,
+debug=[],
+deepspeed=None,
+disable_tqdm=False,
+do_eval=True,
+do_predict=False,
+do_train=False,
+eval_accumulation_steps=None,
+eval_delay=0,
+eval_steps=500,
+evaluation_strategy=steps,
+fp16=False,
+fp16_backend=auto,
+fp16_full_eval=False,
+fp16_opt_level=O1,
+fsdp=[],
+fsdp_config={'fsdp_min_num_params': 0, 'xla': False, 'xla_fsdp_grad_ckpt': False},
+fsdp_min_num_params=0,
+fsdp_transformer_layer_cls_to_wrap=None,
+full_determinism=False,
+generation_config=None,
+generation_max_length=None,
+generation_num_beams=None,
+gradient_accumulation_steps=1,
+gradient_checkpointing=False,
+greater_is_better=True,
+group_by_length=False,
+half_precision_backend=auto,
+hub_model_id=None,
+hub_private_repo=False,
+hub_strategy=every_save,
+hub_token=<HUB_TOKEN>,
+ignore_data_skip=False,
+include_inputs_for_metrics=True,
+jit_mode_eval=False,
+label_names=None,
+label_smoothing_factor=0.0,
+learning_rate=5e-05,
+length_column_name=length,
+load_best_model_at_end=True,
+local_rank=-1,
+log_level=passive,
+log_level_replica=warning,
+log_on_each_node=True,
+logging_dir=./save/squad_t5-base/runs/May23_16-50-18_sp-byods-145-109-14-79.wireless.uva.nl,
+logging_first_step=False,
+logging_nan_inf_filter=True,
+logging_steps=500,
+logging_strategy=steps,
+lr_scheduler_type=linear,
+max_grad_norm=1.0,
+max_steps=-1,
+metric_for_best_model=f1,
+mp_parameters=,
+no_cuda=False,
+num_train_epochs=3.0,
+optim=adafactor,
+optim_args=None,
+output_dir=./save/squad_t5-base/,
+overwrite_output_dir=True,
+past_index=-1,
+per_device_eval_batch_size=1,
+per_device_train_batch_size=8,
+predict_with_generate=True,
+prediction_loss_only=False,
+push_to_hub=False,
+push_to_hub_model_id=None,
+push_to_hub_organization=None,
+push_to_hub_token=<PUSH_TO_HUB_TOKEN>,
+ray_scope=last,
+remove_unused_columns=True,
+report_to=['wandb'],
+resume_from_checkpoint=None,
+run_name=./save/squad_t5-base/,
+save_on_each_node=False,
+save_safetensors=False,
+save_steps=500,
+save_strategy=steps,
+save_total_limit=1,
+seed=42,
+sharded_ddp=[],
+skip_memory_metrics=True,
+sortish_sampler=False,
+tf32=None,
+torch_compile=False,
+torch_compile_backend=None,
+torch_compile_mode=None,
+torchdynamo=None,
+tpu_metrics_debug=False,
+tpu_num_cores=None,
+use_ipex=False,
+use_legacy_prediction_loop=False,
+use_mps_device=False,
+warmup_ratio=0.0,
+warmup_steps=0,
+weight_decay=0.0,
+xpu_backend=None,
+)
+/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/datasets/load.py:2547: FutureWarning: 'use_auth_token' was deprecated in favor of 'token' in version 2.14.0 and will be removed in 3.0.0.
+You can remove this warning by passing 'token=<use_auth_token>' instead.
+  warnings.warn(
+05/23/2024 17:01:11 - INFO - datasets.builder - Overwrite dataset info from restored data version if exists.
+05/23/2024 17:01:11 - INFO - datasets.info - Loading Dataset info from /Users/matteo/.cache/huggingface/datasets/squad/plain_text/0.0.0/7b6d24c440a36b6815f21b70d25016731768db1f
+05/23/2024 17:01:11 - INFO - datasets.builder - Found cached dataset squad (/Users/matteo/.cache/huggingface/datasets/squad/plain_text/0.0.0/7b6d24c440a36b6815f21b70d25016731768db1f)
+05/23/2024 17:01:11 - INFO - datasets.info - Loading Dataset info from /Users/matteo/.cache/huggingface/datasets/squad/plain_text/0.0.0/7b6d24c440a36b6815f21b70d25016731768db1f
+Overwrite dataset info from restored data version if exists.
+Loading Dataset info from /Users/matteo/.cache/huggingface/datasets/squad/plain_text/0.0.0/7b6d24c440a36b6815f21b70d25016731768db1f
+Found cached dataset squad (/Users/matteo/.cache/huggingface/datasets/squad/plain_text/0.0.0/7b6d24c440a36b6815f21b70d25016731768db1f)
+Loading Dataset info from /Users/matteo/.cache/huggingface/datasets/squad/plain_text/0.0.0/7b6d24c440a36b6815f21b70d25016731768db1f
+[INFO|configuration_utils.py:668] 2024-05-23 17:01:11,755 >> loading configuration file config.json from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/config.json
+[INFO|configuration_utils.py:720] 2024-05-23 17:01:11,757 >> Model config T5Config {
+  "_name_or_path": "google-t5/t5-large",
+  "architectures": [
+    "T5ForConditionalGeneration"
+  ],
+  "d_ff": 4096,
+  "d_kv": 64,
+  "d_model": 1024,
+  "decoder_start_token_id": 0,
+  "dense_act_fn": "relu",
+  "dropout_rate": 0.1,
+  "eos_token_id": 1,
+  "feed_forward_proj": "relu",
+  "initializer_factor": 1.0,
+  "is_encoder_decoder": true,
+  "is_gated_act": false,
+  "layer_norm_epsilon": 1e-06,
+  "model_type": "t5",
+  "n_positions": 512,
+  "num_decoder_layers": 24,
+  "num_heads": 16,
+  "num_layers": 24,
+  "output_past": true,
+  "pad_token_id": 0,
+  "relative_attention_max_distance": 128,
+  "relative_attention_num_buckets": 32,
+  "task_specific_params": {
+    "summarization": {
+      "early_stopping": true,
+      "length_penalty": 2.0,
+      "max_length": 200,
+      "min_length": 30,
+      "no_repeat_ngram_size": 3,
+      "num_beams": 4,
+      "prefix": "summarize: "
+    },
+    "translation_en_to_de": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to German: "
+    },
+    "translation_en_to_fr": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to French: "
+    },
+    "translation_en_to_ro": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to Romanian: "
+    }
+  },
+  "transformers_version": "4.28.1",
+  "use_cache": true,
+  "vocab_size": 32128
+}
+[INFO|tokenization_auto.py:502] 2024-05-23 17:01:11,864 >> Could not locate the tokenizer configuration file, will try to use the model config instead.
+[INFO|configuration_utils.py:668] 2024-05-23 17:01:11,979 >> loading configuration file config.json from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/config.json
+[INFO|configuration_utils.py:720] 2024-05-23 17:01:11,982 >> Model config T5Config {
+  "_name_or_path": "google-t5/t5-large",
+  "architectures": [
+    "T5ForConditionalGeneration"
+  ],
+  "d_ff": 4096,
+  "d_kv": 64,
+  "d_model": 1024,
+  "decoder_start_token_id": 0,
+  "dense_act_fn": "relu",
+  "dropout_rate": 0.1,
+  "eos_token_id": 1,
+  "feed_forward_proj": "relu",
+  "initializer_factor": 1.0,
+  "is_encoder_decoder": true,
+  "is_gated_act": false,
+  "layer_norm_epsilon": 1e-06,
+  "model_type": "t5",
+  "n_positions": 512,
+  "num_decoder_layers": 24,
+  "num_heads": 16,
+  "num_layers": 24,
+  "output_past": true,
+  "pad_token_id": 0,
+  "relative_attention_max_distance": 128,
+  "relative_attention_num_buckets": 32,
+  "task_specific_params": {
+    "summarization": {
+      "early_stopping": true,
+      "length_penalty": 2.0,
+      "max_length": 200,
+      "min_length": 30,
+      "no_repeat_ngram_size": 3,
+      "num_beams": 4,
+      "prefix": "summarize: "
+    },
+    "translation_en_to_de": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to German: "
+    },
+    "translation_en_to_fr": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to French: "
+    },
+    "translation_en_to_ro": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to Romanian: "
+    }
+  },
+  "transformers_version": "4.28.1",
+  "use_cache": true,
+  "vocab_size": 32128
+}
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 17:01:12,261 >> loading file spiece.model from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/spiece.model
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 17:01:12,262 >> loading file tokenizer.json from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/tokenizer.json
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 17:01:12,262 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 17:01:12,262 >> loading file special_tokens_map.json from cache at None
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 17:01:12,262 >> loading file tokenizer_config.json from cache at None
+[INFO|configuration_utils.py:668] 2024-05-23 17:01:12,263 >> loading configuration file config.json from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/config.json
+[INFO|configuration_utils.py:720] 2024-05-23 17:01:12,265 >> Model config T5Config {
+  "_name_or_path": "google-t5/t5-large",
+  "architectures": [
+    "T5ForConditionalGeneration"
+  ],
+  "d_ff": 4096,
+  "d_kv": 64,
+  "d_model": 1024,
+  "decoder_start_token_id": 0,
+  "dense_act_fn": "relu",
+  "dropout_rate": 0.1,
+  "eos_token_id": 1,
+  "feed_forward_proj": "relu",
+  "initializer_factor": 1.0,
+  "is_encoder_decoder": true,
+  "is_gated_act": false,
+  "layer_norm_epsilon": 1e-06,
+  "model_type": "t5",
+  "n_positions": 512,
+  "num_decoder_layers": 24,
+  "num_heads": 16,
+  "num_layers": 24,
+  "output_past": true,
+  "pad_token_id": 0,
+  "relative_attention_max_distance": 128,
+  "relative_attention_num_buckets": 32,
+  "task_specific_params": {
+    "summarization": {
+      "early_stopping": true,
+      "length_penalty": 2.0,
+      "max_length": 200,
+      "min_length": 30,
+      "no_repeat_ngram_size": 3,
+      "num_beams": 4,
+      "prefix": "summarize: "
+    },
+    "translation_en_to_de": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to German: "
+    },
+    "translation_en_to_fr": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to French: "
+    },
+    "translation_en_to_ro": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to Romanian: "
+    }
+  },
+  "transformers_version": "4.28.1",
+  "use_cache": true,
+  "vocab_size": 32128
+}
+[INFO|modeling_utils.py:2534] 2024-05-23 17:01:12,321 >> loading weights file model.safetensors from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/model.safetensors
+[INFO|configuration_utils.py:575] 2024-05-23 17:01:12,431 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "decoder_start_token_id": 0,
+  "eos_token_id": 1,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.1"
+}
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 17:01:17,913 >> loading file spiece.model from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/spiece.model
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 17:01:17,914 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 17:01:17,914 >> loading file special_tokens_map.json from cache at None
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 17:01:17,914 >> loading file tokenizer_config.json from cache at None
+[INFO|configuration_utils.py:668] 2024-05-23 17:01:17,914 >> loading configuration file config.json from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/config.json
+[INFO|configuration_utils.py:720] 2024-05-23 17:01:17,915 >> Model config T5Config {
+  "_name_or_path": "google-t5/t5-large",
+  "architectures": [
+    "T5ForConditionalGeneration"
+  ],
+  "d_ff": 4096,
+  "d_kv": 64,
+  "d_model": 1024,
+  "decoder_start_token_id": 0,
+  "dense_act_fn": "relu",
+  "dropout_rate": 0.1,
+  "eos_token_id": 1,
+  "feed_forward_proj": "relu",
+  "initializer_factor": 1.0,
+  "is_encoder_decoder": true,
+  "is_gated_act": false,
+  "layer_norm_epsilon": 1e-06,
+  "model_type": "t5",
+  "n_positions": 512,
+  "num_decoder_layers": 24,
+  "num_heads": 16,
+  "num_layers": 24,
+  "output_past": true,
+  "pad_token_id": 0,
+  "relative_attention_max_distance": 128,
+  "relative_attention_num_buckets": 32,
+  "task_specific_params": {
+    "summarization": {
+      "early_stopping": true,
+      "length_penalty": 2.0,
+      "max_length": 200,
+      "min_length": 30,
+      "no_repeat_ngram_size": 3,
+      "num_beams": 4,
+      "prefix": "summarize: "
+    },
+    "translation_en_to_de": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to German: "
+    },
+    "translation_en_to_fr": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to French: "
+    },
+    "translation_en_to_ro": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to Romanian: "
+    }
+  },
+  "transformers_version": "4.28.1",
+  "use_cache": true,
+  "vocab_size": 32128
+}
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 17:01:22,210 >> loading file spiece.model from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/spiece.model
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 17:01:22,211 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 17:01:22,211 >> loading file special_tokens_map.json from cache at None
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 17:01:22,211 >> loading file tokenizer_config.json from cache at None
+[INFO|configuration_utils.py:668] 2024-05-23 17:01:22,212 >> loading configuration file config.json from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/config.json
+[INFO|configuration_utils.py:720] 2024-05-23 17:01:22,213 >> Model config T5Config {
+  "_name_or_path": "google-t5/t5-large",
+  "architectures": [
+    "T5ForConditionalGeneration"
+  ],
+  "d_ff": 4096,
+  "d_kv": 64,
+  "d_model": 1024,
+  "decoder_start_token_id": 0,
+  "dense_act_fn": "relu",
+  "dropout_rate": 0.1,
+  "eos_token_id": 1,
+  "feed_forward_proj": "relu",
+  "initializer_factor": 1.0,
+  "is_encoder_decoder": true,
+  "is_gated_act": false,
+  "layer_norm_epsilon": 1e-06,
+  "model_type": "t5",
+  "n_positions": 512,
+  "num_decoder_layers": 24,
+  "num_heads": 16,
+  "num_layers": 24,
+  "output_past": true,
+  "pad_token_id": 0,
+  "relative_attention_max_distance": 128,
+  "relative_attention_num_buckets": 32,
+  "task_specific_params": {
+    "summarization": {
+      "early_stopping": true,
+      "length_penalty": 2.0,
+      "max_length": 200,
+      "min_length": 30,
+      "no_repeat_ngram_size": 3,
+      "num_beams": 4,
+      "prefix": "summarize: "
+    },
+    "translation_en_to_de": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to German: "
+    },
+    "translation_en_to_fr": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to French: "
+    },
+    "translation_en_to_ro": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to Romanian: "
+    }
+  },
+  "transformers_version": "4.28.1",
+  "use_cache": true,
+  "vocab_size": 32128
+}
+[INFO|modeling_utils.py:3190] 2024-05-23 17:01:22,981 >> All model checkpoint weights were used when initializing DeployT5ForConditionalGeneration.
+[INFO|modeling_utils.py:3198] 2024-05-23 17:01:22,981 >> All the weights of DeployT5ForConditionalGeneration were initialized from the model checkpoint at google-t5/t5-large.
+If your task is similar to the task the model of the checkpoint was trained on, you can already use DeployT5ForConditionalGeneration for predictions without further training.
+05/23/2024 17:01:23 - INFO - datasets.arrow_dataset - Loading cached processed dataset at /Users/matteo/.cache/huggingface/datasets/squad/plain_text/0.0.0/7b6d24c440a36b6815f21b70d25016731768db1f/cache-409e54ab36806d61.arrow
+[INFO|configuration_utils.py:537] 2024-05-23 17:01:23,289 >> loading configuration file generation_config.json from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/generation_config.json
+[INFO|configuration_utils.py:575] 2024-05-23 17:01:23,291 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "decoder_start_token_id": 0,
+  "eos_token_id": 1,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.1"
+}
+Loading cached processed dataset at /Users/matteo/.cache/huggingface/datasets/squad/plain_text/0.0.0/7b6d24c440a36b6815f21b70d25016731768db1f/cache-409e54ab36806d61.arrow
+[INFO|tokenization_auto.py:502] 2024-05-23 17:01:24,734 >> Could not locate the tokenizer configuration file, will try to use the model config instead.
+[INFO|configuration_utils.py:668] 2024-05-23 17:01:24,854 >> loading configuration file config.json from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/config.json
+[INFO|configuration_utils.py:720] 2024-05-23 17:01:24,857 >> Model config T5Config {
+  "_name_or_path": "google-t5/t5-large",
+  "architectures": [
+    "T5ForConditionalGeneration"
+  ],
+  "d_ff": 4096,
+  "d_kv": 64,
+  "d_model": 1024,
+  "decoder_start_token_id": 0,
+  "dense_act_fn": "relu",
+  "dropout_rate": 0.1,
+  "eos_token_id": 1,
+  "feed_forward_proj": "relu",
+  "initializer_factor": 1.0,
+  "is_encoder_decoder": true,
+  "is_gated_act": false,
+  "layer_norm_epsilon": 1e-06,
+  "model_type": "t5",
+  "n_positions": 512,
+  "num_decoder_layers": 24,
+  "num_heads": 16,
+  "num_layers": 24,
+  "output_past": true,
+  "pad_token_id": 0,
+  "relative_attention_max_distance": 128,
+  "relative_attention_num_buckets": 32,
+  "task_specific_params": {
+    "summarization": {
+      "early_stopping": true,
+      "length_penalty": 2.0,
+      "max_length": 200,
+      "min_length": 30,
+      "no_repeat_ngram_size": 3,
+      "num_beams": 4,
+      "prefix": "summarize: "
+    },
+    "translation_en_to_de": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to German: "
+    },
+    "translation_en_to_fr": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to French: "
+    },
+    "translation_en_to_ro": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to Romanian: "
+    }
+  },
+  "transformers_version": "4.28.1",
+  "use_cache": true,
+  "vocab_size": 32128
+}
+05/23/2024 17:01:25 - INFO - __main__ - *** Evaluate ***
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 17:01:25,099 >> loading file spiece.model from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/spiece.model
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 17:01:25,100 >> loading file tokenizer.json from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/tokenizer.json
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 17:01:25,100 >> loading file added_tokens.json from cache at None
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 17:01:25,101 >> loading file special_tokens_map.json from cache at None
+[INFO|tokenization_utils_base.py:1809] 2024-05-23 17:01:25,101 >> loading file tokenizer_config.json from cache at None
+[INFO|configuration_utils.py:668] 2024-05-23 17:01:25,102 >> loading configuration file config.json from cache at /Users/matteo/.cache/huggingface/hub/models--google-t5--t5-large/snapshots/150ebc2c4b72291e770f58e6057481c8d2ed331a/config.json
+[INFO|configuration_utils.py:720] 2024-05-23 17:01:25,103 >> Model config T5Config {
+  "_name_or_path": "google-t5/t5-large",
+  "architectures": [
+    "T5ForConditionalGeneration"
+  ],
+  "d_ff": 4096,
+  "d_kv": 64,
+  "d_model": 1024,
+  "decoder_start_token_id": 0,
+  "dense_act_fn": "relu",
+  "dropout_rate": 0.1,
+  "eos_token_id": 1,
+  "feed_forward_proj": "relu",
+  "initializer_factor": 1.0,
+  "is_encoder_decoder": true,
+  "is_gated_act": false,
+  "layer_norm_epsilon": 1e-06,
+  "model_type": "t5",
+  "n_positions": 512,
+  "num_decoder_layers": 24,
+  "num_heads": 16,
+  "num_layers": 24,
+  "output_past": true,
+  "pad_token_id": 0,
+  "relative_attention_max_distance": 128,
+  "relative_attention_num_buckets": 32,
+  "task_specific_params": {
+    "summarization": {
+      "early_stopping": true,
+      "length_penalty": 2.0,
+      "max_length": 200,
+      "min_length": 30,
+      "no_repeat_ngram_size": 3,
+      "num_beams": 4,
+      "prefix": "summarize: "
+    },
+    "translation_en_to_de": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to German: "
+    },
+    "translation_en_to_fr": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to French: "
+    },
+    "translation_en_to_ro": {
+      "early_stopping": true,
+      "max_length": 300,
+      "num_beams": 4,
+      "prefix": "translate English to Romanian: "
+    }
+  },
+  "transformers_version": "4.28.1",
+  "use_cache": true,
+  "vocab_size": 32128
+}
+[INFO|trainer.py:762] 2024-05-23 17:01:25,152 >> The following columns in the evaluation set don't have a corresponding argument in `DeployT5ForConditionalGeneration.forward` and have been ignored: offset_mapping, example_id. If offset_mapping, example_id are not expected by `DeployT5ForConditionalGeneration.forward`,  you can safely ignore this message.
+[WARNING|logging.py:280] 2024-05-23 17:01:25,156 >> You're using a T5TokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+[INFO|configuration_utils.py:575] 2024-05-23 17:01:25,156 >> Generate config GenerationConfig {
+  "_from_model_config": true,
+  "decoder_start_token_id": 0,
+  "eos_token_id": 1,
+  "pad_token_id": 0,
+  "transformers_version": "4.28.1"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [01:24<00:00,  1.06it/s][INFO|integrations.py:720] 2024-05-23 17:02:50,985 >> Automatic Weights & Biases logging enabled, to disable set os.environ["WANDB_DISABLED"] = "true"
+100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 100/100 [01:24<00:00,  1.18it/s]
+***** eval metrics *****
+  eval_block_avg              =                19.3543
+  eval_exact_match            =                   88.0
+  eval_f1                     =                95.1238
+  eval_runtime                =             0:01:25.74
+  eval_samples                =                    100
+  eval_samples_per_second     =                  1.166
+  eval_steps_per_second       =                  1.166
+  time_attn                   = ['0:00:02', '0:00:04']
+  time_confidence             =                0:00:05
+  time_decoder_forward        =                0:00:40
+  time_encoder_forward        =                0:00:00
+  time_estimate_conf          =                0:00:00
+  time_exit_attn              = ['0:00:00', '0:00:00']
+  time_exit_ffn               =                0:00:00
+  time_exit_key_value_gen     = ['0:00:00', '0:00:00']
+  time_ffn                    =                0:00:05
+  time_key_value_gen          = ['0:00:01', '0:00:03']
+  time_others                 =                0:00:00
+  time_parallel_attn          = ['0:00:00', '0:00:00']
+  time_parallel_ffn           =                0:00:00
+  time_parallel_key_value_gen = ['0:00:00', '0:00:00']

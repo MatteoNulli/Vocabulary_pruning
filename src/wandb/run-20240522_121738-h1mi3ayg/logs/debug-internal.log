@@ -1,0 +1,55 @@
+2024-05-22 12:17:39,365 INFO    StreamThr :30179 [internal.py:wandb_internal():86] W&B internal server running at pid: 30179, started at: 2024-05-22 12:17:39.363170
+2024-05-22 12:17:39,366 DEBUG   HandlerThread:30179 [handler.py:handle_request():146] handle_request: status
+2024-05-22 12:17:39,367 INFO    WriterThread:30179 [datastore.py:open_for_write():87] open: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240522_121738-h1mi3ayg/run-h1mi3ayg.wandb
+2024-05-22 12:17:39,368 DEBUG   SenderThread:30179 [sender.py:send():379] send: header
+2024-05-22 12:17:39,368 DEBUG   SenderThread:30179 [sender.py:send():379] send: run
+2024-05-22 12:17:39,862 INFO    SenderThread:30179 [dir_watcher.py:__init__():211] watching files in: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240522_121738-h1mi3ayg/files
+2024-05-22 12:17:39,862 INFO    SenderThread:30179 [sender.py:_start_run_threads():1124] run started: h1mi3ayg with start time 1716373058.52396
+2024-05-22 12:17:39,867 DEBUG   HandlerThread:30179 [handler.py:handle_request():146] handle_request: check_version
+2024-05-22 12:17:39,867 DEBUG   SenderThread:30179 [sender.py:send_request():406] send_request: check_version
+2024-05-22 12:17:39,952 DEBUG   HandlerThread:30179 [handler.py:handle_request():146] handle_request: run_start
+2024-05-22 12:17:39,959 DEBUG   HandlerThread:30179 [system_info.py:__init__():26] System info init
+2024-05-22 12:17:39,960 DEBUG   HandlerThread:30179 [system_info.py:__init__():41] System info init done
+2024-05-22 12:17:39,960 INFO    HandlerThread:30179 [system_monitor.py:start():194] Starting system monitor
+2024-05-22 12:17:39,960 INFO    SystemMonitor:30179 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2024-05-22 12:17:39,960 INFO    HandlerThread:30179 [system_monitor.py:probe():214] Collecting system info
+2024-05-22 12:17:39,960 INFO    SystemMonitor:30179 [interfaces.py:start():190] Started cpu monitoring
+2024-05-22 12:17:39,960 DEBUG   HandlerThread:30179 [system_info.py:probe():150] Probing system
+2024-05-22 12:17:39,960 INFO    SystemMonitor:30179 [interfaces.py:start():190] Started disk monitoring
+2024-05-22 12:17:39,961 INFO    SystemMonitor:30179 [interfaces.py:start():190] Started gpuapple monitoring
+2024-05-22 12:17:39,964 INFO    SystemMonitor:30179 [interfaces.py:start():190] Started memory monitoring
+2024-05-22 12:17:39,965 INFO    SystemMonitor:30179 [interfaces.py:start():190] Started network monitoring
+2024-05-22 12:17:39,966 DEBUG   HandlerThread:30179 [system_info.py:_probe_git():135] Probing git
+2024-05-22 12:17:39,982 DEBUG   HandlerThread:30179 [system_info.py:_probe_git():143] Probing git done
+2024-05-22 12:17:39,983 DEBUG   HandlerThread:30179 [system_info.py:probe():198] Probing system done
+2024-05-22 12:17:39,983 DEBUG   HandlerThread:30179 [system_monitor.py:probe():223] {'os': 'macOS-14.5-arm64-arm-64bit', 'python': '3.10.12', 'heartbeatAt': '2024-05-22T10:17:39.960544', 'startedAt': '2024-05-22T10:17:38.517363', 'docker': None, 'cuda': None, 'args': ('--model_name_or_path', 'jvelja/t5-squad', '--do_eval', '--dataset_name', 'squad', '--context_column', 'context', '--question_column', 'question', '--answer_column', 'answers', '--output_dir', './save/squad_t5-base/', '--per_device_eval_batch_size', '1', '--deploy_scenario', 'True', '--use_synchronize', 'False', '--overwrite_output_dir', '--predict_with_generate', '--max_seq_length', '512', '--use_early_exit', 'True', '--exit_conf_type', 'reweight_contrastive_decoding', '--exit_conf_threshold', '0.9', '--exit_min_layer', '1', '--include_inputs_for_metrics', 'True', '--max_eval_samples', '100', '--use_auth_token', 'True', '--type_vocab_reduct', 'fixed'), 'state': 'running', 'program': '-m run_question_answering', 'codePathLocal': None, 'git': {'remote': 'https://github.com/joanvelja/Confidently_Exiting.git', 'commit': 'ee1bb2d9966d1a87efd1e3ecd1f5e67178bb6fc5'}, 'email': 'matteo.nulli@gmail.com', 'root': '/Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting', 'host': 'sp-byods-145-109-44-187.wireless.uva.nl', 'username': 'matteo', 'executable': '/Users/matteo/anaconda3/envs/dl2/bin/python', 'cpu_count': 10, 'cpu_count_logical': 10, 'disk': {'/': {'total': 460.4317207336426, 'used': 422.86136627197266}}, 'gpuapple': {'type': 'arm', 'vendor': 'Apple'}, 'memory': {'total': 32.0}}
+2024-05-22 12:17:39,983 INFO    HandlerThread:30179 [system_monitor.py:probe():224] Finished collecting system info
+2024-05-22 12:17:39,983 INFO    HandlerThread:30179 [system_monitor.py:probe():227] Publishing system info
+2024-05-22 12:17:39,983 DEBUG   HandlerThread:30179 [system_info.py:_save_conda():207] Saving list of conda packages installed into the current environment
+2024-05-22 12:17:40,869 INFO    Thread-24 :30179 [dir_watcher.py:_on_file_created():271] file/dir created: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240522_121738-h1mi3ayg/files/conda-environment.yaml
+2024-05-22 12:17:41,811 DEBUG   HandlerThread:30179 [system_info.py:_save_conda():222] Saving conda packages done
+2024-05-22 12:17:41,812 INFO    HandlerThread:30179 [system_monitor.py:probe():229] Finished publishing system info
+2024-05-22 12:17:41,812 DEBUG   SenderThread:30179 [sender.py:send():379] send: files
+2024-05-22 12:17:41,812 INFO    SenderThread:30179 [sender.py:_save_file():1390] saving file wandb-metadata.json with policy now
+2024-05-22 12:17:41,874 INFO    Thread-24 :30179 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240522_121738-h1mi3ayg/files/conda-environment.yaml
+2024-05-22 12:17:41,874 INFO    Thread-24 :30179 [dir_watcher.py:_on_file_created():271] file/dir created: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240522_121738-h1mi3ayg/files/wandb-metadata.json
+2024-05-22 12:17:41,925 DEBUG   HandlerThread:30179 [handler.py:handle_request():146] handle_request: python_packages
+2024-05-22 12:17:41,925 DEBUG   HandlerThread:30179 [handler.py:handle_request():146] handle_request: stop_status
+2024-05-22 12:17:41,925 DEBUG   SenderThread:30179 [sender.py:send_request():406] send_request: python_packages
+2024-05-22 12:17:41,926 DEBUG   HandlerThread:30179 [handler.py:handle_request():146] handle_request: internal_messages
+2024-05-22 12:17:41,926 DEBUG   SenderThread:30179 [sender.py:send_request():406] send_request: stop_status
+2024-05-22 12:17:42,214 DEBUG   SenderThread:30179 [sender.py:send():379] send: telemetry
+2024-05-22 12:17:42,409 INFO    wandb-upload_0:30179 [upload_job.py:push():131] Uploaded file /var/folders/vz/f1jf304n3fxfxhc14yfh_l_c0000gn/T/tmpesxlhi6gwandb/j1366znv-wandb-metadata.json
+2024-05-22 12:17:42,876 INFO    Thread-24 :30179 [dir_watcher.py:_on_file_created():271] file/dir created: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240522_121738-h1mi3ayg/files/output.log
+2024-05-22 12:17:42,877 INFO    Thread-24 :30179 [dir_watcher.py:_on_file_created():271] file/dir created: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240522_121738-h1mi3ayg/files/requirements.txt
+2024-05-22 12:17:44,883 INFO    Thread-24 :30179 [dir_watcher.py:_on_file_modified():288] file/dir modified: /Users/matteo/Documents/MSc/Period5/DL2/Project/Confidently_Exiting/src/wandb/run-20240522_121738-h1mi3ayg/files/output.log
+2024-05-22 12:17:45,228 DEBUG   HandlerThread:30179 [handler.py:handle_request():146] handle_request: status_report
+2024-05-22 12:17:45,975 INFO    memory    :30179 [interfaces.py:monitor():140] Process proc.memory.rssMB has exited.
+2024-05-22 12:17:45,975 INFO    cpu       :30179 [interfaces.py:monitor():140] Process cpu has exited.
+2024-05-22 12:17:45,975 DEBUG   SystemMonitor:30179 [system_monitor.py:_start():172] Starting system metrics aggregation loop
+2024-05-22 12:17:45,976 DEBUG   SystemMonitor:30179 [system_monitor.py:_start():179] Finished system metrics aggregation loop
+2024-05-22 12:17:45,976 DEBUG   SystemMonitor:30179 [system_monitor.py:_start():183] Publishing last batch of metrics
+2024-05-22 12:17:45,979 INFO    MainThread:30179 [internal.py:handle_exit():76] Internal process exited
+2024-05-22 12:17:45,979 INFO    MainThread:30179 [internal.py:handle_exit():76] Internal process exited
+2024-05-22 12:17:45,981 DEBUG   SenderThread:30179 [sender.py:send():379] send: telemetry
+2024-05-22 12:17:45,981 DEBUG   SenderThread:30179 [sender.py:send():379] send: stats

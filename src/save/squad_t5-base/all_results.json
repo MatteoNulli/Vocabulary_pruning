@@ -1,0 +1,23 @@
+{
+    "eval_block_avg": 16.195652173877836,
+    "eval_exact_match": 80.0,
+    "eval_f1": 93.33333333333334,
+    "eval_runtime": 21.6494,
+    "eval_samples": 10,
+    "eval_samples_per_second": 0.462,
+    "eval_steps_per_second": 0.462,
+    "time_attn": "['0:00:00', '0:00:01']",
+    "time_confidence": "0:00:04",
+    "time_decoder_forward": "0:00:11",
+    "time_encoder_forward": "0:00:00",
+    "time_estimate_conf": "0:00:00",
+    "time_exit_attn": "['0:00:00', '0:00:00']",
+    "time_exit_ffn": "0:00:00",
+    "time_exit_key_value_gen": "['0:00:00', '0:00:00']",
+    "time_ffn": "0:00:02",
+    "time_key_value_gen": "['0:00:00', '0:00:00']",
+    "time_others": "0:00:00",
+    "time_parallel_attn": "['0:00:00', '0:00:00']",
+    "time_parallel_ffn": "0:00:00",
+    "time_parallel_key_value_gen": "['0:00:00', '0:00:00']"
+}

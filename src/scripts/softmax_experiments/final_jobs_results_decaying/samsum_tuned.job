@@ -1,0 +1,26 @@
+#!/bin/bash
+
+module purge
+module load 2022
+module load Anaconda3/2022.05
+cd $HOME/karim_Confidently_Exiting/src/
+source activate dl2
+wandb login 94c83d220ddc780120eaa22226adf6730f644c6c
+srun python run_summarization.py \
+    --model_name_or_path jvelja/t5-samsum \
+    --do_eval \
+    --dataset_name samsum \
+    --output_dir ./save/samsum_t5_large/ \
+    --per_device_eval_batch_size 1 \
+    --overwrite_output_dir \
+    --predict_with_generate \
+    --source_prefix "summarize: " \
+    --deploy_scenario True \
+    --use_synchronize True \
+    --overwrite_output_dir \
+    --predict_with_generate \
+    --use_early_exit True \
+    --exit_conf_threshold 0.9 \
+    --exit_min_layer 3 \
+    --exit_conf_type softmax \
+    --type_vocab_reduct decaying \

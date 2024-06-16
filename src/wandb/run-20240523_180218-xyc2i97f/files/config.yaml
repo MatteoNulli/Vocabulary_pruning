@@ -1,0 +1,63 @@
+wandb_version: 1
+
+dataset:
+  desc: null
+  value: squad
+model:
+  desc: null
+  value: google-t5/t5-large
+exit_conf_type:
+  desc: null
+  value: JSD_contrastive_confidence
+exit_conf_threshold:
+  desc: null
+  value: 0.9
+exit_min_layer:
+  desc: null
+  value: 3
+type_vocab_reduct:
+  desc: null
+  value: adaptive
+_wandb:
+  desc: null
+  value:
+    python_version: 3.10.12
+    cli_version: 0.16.6
+    framework: huggingface
+    huggingface_version: 4.28.1
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    start_time: 1716480138.0
+    t:
+      1:
+      - 1
+      - 5
+      - 11
+      - 49
+      - 51
+      - 53
+      - 55
+      - 71
+      - 98
+      - 100
+      2:
+      - 1
+      - 5
+      - 11
+      - 49
+      - 51
+      - 53
+      - 55
+      - 71
+      - 98
+      - 100
+      3:
+      - 16
+      - 23
+      4: 3.10.12
+      5: 0.16.6
+      6: 4.28.1
+      8:
+      - 4
+      - 5
+      13: darwin-arm64
