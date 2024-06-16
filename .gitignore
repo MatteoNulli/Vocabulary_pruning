@@ -4,5 +4,5 @@
 /src/wandb/latest-run/
 /src/wandb/run-*
 /src/wandb/debug-*
-src/wandb/debug-internal.log
+src/wandb/debug-internal.logs
 /src/logs/
