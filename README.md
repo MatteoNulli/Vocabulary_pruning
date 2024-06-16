@@ -43,10 +43,10 @@ If you wish to run all the scripts at once - for example if you want to reproduc
 ```bash
 for job in *.job; do sbatch $job; done
 ```
-
+<!-- 
 #### Softmax Vocabulary Pruning
 Here we explain how to reproduce the experiments from the Section `Softmax Vocabulary Prunning` of our [blogpost](blogpost.md). 
-Please see the main [folder](src/scripts/softmax_experiments) for a total overview of the files you need to reproduce this section.
+Please see the main [folder](src/scripts/softmax_experiments) for a total overview of the files you need to reproduce this section. -->
 
 <!-- 
 The plots obtained for [Figure 2](./blogpost_images/plots/figure2.png), [3](./blogpost_images/plots/figure3.png), and [4](./blogpost_images/plots/figure4.png) can be obtained by running this [folder](src\scripts\softmax_experiments\plotting_graphs). Regarding the full runs for plots [7](/blogpost_images/plots/figure5.png) and [8](/blogpost_images/plots/figure6.png) they can be obtained by running the folders for [baseline](src\scripts\softmax_experiments\final_jobs_results_no_reduct), [fixed](src\scripts\softmax_experiments\final_jobs_results_fixed), and [decaying](src\scripts\softmax_experiments\final_jobs_results_decaying) and logging their respective results. -->
