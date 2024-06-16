@@ -596,9 +596,6 @@ class DeployT5Stack(T5Stack):
             self._reset_time_measure()
         else: self.deploy_time = None
         
-        self.render = config.render_jsds
-        if self.render:
-            self.tokenizer = T5Tokenizer.from_pretrained("google-t5/t5-large")
         
     def _reset_time_measure(self):
         self.deploy_time = {'time_key_value_gen': [datetime.timedelta(), datetime.timedelta()],
@@ -987,8 +984,6 @@ class DeployT5Stack(T5Stack):
                         start = datetime.datetime.now()
                         _hidden_states = self.dropout(self.final_layer_norm(hidden_states))
 
-
-                        
                         # SHRINKING VOCAB PART:
                         if not self.config.type_vocab_reduct: # If we are not using any vocab reduction
                             a = _hidden_states * (self.config.d_model ** -0.5)
@@ -1085,82 +1080,25 @@ class DeployT5Stack(T5Stack):
                                     raise("Please provide a valid type_vocab_reduct argument. Either use fixed, decaying, or adaptive.")
 
                         # END OF SHRINKING VOCAB PART                        
-                        if self.config.exit_conf_type == "reweight_contrastive_decoding":
-                            
-                            out = get_skip_mask_cd(
-                                lm_logits,
-                                _hidden_states,
-                                cm_head,
-                                config=self.config,
-                                pos_time=past_key_values[i][0].shape[2] + 1 if past_key_values[i] is not None else 1,
-                                layer_exp = i,
-                                prev_probits = prev_probits, 
-                                layer_am = i//2,
-                                alpha = 0.1,
-                                return_jsds=False,
-                                return_conf=True if self.config.type_vocab_reduct == "adaptive" else False,
-                                )
-                            if self.config.type_vocab_reduct == "adaptive":
-                                skip_mask, conf = out
-                                prev_confidences[i] = conf
-                            else:
-                                skip_mask = out
-                            
-                        elif self.config.exit_conf_type == "JSD_contrastive_confidence":
-                            
-                            out = get_skip_mask_cd(
-                                lm_logits,
-                                _hidden_states,
-                                cm_head,
-                                config=self.config,
-                                pos_time=past_key_values[i][0].shape[2] + 1 if past_key_values[i] is not None else 1,
-                                layer_exp = i,
-                                prev_probits = prev_probits, 
-                                layer_am = i//2,
-                                alpha = 0.1,
-                                return_jsds=self.render,
-                                return_conf=True if self.config.type_vocab_reduct == "adaptive" else False,
-                                )
-                            if self.config.type_vocab_reduct == "adaptive":
-                                if self.render:
-                                    skip_mask, jsds, conf = out
-                                else:
-                                    skip_mask, conf = out
-                                prev_confidences[i] = conf
-                            else:
-                                if self.render:
-                                    skip_mask, jsds = out
-                                else:
-                                    skip_mask = out
-
+                        out = get_skip_mask(
+                            lm_logits,
+                            _hidden_states,
+                            cm_head,
+                            config=self.config,
+                            pos_time=past_key_values[i][0].shape[2] + 1 if past_key_values[i] is not None else 1,
+                            return_conf=True if self.config.type_vocab_reduct == "adaptive" else False
+                        )
+                        if self.config.type_vocab_reduct == "adaptive":
+                            skip_mask, conf = out
+                            prev_confidences[i] = conf
                         else:
-                            out = get_skip_mask(
-                                lm_logits,
-                                _hidden_states,
-                                cm_head,
-                                config=self.config,
-                                pos_time=past_key_values[i][0].shape[2] + 1 if past_key_values[i] is not None else 1,
-                                return_conf=True if self.config.type_vocab_reduct == "adaptive" else False
-                            )
-                            if self.config.type_vocab_reduct == "adaptive":
-                                skip_mask, conf = out
-                                prev_confidences[i] = conf
-                            else:
-                                skip_mask = out
-                        
+                            skip_mask = out
+                    
 
                         if not skip_mask: self.block_op[i] += 1                    
                         if skip_mask: 
                             
-                            self.lm_logits = lm_logits # This is where the logits are sent to do the predictions.
-    
-                            if self.render: #and len(jsds) >= 23 : # When we have all the jdss values, we can use them to check jsds between layers
-                                print("JSDS: ", jsds)
-                                probits = torch.softmax(lm_logits, dim=-1)
-                                argmax_index = torch.argmax(probits).item()
-                                # Tokenizer to get the words
-                                word = self.tokenizer.decode(argmax_index)
-                                print("Word: ", word, " Token_id: ", argmax_index)
+                            self.lm_logits = lm_logits # This is where the logits are sent to do the predictions.   
                     
                         if self.config.use_synchronize: torch.cuda.synchronize()
                         self.deploy_time['time_confidence'] += (datetime.datetime.now() - start)

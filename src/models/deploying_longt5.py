@@ -552,6 +552,7 @@ class DeployLongT5Stack(LongT5Stack):
         self.lm_logits = None  # to prevent calculating logits twice
 
         prev_probits = {}
+        prev_confidences = {}
 
         if self.is_decoder and self.config.plotting_logits:
             previous_logits = []
@@ -688,17 +689,16 @@ class DeployLongT5Stack(LongT5Stack):
                                 selected_weights = lm_head.weight[self.top_k_indices, : ] # THis can be done here to win some compute time
                             else: # For all the other layers either use fixed, decaying or adaptive pruning
                                 if self.config.type_vocab_reduct == "fixed":
-                                    # Note: There is no bias in self.lm_head = nn.Linear(config.d_model, config.vocab_size, bias=False)
-                                    #lm_logits = selected_weights(_hidden_states) # Get new logits with the top-200 weights
-                                    #print(_hidden_states.shape, selected_weights.T.shape)
 
+                                    if self.config.count_flops:
+                                        self.flop_counter +=  (self.config.d_model**2)* k * 1 # Seq length is always one
+                                    # Note: There is no bias in self.lm_head = nn.Linear(config.d_model, config.vocab_size, bias=False)
                                     a = _hidden_states * (self.config.d_model ** -0.5)
                                     lm_logits_temp = torch.nn.functional.linear(_hidden_states, selected_weights)  if not self.config.tie_word_embeddings \
                                         else torch.nn.functional.linear(a, selected_weights)
-                                    
+               
                                     # Initialize lm_logits with -inf
                                     lm_logits = torch.full((1, 1, self.config.vocab_size), -float("inf"), device=lm_logits_temp.device)
-                                    #lm_logits = torch.full((1, 1, self.config.vocab_size), -10000.00, device=lm_logits_temp.device)
 
                                     # Create a mask for the top_k_indices
                                     top_k_mask = torch.zeros(self.config.vocab_size, dtype=torch.bool, device=lm_logits_temp.device)
@@ -707,12 +707,12 @@ class DeployLongT5Stack(LongT5Stack):
                                     # Use the mask to assign values from lm_logits_temp to lm_logits
                                     lm_logits[0, 0, top_k_mask] = lm_logits_temp[0, 0, :len(self.top_k_indices)]
 
-                                    # Update lm_logits_temp by removing the used elements
-                                    lm_logits_temp = lm_logits_temp[:, :, len(self.top_k_indices):]
-
                                 elif self.config.type_vocab_reduct == "decaying":  # Smoothed pruning! For all the other layers -> smoothed pruning
                                     current_k = self.func_inverse(i,maximum_k_size, minimum_k_size, num_layers)
-                                    # top_k_list = [4500, 2500, 2000, 1000, 750, 700, 600, 500, 400, 300, 100, 50] # This is the list of top_k values for each block based on graph for based as an indicator.
+                                    
+                                    if self.config.count_flops:
+                                        self.flop_counter +=  (self.config.d_model**2)* current_k * 1 # Seq length is always one
+
                                     selected_weights = lm_head.weight[self.top_k_indices[:current_k], :]
                     
                                     a = _hidden_states * (self.config.d_model ** -0.5)
@@ -721,7 +721,6 @@ class DeployLongT5Stack(LongT5Stack):
                                     
                                     # Initialize lm_logits with -inf
                                     lm_logits = torch.full((1, 1, self.config.vocab_size), -float("inf"), device=lm_logits_temp.device)
-                                    #lm_logits = torch.full((1, 1, self.config.vocab_size), -10000.00, device=lm_logits_temp.device)
 
                                     # Create a mask for the top_k_indices
                                     top_k_mask = torch.zeros(self.config.vocab_size, dtype=torch.bool, device=lm_logits_temp.device)
@@ -730,88 +729,58 @@ class DeployLongT5Stack(LongT5Stack):
                                     # Use the mask to assign values from lm_logits_temp to lm_logits
                                     lm_logits[0, 0, top_k_mask] = lm_logits_temp[0, 0, :len(self.top_k_indices[:current_k])]
 
-                                    # Update lm_logits_temp by removing the used elements
-                                    lm_logits_temp = lm_logits_temp[:, :, len(self.top_k_indices[:current_k]):]
                                 elif self.config.type_vocab_reduct == "adaptive":
                                         # TODO experiment with not only the top-1 confidence but combining the top-k confidences
                                         # TODO experiment with taking the top-k not (only) in the starting layer
                                         # TODO experiment with different formulas to go from confidence value to retained indices
                                         # TODO experiment with non-confidence parameters (and potentialy combinations of params)
                                         curr_weights_size = lm_head.weight.size(dim=0)
+                                        conf = prev_confidences[i-1] # This is the confidence of the previous layer
                                         conf_scaling_factor = 0.9 # TODO experiment with different scaling factors
                                         retained_top_k = int(curr_weights_size * (1 - conf * conf_scaling_factor))
                                         selected_weights = lm_head.weight[self.top_k_indices[:retained_top_k], :]
-                                        lm_logits = torch.nn.functional.linear(_hidden_states, selected_weights)
-                                else: 
+                                        ############################
+                                        a = _hidden_states * (self.config.d_model ** -0.5)
+                                        lm_logits_temp = torch.nn.functional.linear(_hidden_states, selected_weights)  if not self.config.tie_word_embeddings \
+                                            else torch.nn.functional.linear(a, selected_weights)
+                                        
+                                        if self.config.count_flops:
+                                            self.flop_counter +=  (self.config.d_model**2)* retained_top_k * 1 # Seq length is always one
+                                    
+                                        # Initialize lm_logits with -inf
+                                        lm_logits = torch.full((1, 1, self.config.vocab_size), -float("inf"), device=lm_logits_temp.device)
+
+                                        # Create a mask for the top_k_indices
+                                        top_k_mask = torch.zeros(self.config.vocab_size, dtype=torch.bool, device=lm_logits_temp.device)
+                                        top_k_mask[self.top_k_indices[:retained_top_k]] = True
+
+                                        # Use the mask to assign values from lm_logits_temp to lm_logits
+                                        lm_logits[0, 0, top_k_mask] = lm_logits_temp[0, 0, :len(self.top_k_indices[:retained_top_k])]
+                                else:
                                     raise("Please provide a valid type_vocab_reduct argument. Either use fixed, decaying, or adaptive.")
-
-
-
-                        if self.config.exit_conf_type == "contrastive_decoding":
-                            skip_mask = get_skip_mask_cd(
-                                lm_logits,
-                                _hidden_states,
-                                cm_head,
-                                config=self.config,
-                                pos_time=past_key_values[i][0].shape[2] + 1 if past_key_values[i] is not None else 1,
-                                layer_exp = i,
-                                prev_probits = prev_probits, 
-                                layer_am = i//2,
-                                alpha = 0.1,
-                                )
                         
-                        elif self.config.exit_conf_type == "reweight_contrastive_decoding":
-                            
-                            skip_mask = get_skip_mask_cd(
-                                lm_logits,
-                                _hidden_states,
-                                cm_head,
-                                config=self.config,
-                                pos_time=past_key_values[i][0].shape[2] + 1 if past_key_values[i] is not None else 1,
-                                layer_exp = i,
-                                prev_probits = prev_probits, 
-                                layer_am = i//2,
-                                alpha = 0.1,
-                                )
-                            
-                        elif self.config.exit_conf_type == "JSD_contrastive_confidence":
-                            
-                            skip_mask, jsds = get_skip_mask_cd(
-                                lm_logits,
-                                _hidden_states,
-                                cm_head,
-                                config=self.config,
-                                pos_time=past_key_values[i][0].shape[2] + 1 if past_key_values[i] is not None else 1,
-                                layer_exp = i,
-                                prev_probits = prev_probits, 
-                                layer_am = i//2,
-                                alpha = 0.1,
-                                return_jsds=True
-                                )
+                        # END OF SHRINKING VOCAB PART                        
+                        out = get_skip_mask(
+                            lm_logits,
+                            _hidden_states,
+                            cm_head,
+                            config=self.config,
+                            pos_time=past_key_values[i][0].shape[2] + 1 if past_key_values[i] is not None else 1,
+                            return_conf=True if self.config.type_vocab_reduct == "adaptive" else False
+                        )
+                        
+                        if self.config.type_vocab_reduct == "adaptive":
+                            skip_mask, conf = out
+                            prev_confidences[i] = conf
                         else:
-                            skip_mask = get_skip_mask(
-                                lm_logits,
-                                _hidden_states,
-                                cm_head,
-                                config=self.config,
-                                pos_time=past_key_values[i][0].shape[2] + 1 if past_key_values[i] is not None else 1
-                            )
-                        if not skip_mask: self.block_op[i] += 1                    
-                        if skip_mask: 
-                            self.lm_logits = lm_logits
-                            plot = False
-                            if plot: #and len(jsds) >= 23 : # When we have all the jdss values, we can use them to check jsds between layers
-
-                                print("JSDS: ", jsds)
-                                # Plot the probits distribution
-                                probits = torch.softmax(lm_logits, dim=-1)
-                                argmax_index = torch.argmax(probits).item()
-                                # Tokenizer to get the words
-                                word = self.tokenizer.decode(argmax_index)
-
-                                print("Word: ", word, " Token_id: ", argmax_index)
-                        if self.config.use_synchronize: torch.cuda.synchronize()
-                        self.deploy_time['time_confidence'] += (datetime.datetime.now() - start)
+                            skip_mask = out
+                        
+                    if not skip_mask: self.block_op[i] += 1                    
+                    if skip_mask: 
+                        self.lm_logits = lm_logits
+                        
+                    if self.config.use_synchronize: torch.cuda.synchronize()
+                    self.deploy_time['time_confidence'] += (datetime.datetime.now() - start)
                     
                 # Normal framework
                 elif (not self.use_shallow_deep and not self.use_early_exit):
