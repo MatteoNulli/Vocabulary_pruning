@@ -5,7 +5,7 @@
     "eval_rouge2": 14.2857,
     "eval_rougeL": 27.5862,
     "eval_rougeLsum": 31.0345,
-    "eval_runtime": 2.9883,
+    "eval_runtime": 2.9887,
     "eval_samples": 1,
     "eval_samples_per_second": 0.335,
     "eval_steps_per_second": 0.335,

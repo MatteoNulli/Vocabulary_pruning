@@ -1,4 +1,8 @@
 /src/__pycache__/
 /src/save/
 /src/wandb/
+/src/wandb/latest-run/
+/src/wandb/run-*
+/src/wandb/debug-*
+src/wandb/debug-internal.log
 /src/logs/
