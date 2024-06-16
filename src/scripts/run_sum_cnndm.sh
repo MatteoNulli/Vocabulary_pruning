@@ -1,6 +1,5 @@
 CUDA_VISIBLE_DEVICES=0 python -m run_summarization \
     --model_name_or_path google-t5/t5-large \
-    --do_train \
     --do_eval \
     --dataset_name cnn_dailymail \
     --dataset_config_name "3.0.0" \
@@ -12,7 +11,7 @@ CUDA_VISIBLE_DEVICES=0 python -m run_summarization \
     --source_prefix "summarize: " \
     --exit_conf_threshold 0.9 \
     --exit_min_layer 1 \
-    --max_eval_samples 100 \
+    --max_eval_samples 1 \
     --exit_conf_type softmax \
     --include_inputs_for_metrics True \
     --use_auth_token True \
