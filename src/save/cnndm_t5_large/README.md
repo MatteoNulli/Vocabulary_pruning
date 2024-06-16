@@ -34,8 +34,8 @@ More information needed
 
 The following hyperparameters were used during training:
 - learning_rate: 5e-05
-- train_batch_size: 8
-- eval_batch_size: 1
+- train_batch_size: 1
+- eval_batch_size: 16
 - seed: 42
 - optimizer: Adam with betas=(0.9,0.999) and epsilon=1e-08
 - lr_scheduler_type: linear
@@ -44,6 +44,6 @@ The following hyperparameters were used during training:
 ### Framework versions
 
 - Transformers 4.28.1
-- Pytorch 2.3.0+cu118
-- Datasets 2.19.0
+- Pytorch 2.1.2
+- Datasets 2.20.0
 - Tokenizers 0.13.3

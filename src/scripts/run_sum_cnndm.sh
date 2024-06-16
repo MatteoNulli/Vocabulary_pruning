@@ -4,8 +4,10 @@ CUDA_VISIBLE_DEVICES=0 python -m run_summarization \
     --dataset_name cnn_dailymail \
     --dataset_config_name "3.0.0" \
     --output_dir ./save/cnndm_t5_large/ \
-    --per_device_train_batch_size 4 \
+    --per_device_train_batch_size 1 \
     --per_device_eval_batch_size 16 \
+    --deploy_scenario True \
+    --use_synchronize False \
     --overwrite_output_dir \
     --predict_with_generate \
     --source_prefix "summarize: " \
