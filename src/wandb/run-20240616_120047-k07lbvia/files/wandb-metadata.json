@@ -1,0 +1,81 @@
+{
+    "os": "macOS-14.5-arm64-arm-64bit",
+    "python": "3.10.12",
+    "heartbeatAt": "2024-06-16T10:00:48.891524",
+    "startedAt": "2024-06-16T10:00:47.914616",
+    "docker": null,
+    "cuda": null,
+    "args": [
+        "--model_name_or_path",
+        "google-t5/t5-large",
+        "--do_train",
+        "--do_eval",
+        "--dataset_name",
+        "cnn_dailymail",
+        "--dataset_config_name",
+        "3.0.0",
+        "--output_dir",
+        "./save/cnndm_t5_large/",
+        "--per_device_train_batch_size",
+        "4",
+        "--per_device_eval_batch_size",
+        "16",
+        "--overwrite_output_dir",
+        "--predict_with_generate",
+        "--source_prefix",
+        "summarize: ",
+        "--exit_conf_threshold",
+        "0.9",
+        "--exit_min_layer",
+        "1",
+        "--max_eval_samples",
+        "100",
+        "--exit_conf_type",
+        "softmax",
+        "--include_inputs_for_metrics",
+        "True",
+        "--use_auth_token",
+        "True",
+        "--type_vocab_reduct",
+        "fixed"
+    ],
+    "state": "running",
+    "program": "-m run_summarization",
+    "codePathLocal": null,
+    "git": {
+        "remote": "https://github.com/MatteoNulli/Vocabulary_pruning.git",
+        "commit": "4ef47eb9ffd7e28f14e642eb500ef09770a0d98f"
+    },
+    "email": "matteo.nulli@gmail.com",
+    "root": "/Users/matteo/Documents/MSc/Period5/DL2/Workshop/Vocabulary_pruning",
+    "host": "MacBook-Pro-di-Matteo-4.local",
+    "username": "matteo",
+    "executable": "/Users/matteo/anaconda3/envs/dl2/bin/python",
+    "cpu_count": 10,
+    "cpu_count_logical": 10,
+    "cpu_freq": {
+        "current": 3504,
+        "min": 702,
+        "max": 3504
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 3504,
+            "min": 702,
+            "max": 3504
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 460.4317207336426,
+            "used": 9.555965423583984
+        }
+    },
+    "gpuapple": {
+        "type": "Apple M2 Pro",
+        "vendor": "sppci_vendor_Apple"
+    },
+    "memory": {
+        "total": 32.0
+    }
+}

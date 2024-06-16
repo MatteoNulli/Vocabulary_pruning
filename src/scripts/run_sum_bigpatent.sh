@@ -60,11 +60,12 @@ CUDA_VISIBLE_DEVICES=0 python -m run_summarization \
     --max_source_length 2048 \
     --max_target_length 512 \
     --use_early_exit True \
-    --exit_conf_type JSD_contrastive_confidence \
+    --exit_conf_type softmax \
     --exit_conf_threshold 1.1 \
     --exit_min_layer 2 \
     --max_eval_samples 10 \
     --include_inputs_for_metrics True \
+    # --type_vocab_reduct adaptive \
 
     # FREE
     # --use_shallow_deep True \

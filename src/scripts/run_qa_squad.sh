@@ -50,6 +50,7 @@ CUDA_VISIBLE_DEVICES=0 python -m run_question_answering \
     --max_eval_samples 10 \
     --use_auth_token True \
     --count_flops False \
+    # --type_vocab_reduct adaptive \
 
 
 

@@ -1,0 +1,22 @@
+
+  0%|                                                                                                                                                                                                               | 0/215337 [00:00<?, ?it/s][WARNING|logging.py:280] 2024-06-16 12:00:50,357 >> You're using a T5TokenizerFast tokenizer. Please note that with a fast tokenizer, using the `__call__` method is faster than using a method to encode the text followed by a call to the `pad` method to get a padded encoding.
+  0%|                                                                                                                                                                                                   | 1/215337 [00:15<920:01:14, 15.38s/it]Traceback (most recent call last):
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/Users/matteo/Documents/MSc/Period5/DL2/Workshop/Vocabulary_pruning/src/run_summarization.py", line 647, in <module>
+    main(model_args, data_args, training_args, additional_args, model_cls, trainer_cls)
+  File "/Users/matteo/Documents/MSc/Period5/DL2/Workshop/Vocabulary_pruning/src/run_summarization.py", line 496, in main
+    train_result = trainer.train(resume_from_checkpoint=checkpoint)
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/transformers/trainer.py", line 1662, in train
+    return inner_training_loop(
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/transformers/trainer.py", line 1929, in _inner_training_loop
+    tr_loss_step = self.training_step(model, inputs)
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/transformers/trainer.py", line 2717, in training_step
+    loss.backward()
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/torch/_tensor.py", line 492, in backward
+    torch.autograd.backward(
+  File "/Users/matteo/anaconda3/envs/dl2/lib/python3.10/site-packages/torch/autograd/__init__.py", line 251, in backward
+    Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+KeyboardInterrupt
