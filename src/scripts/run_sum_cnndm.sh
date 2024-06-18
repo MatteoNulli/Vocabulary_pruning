@@ -12,11 +12,10 @@ CUDA_VISIBLE_DEVICES=0 python -m run_summarization \
     --source_prefix "summarize: " \
     --exit_conf_threshold 0.9 \
     --exit_min_layer 1 \
-    --max_eval_samples 1 \
     --exit_conf_type softmax \
     --include_inputs_for_metrics True \
     --use_auth_token True \
-    --type_vocab_reduct fixed \
+    # --type_vocab_reduct fixed \
 
     # FREE
     # --output_hidden_states_decoder True \
@@ -39,19 +38,19 @@ CUDA_VISIBLE_DEVICES=0 python -m run_summarization \
     # --shallow_exit_layer 8 \ # for FREE
 
 
-CUDA_VISIBLE_DEVICES=0 python -m torch.distributed.run --nproc_per_node=1 \
-    run_summarization.py \
-    --model_name_or_path ./save/cnndm_t5_large/ \
-    --do_eval \
-    --dataset_name cnn_dailymail \
-    --dataset_config_name "3.0.0" \
-    --output_dir ./save/cnndm_t5_large/ \
-    --per_device_eval_batch_size 1 \
-    --deploy_scenario True \
-    --use_synchronize True \
-    --overwrite_output_dir \
-    --predict_with_generate \
-    --source_prefix "summarize: " \
+# CUDA_VISIBLE_DEVICES=0 python -m torch.distributed.run --nproc_per_node=1 \
+#     run_summarization.py \
+#     --model_name_or_path ./save/cnndm_t5_large/ \
+#     --do_eval \
+#     --dataset_name cnn_dailymail \
+#     --dataset_config_name "3.0.0" \
+#     --output_dir ./save/cnndm_t5_large/ \
+#     --per_device_eval_batch_size 1 \
+#     --deploy_scenario True \
+#     --use_synchronize True \
+#     --overwrite_output_dir \
+#     --predict_with_generate \
+#     --source_prefix "summarize: " \
 
     # FREE
     # --use_shallow_deep True \

@@ -31,13 +31,15 @@ CUDA_VISIBLE_DEVICES=0 python -m run_summarization \
     --max_source_length 2048 \
     --max_target_length 512 \
     --max_eval_samples 10 \
-    --use_early_exit True \
+    --use_early_exit False \
     --exit_conf_type softmax \
     --exit_conf_threshold 0.9 \
     --exit_min_layer 1 \
     --include_inputs_for_metrics True \
     --use_auth_token True \
-    --type_vocab_reduct fixed \
+    --count_flops True \
+    # --type_vocab_reduct fixed \
+
 
 
     # FREE

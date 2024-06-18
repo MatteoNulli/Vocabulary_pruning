@@ -46,7 +46,7 @@
 #     --max_target_length 512 \
 
 CUDA_VISIBLE_DEVICES=0 python -m run_summarization \
-    --model_name_or_path jvelja/t5-bigpatent \
+    --model_name_or_path google/long-t5-tglobal-base \
     --do_eval \
     --dataset_name big_patent \
     --dataset_config_name e \

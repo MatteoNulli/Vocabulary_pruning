@@ -225,6 +225,7 @@ class DeployLongT5Stack(LongT5Stack):
         
         self.embed_tokens = embed_tokens
         self.is_decoder = config.is_decoder
+        self.flop_counter = 0.0
 
         self.graph_top_k_list = []
         self.graph_top_k_confidence = []
@@ -672,6 +673,11 @@ class DeployLongT5Stack(LongT5Stack):
                             a = _hidden_states * (self.config.d_model ** -0.5)
                             lm_logits = lm_head(_hidden_states) if not self.config.tie_word_embeddings \
                                 else lm_head(a)
+                            
+                            if self.config.count_flops:
+                                self.flop_counter += (self.config.d_model**2)* self.config.vocab_size * 1 # Seq length is always one
+
+                            
                         else:
                             starting_layer = self.config.exit_min_layer if self.config.exit_min_layer > 1  else 1 # Start where exit_min_layer is set or start at 2.
                             if i == starting_layer: # if it is the first layer where we compute the logits

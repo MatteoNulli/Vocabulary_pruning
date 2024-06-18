@@ -1,19 +1,48 @@
-CUDA_VISIBLE_DEVICES=0,1,2,3 python -m torch.distributed.run --nproc_per_node=4 \
-    run_translation.py \
-    --model_name_or_path mt5-large \
-    --do_train \
+
+CUDA_VISIBLE_DEVICES=0 python -m run_translation \
+    --model_name_or_path google-t5/t5-large \
     --do_eval \
     --dataset_name iwslt2017 \
     --dataset_config_name iwslt2017-de-en \
     --output_dir ./save/iwslt_t5_large/ \
-    --per_device_train_batch_size 2 \
-    --per_device_eval_batch_size 16 \
+    --per_device_eval_batch_size 1 \
     --overwrite_output_dir \
     --predict_with_generate \
     --source_prefix "translate German to English: " \
+    --source_lang "German" \
+    --target_lang "English" \
     --save_steps 5152 \
-    --learning_rate 1e-4 \
-    --num_train_epochs 2 \
+    --deploy_scenario True \
+    --use_synchronize False \
+    --save_steps 1000 \
+    --max_source_length 2048 \
+    --max_target_length 512 \
+    --max_eval_samples 10 \
+    --use_early_exit False \
+    --exit_conf_type softmax \
+    --exit_conf_threshold 0.9 \
+    --exit_min_layer 1 \
+    --include_inputs_for_metrics True \
+    --use_auth_token True \
+    --count_flops True \
+    # --type_vocab_reduct fixed \
+
+# CUDA_VISIBLE_DEVICES=0,1,2,3 python -m torch.distributed.run --nproc_per_node=4 \
+#     run_translation.py \
+#     --model_name_or_path mt5-large \
+#     --do_train \
+#     --do_eval \
+#     --dataset_name iwslt2017 \
+#     --dataset_config_name iwslt2017-de-en \
+#     --output_dir ./save/iwslt_t5_large/ \
+#     --per_device_train_batch_size 2 \
+#     --per_device_eval_batch_size 16 \
+#     --overwrite_output_dir \
+#     --predict_with_generate \
+#     --source_prefix "translate German to English: " \
+#     --save_steps 5152 \
+#     --learning_rate 1e-4 \
+#     --num_train_epochs 2 \
 
     # FREE
     # --output_hidden_states_decoder True \
@@ -35,19 +64,19 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 python -m torch.distributed.run --nproc_per_node=4 
     # --lora_target_modules 'q' 'k' 'v' 'o' 'wi' 'wo' \
 
 
-CUDA_VISIBLE_DEVICES=0 python -m torch.distributed.run --nproc_per_node=1 \
-    run_translation.py \
-    --model_name_or_path ./save/iwslt_t5_large/ \
-    --do_eval \
-    --dataset_name iwslt2017 \
-    --dataset_config_name iwslt2017-de-en \
-    --output_dir ./save/iwslt_t5_large/ \
-    --per_device_eval_batch_size 1 \
-    --deploy_scenario True \
-    --use_synchronize True \
-    --overwrite_output_dir \
-    --predict_with_generate \
-    --source_prefix "translate German to English: " \
+# CUDA_VISIBLE_DEVICES=0 python -m torch.distributed.run --nproc_per_node=1 \
+#     run_translation.py \
+#     --model_name_or_path ./save/iwslt_t5_large/ \
+#     --do_eval \
+#     --dataset_name iwslt2017 \
+#     --dataset_config_name iwslt2017-de-en \
+#     --output_dir ./save/iwslt_t5_large/ \
+#     --per_device_eval_batch_size 1 \
+#     --deploy_scenario True \
+#     --use_synchronize True \
+#     --overwrite_output_dir \
+#     --predict_with_generate \
+#     --source_prefix "translate German to English: " \
 
     # FREE
     # --use_shallow_deep True \
