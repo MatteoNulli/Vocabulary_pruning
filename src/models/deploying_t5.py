@@ -300,8 +300,7 @@ class DeployT5LayerSelfAttention(T5LayerSelfAttention):
             hidden_states = hidden_states + self.dropout(attention_output[0])
             outputs = (hidden_states,) + attention_output[1:]  # add attentions if we output them
         else:
-            outputs = (hidden_states,) + attention_output[1:]  # add attentions if we output them     
-
+            outputs = (hidden_states,) + attention_output[1:]  # add attentions if we output them 
         if self.config.use_synchronize: torch.cuda.synchronize()
         if self.config.is_decoder:
             self.attn_ffn_time = self.SelfAttention.attn_ffn_time + norm_time + (datetime.datetime.now() - start)
@@ -552,6 +551,9 @@ class DeployT5Stack(T5Stack):
         super().__init__(config, embed_tokens)
         self.graph_top_k_list = []
         self.graph_top_k_confidence = []
+
+        self.offset_index_from_prunning = []
+        self.shrank_logits_from_prunning = []
         self.top_k_indices = None
         
         self.embed_tokens = embed_tokens
@@ -865,8 +867,11 @@ class DeployT5Stack(T5Stack):
 
         prev_probits = {}
         prev_confidences = {}
+        top_1_index = None
         if self.is_decoder and self.config.plotting_logits:
             previous_logits = []
+
+        _hidden_states = None
 
         for i, layer_module in enumerate(self.block):
             if self.is_decoder and self.config.plotting_logits:
@@ -963,6 +968,7 @@ class DeployT5Stack(T5Stack):
                                 
                             break
 
+
                 # Early-Exit framework
                 elif self.use_early_exit and not skip_mask:	
                     if (self.exit_min_layer is not None and i < self.exit_min_layer):
@@ -975,8 +981,6 @@ class DeployT5Stack(T5Stack):
                         probits = lm_logits.softmax(dim=-1).squeeze() #torch.softmax(lm_logits, dim=-1) + squeezing
                         prev_probits[i] = probits
                         self.block_op[i] += 1
-
-                        
 
                     else:
                         if self.config.use_synchronize: torch.cuda.synchronize()
@@ -1004,7 +1008,8 @@ class DeployT5Stack(T5Stack):
                                 num_layers = len(self.block) # This is the number of layers in the model
                                 k = self.func_inverse(i,maximum_k_size, minimum_k_size, num_layers)
                                 self.top_k_indices = torch.topk(lm_logits[0][0], k, largest=True, sorted=True)[1].sort()[0]
-
+                                self.offset_index_from_prunning.append(self.top_k_indices)
+                            
                                 selected_weights = lm_head.weight[self.top_k_indices, : ] # THis can be done here to win some compute time
                             else: # For all the other layers either use fixed, decaying or adaptive pruning
                                 if self.config.type_vocab_reduct == "fixed":
@@ -1013,41 +1018,21 @@ class DeployT5Stack(T5Stack):
                                         self.flop_counter +=  (self.config.d_model**2)* k * 1 # Seq length is always one
                                     # Note: There is no bias in self.lm_head = nn.Linear(config.d_model, config.vocab_size, bias=False)
                                     a = _hidden_states * (self.config.d_model ** -0.5)
-                                    lm_logits_temp = torch.nn.functional.linear(_hidden_states, selected_weights)  if not self.config.tie_word_embeddings \
+                                    lm_logits = torch.nn.functional.linear(_hidden_states, selected_weights)  if not self.config.tie_word_embeddings \
                                         else torch.nn.functional.linear(a, selected_weights)
-               
-                                    # Initialize lm_logits with -inf
-                                    lm_logits = torch.full((1, 1, self.config.vocab_size), -float("inf"), device=lm_logits_temp.device)
-
-                                    # Create a mask for the top_k_indices
-                                    top_k_mask = torch.zeros(self.config.vocab_size, dtype=torch.bool, device=lm_logits_temp.device)
-                                    top_k_mask[self.top_k_indices] = True
-
-                                    # Use the mask to assign values from lm_logits_temp to lm_logits
-                                    lm_logits[0, 0, top_k_mask] = lm_logits_temp[0, 0, :len(self.top_k_indices)]
-
+    
                                 elif self.config.type_vocab_reduct == "decaying":  # Smoothed pruning! For all the other layers -> smoothed pruning
                                     current_k = self.func_inverse(i,maximum_k_size, minimum_k_size, num_layers)
                                     
                                     if self.config.count_flops:
                                         self.flop_counter +=  (self.config.d_model**2)* current_k * 1 # Seq length is always one
-
-                                    selected_weights = lm_head.weight[self.top_k_indices[:current_k], :]
+                                    self.top_k_indices = self.top_k_indices[:current_k]
+                                    selected_weights = lm_head.weight[self.top_k_indices, :]
                     
                                     a = _hidden_states * (self.config.d_model ** -0.5)
-                                    lm_logits_temp = torch.nn.functional.linear(_hidden_states, selected_weights)  if not self.config.tie_word_embeddings \
+                                    lm_logits = torch.nn.functional.linear(_hidden_states, selected_weights)  if not self.config.tie_word_embeddings \
                                         else torch.nn.functional.linear(a, selected_weights)
                                     
-                                    # Initialize lm_logits with -inf
-                                    lm_logits = torch.full((1, 1, self.config.vocab_size), -float("inf"), device=lm_logits_temp.device)
-
-                                    # Create a mask for the top_k_indices
-                                    top_k_mask = torch.zeros(self.config.vocab_size, dtype=torch.bool, device=lm_logits_temp.device)
-                                    top_k_mask[self.top_k_indices[:current_k]] = True
-
-                                    # Use the mask to assign values from lm_logits_temp to lm_logits
-                                    lm_logits[0, 0, top_k_mask] = lm_logits_temp[0, 0, :len(self.top_k_indices[:current_k])]
-
                                 elif self.config.type_vocab_reduct == "adaptive":
                                         # TODO experiment with not only the top-1 confidence but combining the top-k confidences
                                         # TODO experiment with taking the top-k not (only) in the starting layer
@@ -1057,6 +1042,7 @@ class DeployT5Stack(T5Stack):
                                         conf = prev_confidences[i-1] # This is the confidence of the previous layer
                                         conf_scaling_factor = 0.9 # TODO experiment with different scaling factors
                                         retained_top_k = int(curr_weights_size * (1 - conf * conf_scaling_factor))
+                                        self.top_k_indices = self.top_k_indices[:retained_top_k]
                                         selected_weights = lm_head.weight[self.top_k_indices[:retained_top_k], :]
                                         ############################
                                         a = _hidden_states * (self.config.d_model ** -0.5)
@@ -1078,26 +1064,31 @@ class DeployT5Stack(T5Stack):
                                 else:
                                     raise("Please provide a valid type_vocab_reduct argument. Either use fixed, decaying, or adaptive.")
 
-                        # END OF SHRINKING VOCAB PART                        
-                        out = get_skip_mask(
-                            lm_logits,
-                            _hidden_states,
-                            cm_head,
-                            config=self.config,
-                            pos_time=past_key_values[i][0].shape[2] + 1 if past_key_values[i] is not None else 1,
-                            return_conf=True if self.config.type_vocab_reduct == "adaptive" else False
-                        )
+                        # END OF SHRINKING VOCAB PART
                         if self.config.type_vocab_reduct == "adaptive":
-                            skip_mask, conf = out
+                            skip_mask, conf = get_skip_mask(
+                                lm_logits,
+                                _hidden_states,
+                                cm_head,
+                                config=self.config,
+                                pos_time=past_key_values[i][0].shape[2] + 1 if past_key_values[i] is not None else 1,
+                                return_conf=True
+                            )
                             prev_confidences[i] = conf
-                        else:
-                            skip_mask = out
+                        else :
+                            skip_mask = get_skip_mask(
+                                lm_logits,
+                                _hidden_states,
+                                cm_head,
+                                config=self.config,
+                                pos_time=past_key_values[i][0].shape[2] + 1 if past_key_values[i] is not None else 1,
+                                return_conf= False
+                            )
                     
+                        if not skip_mask: self.block_op[i] += 1               
+                        if skip_mask:
+                            self.lm_logits = lm_logits
 
-                        if not skip_mask: self.block_op[i] += 1                    
-                        if skip_mask: 
-                            
-                            self.lm_logits = lm_logits # This is where the logits are sent to do the predictions.   
                     
                         if self.config.use_synchronize: torch.cuda.synchronize()
                         self.deploy_time['time_confidence'] += (datetime.datetime.now() - start)
@@ -1105,7 +1096,7 @@ class DeployT5Stack(T5Stack):
                 # Normal framework
                 elif (not self.use_shallow_deep and not self.use_early_exit):
                     self.block_op[i] += 1
-                
+
             past_key_value = past_key_values[i]
             layer_outputs = layer_module(
                 hidden_states,
@@ -1121,9 +1112,9 @@ class DeployT5Stack(T5Stack):
                 output_attentions=output_attentions,
                 skip_mask=skip_mask,
             )
-
             # logits are in layer_outputs
-
+            if self.offset_index_from_prunning: # We need to re-assign the logits here, in order for Adaptive and Decaying (since they shrink)
+                self.offset_index_from_prunning[-1] = self.top_k_indices
             # save them and compute new logits!
 
             if self.is_decoder:
@@ -1156,6 +1147,9 @@ class DeployT5Stack(T5Stack):
             if self.config.use_synchronize: torch.cuda.synchronize()
             if self.is_decoder: self.deploy_time['time_others'] += (datetime.datetime.now() - start)
 
+
+
+        
         if self.is_decoder and self.config.plotting_logits:
             # Get the top-1 index of last block.
             index_top_1 = torch.topk(previous_logits[-1], 1)[1][0][0][0].item()
@@ -1311,6 +1305,7 @@ class DeployT5ForConditionalGeneration(T5ForConditionalGeneration):
                                                             head_mask, decoder_head_mask, cross_attn_head_mask, encoder_outputs,
                                                             past_key_values, inputs_embeds, decoder_inputs_embeds, labels, use_cache,
                                                             output_attentions, output_hidden_states, return_dict)
+
         if self.config.use_synchronize: torch.cuda.synchronize()
         start = datetime.datetime.now()
         if self.decoder.lm_logits is None:  # token has not skipped
@@ -1322,7 +1317,8 @@ class DeployT5ForConditionalGeneration(T5ForConditionalGeneration):
                 sequence_output = sequence_output * (self.model_dim**-0.5)
             
             lm_logits = self.lm_head(sequence_output)
-        else: lm_logits = self.decoder.lm_logits
+        else:
+            lm_logits = self.decoder.lm_logits
         
         if self.config.use_synchronize: torch.cuda.synchronize()
         self.deploy_time['time_others'] += (datetime.datetime.now() - start)
@@ -1333,12 +1329,13 @@ class DeployT5ForConditionalGeneration(T5ForConditionalGeneration):
             self.decoder.stack_conf, self.decoder.stack_pred = (), ()
         if self.config.rollback_conf_threshold is None:
             lm_logits = lm_logits[:, [-1], :]
+
         loss = self.compute_model_loss(lm_logits, labels)
 
-        if not return_dict:
+        if not return_dict: # Jort: This does not enter
             output = (lm_logits,) + decoder_outputs[1:] + encoder_outputs
             return ((loss,) + output) if loss is not None else output
-
+        
         return Seq2SeqLMOutput(
             loss=loss,
             logits=lm_logits,
@@ -1457,12 +1454,37 @@ class DeployT5ForConditionalGeneration(T5ForConditionalGeneration):
         if penalty == 1.0:
             return logits
 
+        # If we did not early exit using the vocab reduction
         for i in range(input_ids.shape[0]):
             for token_id in set(input_ids[i].tolist()):
+                print(token_id)
                 if logits[i, token_id] < 0:
                     logits[i, token_id] *= penalty
                 else:
                     logits[i, token_id] /= penalty
+        return logits
+    
+    @staticmethod
+    def apply_repetition_penalty_shrinked(logits, input_ids, penalty, offset_index_from_prunning):
+        if penalty == 1.0:
+            return logits
+        
+        # TO DO: DO THIS BUT WITH TORCH TENSORS FROM THE START!
+        if isinstance(offset_index_from_prunning, torch.Tensor):
+            offset_index_from_prunning = offset_index_from_prunning.cpu().numpy()
+        if isinstance(input_ids, torch.Tensor):
+            input_ids = input_ids.cpu().numpy()
+        
+        matches = np.isin(offset_index_from_prunning, input_ids) # Check if the input_ids contain the offset_index_from_prunning
+        matching_indices = np.where(matches)[0] # Get the indices of the matching elements
+        
+        for i in range(input_ids.shape[0]): # TO DO : MAKE THIS FASTER
+            for token_id in matching_indices:
+                if logits[i, token_id] < 0:
+                    logits[i, token_id] *= penalty
+                else:
+                    logits[i, token_id] /= penalty
+
         return logits
 
     def greedy_search(
@@ -1542,6 +1564,7 @@ class DeployT5ForConditionalGeneration(T5ForConditionalGeneration):
         self.rollback_candidates = ()
         self.pass_length_rollback = 0
 
+        count = 0
         while True:
             if synced_gpus:
                 # Under synced_gpus the `forward` call must continue until all gpus complete their sequence.
@@ -1557,12 +1580,13 @@ class DeployT5ForConditionalGeneration(T5ForConditionalGeneration):
             model_inputs = self.prepare_inputs_for_generation(input_ids, **model_kwargs)
 
             # forward pass to get next token
+
             outputs = self(
                 **model_inputs,
                 return_dict=True,
                 output_attentions=output_attentions,
                 output_hidden_states=output_hidden_states,
-            )       
+            )
 
             if synced_gpus and this_peer_finished:
                 continue  # don't waste resources running the code we don't need
@@ -1614,15 +1638,17 @@ class DeployT5ForConditionalGeneration(T5ForConditionalGeneration):
                 self.deploy_time['time_decoder_forward'] += (datetime.datetime.now() - start)
 
             next_token_logits = outputs.logits[:, -1, :]
-
-            try:
+            if self.decoder.offset_index_from_prunning:
+                next_token_logits = self.apply_repetition_penalty_shrinked(next_token_logits, input_ids, penalty=1.2, offset_index_from_prunning=self.decoder.offset_index_from_prunning[count])
+            else:
                 next_token_logits = self.apply_repetition_penalty(next_token_logits, input_ids, penalty=1.2)
-            except:
-                pass
+
             # pre-process distribution
+            # print("logits_processor", logits_processor)
             next_tokens_scores = logits_processor(input_ids, next_token_logits)
 
             # Store scores, attentions and hidden_states when required
+            # Not done in the case of our experiments.
             if return_dict_in_generate:
                 if output_scores:
                     scores += (next_tokens_scores,)
@@ -1642,6 +1668,9 @@ class DeployT5ForConditionalGeneration(T5ForConditionalGeneration):
 
             # argmax
             next_tokens = torch.argmax(next_tokens_scores, dim=-1)
+            if next_tokens_scores.shape[1] <= self.decoder.offset_index_from_prunning[count].shape[0]: # The equal is for fixed pruningm the less than is for decaying/adaptive pruning
+                next_tokens =  self.decoder.offset_index_from_prunning[count][next_tokens.item()]   
+            count += 1
 
             # for RollBack, store Shallow decoder's predictions
             if self.config.use_shallow_deep and not self.decoder.shallow2deep and not self.config.copy_skipped_hidden_states and self.config.rollback_conf_threshold is not None:
@@ -1653,8 +1682,12 @@ class DeployT5ForConditionalGeneration(T5ForConditionalGeneration):
                     raise ValueError("If `eos_token_id` is defined, make sure that `pad_token_id` is defined.")
                 next_tokens = next_tokens * unfinished_sequences + pad_token_id * (1 - unfinished_sequences)
 
+
+            # print("next_tokens", next_tokens)
             # update generated ids, model inputs, and length for next step
             input_ids = torch.cat([input_ids, next_tokens[:, None]], dim=-1)
+
+            #print("input_ids", input_ids)
 
             if streamer is not None:
                 streamer.put(next_tokens.cpu())
@@ -1678,10 +1711,10 @@ class DeployT5ForConditionalGeneration(T5ForConditionalGeneration):
 
             if this_peer_finished and not synced_gpus:
                 break
-
+        
+        self.decoder.offset_index_from_prunning = []
         if streamer is not None:
             streamer.end()
-
         if return_dict_in_generate:
             if self.config.is_encoder_decoder:
                 return GreedySearchEncoderDecoderOutput(

@@ -18,7 +18,7 @@ def softmax_confidence(
     # print("Time taken for softmax confidence", end-start)
 
     return (top_2[..., 0] - top_2[..., 1]).squeeze()
-    
+
 
 def meta_confidence(
     hidden_states: torch.Tensor = None,
@@ -69,20 +69,19 @@ def get_skip_mask(
         key = config.shallow2deep_conf_type
         threshold = config.shallow2deep_conf_threshold if adapt_threshold is None else adapt_threshold
 
+
     conf_measure = get_confidence_class(key=key)    
-    
+
     conf = conf_measure(
         logits=logits
         )
-    
+
     mask = torch.where(conf <= threshold, 0., 1.).bool()
 
     # print(f"Confidence: {conf.item():.4f}, Threshold: {threshold:.4f}, Mask: {mask.item()}")
     
     # print("Are we early exiting?", mask.item() == 1)
     #print('Confidence:', conf.item(), 'Threshold:', threshold, 'Mask:', mask.item())
-
-
     if not return_conf:
         return mask.item()  # False (0) and True (1) denote keep and exit
     else:
