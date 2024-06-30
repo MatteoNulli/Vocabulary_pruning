@@ -452,7 +452,7 @@ class QATrainer(Seq2SeqTrainer):
         # generated_tokens = self.model.generate(**inputs, **gen_kwargs)
         
         gen_model = self.model.base_model if self.model.config.use_lora else self.model
-
+        
         
         generated_tokens = gen_model.generate(
             inputs["input_ids"],
@@ -507,7 +507,7 @@ class QATrainer(Seq2SeqTrainer):
         # print(self.tokenizer.decode([192, 2759], skip_special_tokens=False, clean_up_tokenization_spaces=True))
         # afad
         # print(self.tokenizer.decode([16, 1], skip_special_tokens=False, clean_up_tokenization_spaces=True))
-        # self.model.decoder.offset_index_from_prunning = []
+        self.model.decoder.offset_index_from_prunning = []
         # print("="*100)
         
         # Temporary hack to ensure the generation config is not initialized for each iteration of the evaluation loop
