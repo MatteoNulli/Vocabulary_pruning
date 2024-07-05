@@ -29,7 +29,7 @@
     # --intermediate_loss_fn weighted_ce \
 
 CUDA_VISIBLE_DEVICES=0 python -m run_question_answering \
-    --model_name_or_path google-t5/t5-large \
+    --model_name_or_path jvelja/t5-squad \
     --do_eval \
     --dataset_name squad \
     --context_column context \
@@ -47,10 +47,9 @@ CUDA_VISIBLE_DEVICES=0 python -m run_question_answering \
     --exit_conf_threshold 0.9 \
     --exit_min_layer 7 \
     --include_inputs_for_metrics True \
-    --max_eval_samples 10 \
     --use_auth_token True \
-    --count_flops False \
-    # --type_vocab_reduct adaptive \
+    --count_flops True \
+    # --type_vocab_reduct decaying \
 
 
 

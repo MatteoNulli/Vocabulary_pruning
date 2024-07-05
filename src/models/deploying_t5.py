@@ -1457,7 +1457,7 @@ class DeployT5ForConditionalGeneration(T5ForConditionalGeneration):
         # If we did not early exit using the vocab reduction
         for i in range(input_ids.shape[0]):
             for token_id in set(input_ids[i].tolist()):
-                print(token_id)
+                # print(token_id)
                 if logits[i, token_id] < 0:
                     logits[i, token_id] *= penalty
                 else:
@@ -1667,9 +1667,12 @@ class DeployT5ForConditionalGeneration(T5ForConditionalGeneration):
                     )
 
             # argmax
+            # print("type vocab", self.config.type_vocab_reduct)
+            
             next_tokens = torch.argmax(next_tokens_scores, dim=-1)
-            if next_tokens_scores.shape[1] <= self.decoder.offset_index_from_prunning[count].shape[0]: # The equal is for fixed pruningm the less than is for decaying/adaptive pruning
-                next_tokens =  self.decoder.offset_index_from_prunning[count][next_tokens.item()]   
+            if self.config.type_vocab_reduct is not False:
+                if next_tokens_scores.shape[1] <= self.decoder.offset_index_from_prunning[count].shape[0]: # The equal is for fixed pruningm the less than is for decaying/adaptive pruning
+                    next_tokens = self.decoder.offset_index_from_prunning[count][next_tokens.item()]   
             count += 1
 
             # for RollBack, store Shallow decoder's predictions
@@ -1683,8 +1686,8 @@ class DeployT5ForConditionalGeneration(T5ForConditionalGeneration):
                 next_tokens = next_tokens * unfinished_sequences + pad_token_id * (1 - unfinished_sequences)
 
 
-            # print("next_tokens", next_tokens)
-            # update generated ids, model inputs, and length for next step
+        # print("next_tokens", next_tokens)
+        # update generated ids, model inputs, and length for next step
             input_ids = torch.cat([input_ids, next_tokens[:, None]], dim=-1)
 
             #print("input_ids", input_ids)

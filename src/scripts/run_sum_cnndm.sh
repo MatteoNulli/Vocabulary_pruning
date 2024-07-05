@@ -11,11 +11,13 @@ CUDA_VISIBLE_DEVICES=0 python -m run_summarization \
     --predict_with_generate \
     --source_prefix "summarize: " \
     --exit_conf_threshold 0.9 \
-    --exit_min_layer 1 \
+    --exit_min_layer 7 \
+    --use_early_exit True \
     --exit_conf_type softmax \
     --include_inputs_for_metrics True \
     --use_auth_token True \
-    # --type_vocab_reduct fixed \
+    --max_eval_samples 100 \
+    --type_vocab_reduct fixed \
 
     # FREE
     # --output_hidden_states_decoder True \
