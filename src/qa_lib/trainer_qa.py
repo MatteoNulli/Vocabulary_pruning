@@ -19,9 +19,6 @@ from typing import Dict, List, Optional, Union, Any, Tuple
 
 import math
 import time
-import copy
-import logging
-import datetime
 import numpy as np
 import torch
 import torch.nn as nn
@@ -59,7 +56,6 @@ class QATrainer(Seq2SeqTrainer):
         descriptive = True
         if descriptive:
             self.tokenizer = AutoTokenizer.from_pretrained('google-t5/t5-large')
-
             
     def evaluate(
         self,
@@ -147,17 +143,8 @@ class QATrainer(Seq2SeqTrainer):
             output.metrics.update(metric)
 
         # average block layers
-        if self.model.decoder.use_shallow_deep:
-            total, deep = self.model.decoder.block_op[0], self.model.decoder.block_op[self.model.decoder.shallow_exit_layer]
-            shallow = (total - deep)  
 
-            # self.model.rollback_num: we should consider redundant operations due to rollback
-            block_op_metric = {'{}_block_avg'.format(metric_key_prefix): (deep * len(self.model.decoder.block_op) \
-                + (shallow + self.model.rollback_num) * self.model.decoder.shallow_exit_layer) / (total + 1e-10)}
-            # 'block_num' contains the number of token for [shallow, deep, parallel, rollback]
-            block_op_metric['{}_block_num'.format(metric_key_prefix)] = str([shallow, deep, self.model.decoder.parallel_tokens_shallow, self.model.decoder.parallel_tokens_deep, self.model.rollback_num])
-        else:
-            block_op_metric = {'{}_block_avg'.format(metric_key_prefix): sum(self.model.decoder.block_op) / (self.model.decoder.block_op[0] + 1e-10),}
+        block_op_metric = {'{}_block_avg'.format(metric_key_prefix): sum(self.model.decoder.block_op) / (self.model.decoder.block_op[0] + 1e-10),}
         output.metrics.update(block_op_metric)
 
         # deploy time
@@ -285,11 +272,11 @@ class QATrainer(Seq2SeqTrainer):
                 losses = self._nested_gather(loss.repeat(batch_size))
                 losses_host = losses if losses_host is None else torch.cat((losses_host, losses), dim=0)
             if labels is not None:
-                labels = self._pad_across_processes(labels)
+                # labels = self.pad_across_processes(labels)
                 labels = self._nested_gather(labels)
                 labels_host = labels if labels_host is None else nested_concat(labels_host, labels, padding_index=-100)
             if inputs_decode is not None:
-                inputs_decode = self._pad_across_processes(inputs_decode)
+                # inputs_decode = self._pad_across_processes(inputs_decode)
                 inputs_decode = self._nested_gather(inputs_decode)
                 inputs_host = (
                     inputs_decode
@@ -297,7 +284,7 @@ class QATrainer(Seq2SeqTrainer):
                     else nested_concat(inputs_host, inputs_decode, padding_index=-100)
                 )
             if logits is not None:
-                logits = self._pad_across_processes(logits)
+                # logits = self._pad_across_processes(logits)
                 logits = self._nested_gather(logits)
                 if self.preprocess_logits_for_metrics is not None:
                     logits = self.preprocess_logits_for_metrics(logits, labels)
@@ -426,15 +413,8 @@ class QATrainer(Seq2SeqTrainer):
             labels (each being optional).
         """
         
-        # if not self.args.predict_with_generate or prediction_loss_only:
-        #     return super().prediction_step(
-        #         model, inputs, prediction_loss_only=prediction_loss_only, ignore_keys=ignore_keys
-        #     )
-        
         has_labels = "labels" in inputs
         inputs = self._prepare_inputs(inputs)
-
-        # XXX: adapt synced_gpus for fairscale as well
         gen_kwargs = self._gen_kwargs.copy()
         if gen_kwargs.get("max_length") is None and gen_kwargs.get("max_new_tokens") is None:
             gen_kwargs["max_length"] = self.model.config.max_length
@@ -446,11 +426,8 @@ class QATrainer(Seq2SeqTrainer):
             gen_kwargs["synced_gpus"] if gen_kwargs.get("synced_gpus") is not None else default_synced_gpus
         )
 
-        # TODO (Joao): the following line is needed to keep a consistent result on SQUAD. Ideally, we should not block
-        # users from preparing a dataset with `decoder_input_ids`.
-        inputs = {k: v for k, v in inputs.items() if k != "decoder_input_ids"}
-        # generated_tokens = self.model.generate(**inputs, **gen_kwargs)
         
+        inputs = {k: v for k, v in inputs.items() if k != "decoder_input_ids"}        
         gen_model = self.model.base_model if self.model.config.use_lora else self.model
         
         
@@ -459,57 +436,7 @@ class QATrainer(Seq2SeqTrainer):
             attention_mask=inputs["attention_mask"],
             **gen_kwargs) # Decoder input shape: (batch_size, 1)
         
-        # def process_list(numbers):
-        #     if not numbers:
-        #         return []
-            
-        #     # Initialize the result list with the first number
-        #     result = [numbers[0]]
-            
-        #     # Change the first number to 0
-        #     result[0] = 0
-            
-        #     # Set to keep track of added numbers for uniqueness
-        #     seen = set(result)
-            
-        #     # Iterate through the numbers starting from the second element
-        #     for num in numbers[1:]:
-        #         if num == 1:
-        #             result.append(num)
-        #         elif num not in seen:
-        #             result.append(num)
-        #             seen.add(num)
-            
-        #     my_list = [item for index, item in enumerate(result) if item != 1 or index == len(result)-1]
-
-        #     # stirngs = self.tokenizer.decode(my_list, skip_special_tokens=False)
-        #     # stirngs = re.sub(r'[A-Z]', '', stirngs)
-        #     # my_list = self.tokenizer.encode(stirngs)
-            
-        #     return [my_list]
-
-
-        # new_array = process_list(self.model.decoder.offset_index_from_prunning)
-
-        # if new_array != generated_tokens.tolist():
-        #     print(new_array, generated_tokens.tolist())
-        #     print("True Generated Sentence", self.tokenizer.decode(generated_tokens[0], skip_special_tokens=True))
-        #     print("Sentence from Last layer", self.tokenizer.decode(new_array[0], skip_special_tokens=True))
-
-
-        # print("="*100)
-        # print("True Generated tokens", generated_tokens.tolist())
-        # print("Logits from Last layer", self.model.decoder.offset_index_from_prunning)
-        # print()
-        # print("True Generated Sentence", self.tokenizer.decode(generated_tokens[0], skip_special_tokens=True))
-        # print("Sentence from Last layer", self.tokenizer.decode(new_array[0], skip_special_tokens=True))
-
-        # print(self.tokenizer.decode([192, 2759], skip_special_tokens=False, clean_up_tokenization_spaces=True))
-        # afad
-        # print(self.tokenizer.decode([16, 1], skip_special_tokens=False, clean_up_tokenization_spaces=True))
         self.model.decoder.offset_index_from_prunning = []
-        # print("="*100)
-        
         # Temporary hack to ensure the generation config is not initialized for each iteration of the evaluation loop
         # TODO: remove this hack when the legacy code that initializes generation_config from a model config is
         # removed in https://github.com/huggingface/transformers/blob/98d88b23f54e5a23e741833f1e973fdf600cc2c5/src/transformers/generation/utils.py#L1183

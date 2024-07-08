@@ -45,7 +45,6 @@ from util import (
     BetaMixture1D,
 )
 
-
 logger = logging.get_logger(__name__)
 __HEAD_MASK_WARNING_MSG = """
 The input argument `head_mask` was split into two arguments `head_mask` and `decoder_head_mask`. Currently,
@@ -56,6 +55,11 @@ num_heads)`.
 GreedySearchOutput = Union[
     GreedySearchEncoderDecoderOutput, GreedySearchDecoderOnlyOutput
 ]
+
+
+@torch.jit.script
+def compute_logits(hidden_states: torch.Tensor, weights: torch.Tensor) -> torch.Tensor:
+    return torch.nn.functional.linear(hidden_states, weights)
 
 
 class DeployT5Attention(T5Attention):
@@ -120,6 +124,38 @@ class DeployT5Attention(T5Attention):
         self.pruned_heads = set()
         self.gradient_checkpointing = False
 
+    def project(self, hidden_states, proj_layer, key_value_states, past_key_value):
+        """Projects input states into query, key, or value states for attention."""
+        if key_value_states is None:
+            # Self-attention projection
+            # (batch_size, n_heads, seq_length, dim_per_head)
+            hidden_states = rearrange(
+                proj_layer(hidden_states), "b l (h d) -> b h l d", h=self.n_heads
+            )
+        elif past_key_value is None:
+            # Cross-attention projection when there is no past key value
+            # (batch_size, n_heads, seq_length, dim_per_head)
+            hidden_states = rearrange(
+                proj_layer(key_value_states), "b l (h d) -> b h l d", h=self.n_heads
+            )
+
+        if past_key_value is not None:
+            if key_value_states is None:
+                # Append past key or value states for self-attention
+                # (batch_size, n_heads, key_length, dim_per_head)
+                hidden_states = torch.cat([past_key_value, hidden_states], dim=2)
+            elif past_key_value.shape[2] != key_value_states.shape[1]:
+                # Handle mismatch in sequence lengths between past states and current key-value states
+                # Cross-attention
+                # (batch_size, n_heads, seq_length, dim_per_head)
+                hidden_states = rearrange(
+                    proj_layer(key_value_states), "b l (h d) -> b h l d", h=self.n_heads
+                )
+            else:
+                # Use past key or value states directly in cross-attention
+                hidden_states = past_key_value
+        return hidden_states
+
     def forward(
         self,
         hidden_states,
@@ -167,40 +203,6 @@ class DeployT5Attention(T5Attention):
             real_seq_length if key_value_states is None else key_value_states.shape[1]
         )
 
-        def project(hidden_states, proj_layer, key_value_states, past_key_value):
-            """Projects input states into query, key, or value states for attention."""
-            if key_value_states is None:
-                # Self-attention projection
-                # (batch_size, n_heads, seq_length, dim_per_head)
-                hidden_states = rearrange(
-                    proj_layer(hidden_states), "b l (h d) -> b h l d", h=self.n_heads
-                )
-            elif past_key_value is None:
-                # Cross-attention projection when there is no past key value
-                # (batch_size, n_heads, seq_length, dim_per_head)
-                hidden_states = rearrange(
-                    proj_layer(key_value_states), "b l (h d) -> b h l d", h=self.n_heads
-                )
-
-            if past_key_value is not None:
-                if key_value_states is None:
-                    # Append past key or value states for self-attention
-                    # (batch_size, n_heads, key_length, dim_per_head)
-                    hidden_states = torch.cat([past_key_value, hidden_states], dim=2)
-                elif past_key_value.shape[2] != key_value_states.shape[1]:
-                    # Handle mismatch in sequence lengths between past states and current key-value states
-                    # Cross-attention
-                    # (batch_size, n_heads, seq_length, dim_per_head)
-                    hidden_states = rearrange(
-                        proj_layer(key_value_states),
-                        "b l (h d) -> b h l d",
-                        h=self.n_heads,
-                    )
-                else:
-                    # Use past key or value states directly in cross-attention
-                    hidden_states = past_key_value
-            return hidden_states
-
         ####### Compute key and value states from hidden states #######
         if (
             self.is_decoder
@@ -211,13 +213,13 @@ class DeployT5Attention(T5Attention):
         else:
             _hidden_states = hidden_states
 
-        key_states = project(
+        key_states = self.project(
             _hidden_states,
             self.k,
             key_value_states,
             past_key_value[0] if past_key_value is not None else None,
         )
-        value_states = project(
+        value_states = self.project(
             _hidden_states,
             self.v,
             key_value_states,
@@ -668,11 +670,26 @@ class DeployT5Block(T5Block):
 class DeployT5Stack(T5Stack):
     def __init__(self, config, embed_tokens=None):
         super().__init__(config, embed_tokens)
-        self.graph_top_k_list = []
-        self.graph_top_k_confidence = []
+        self.device_type = (
+            "cuda"
+            if torch.cuda.is_available()
+            else "mps"
+            if torch.backends.mps.is_available()
+            else "cpu"
+        )
+        self.graph_top_k_list = torch.zeros(
+            (config.max_answer_length, config.vocab_size),
+            dtype=torch.int32,
+            device=self.device_type,
+        )
+        self.graph_top_k_confidence = torch.zeros(
+            (config.max_answer_length, config.vocab_size),
+            dtype=torch.float32,
+            device=self.device_type,
+        )
+        self.current_generation_step = 0
 
         self.offset_index_from_prunning = []
-        self.shrank_logits_from_prunning = []
         self.top_k_indices = None
 
         self.embed_tokens = embed_tokens
@@ -698,14 +715,29 @@ class DeployT5Stack(T5Stack):
         # Early-Exit framework
         self.use_early_exit = config.use_early_exit
         self.exit_min_layer = config.exit_min_layer
-
-        # Shallow-Deep Module
-        self.use_shallow_deep = config.use_shallow_deep
-        self.shallow_exit_layer = config.shallow_exit_layer
-        if self.is_decoder and config.use_shallow_deep:
-            assert config.shallow_exit_layer > 0 and config.shallow_exit_layer < len(
-                self.block
+        self.maximum_k_size = 35000  # where 200 is the maximum number of weights to keep ( it actually immediately decreases so it is lower thatn this)
+        self.minimum_k_size = 250  # where 50 is the minimum number of weights to keep
+        self.num_layers = len(self.block)  # This is the number of layers in the model
+        self.k_values = [
+            self.func_inverse(
+                i, self.maximum_k_size, self.minimum_k_size, self.num_layers
             )
+            for i in range(len(self.block))
+        ]
+        self.top_k_heap = []
+
+        self.max_gen_size = 512
+        self.logits_history = torch.zeros(
+            (self.max_gen_size, self.num_layers, config.vocab_size),
+            dtype=torch.float32,
+            device=self.device_type,
+        )
+        self.topk_history = torch.zeros(
+            (self.max_gen_size, self.num_layers, config.top_k),
+            dtype=torch.long,
+            device=self.device_type,
+        )
+        self.current_gen_step = 0
 
         # Synchronized Parallel Decoding
         self.block_op = [
@@ -786,7 +818,6 @@ class DeployT5Stack(T5Stack):
             self.stack_hidden_states = torch.cat(self.stack_hidden_states, dim=1)
             extended_attention_mask = attention_mask
 
-        previous_hidden_states = []
         for j in range(layer_idx, len(self.block)):
             past_key_value = past_key_values[j]
             if past_key_value is None:
@@ -914,10 +945,19 @@ class DeployT5Stack(T5Stack):
 
         return hidden_states, present_key_value_states
 
-    def func_inverse(
-        self, i, k1, k2, num_layers
-    ):  # this is the function for doing smoothed pruning
+    def update_top_k(self, logits: torch.Tensor, k: int, step: int):
+        new_probs, new_indices = torch.topk(logits, k, largest=True, sorted=True)
+        self.graph_top_k_list[step, :k] = new_indices
+        self.graph_top_k_confidence[step, :k] = new_probs
+
+    @staticmethod
+    @torch.jit.script
+    def func_inverse(i: int, k1: int, k2: int, num_layers: int) -> int:
         return max(k2, int(k1 / (1 + (k1 - k2) / k2 * i / num_layers)))
+
+    # @torch.jit.script
+    # def compute_full_logits(self, hidden_states: torch.Tensor) -> torch.Tensor:
+    #     return torch.nn.functional.linear(hidden_states, self.lm_head_weight)
 
     def forward(
         self,
@@ -940,11 +980,7 @@ class DeployT5Stack(T5Stack):
         We have implemented the following inference strategy:
 
         1) Normal framework: Forward all transformer layers.
-        2) Static framework: Only forward the pre-defined number of early layers.
-        3) Early-Exit framework: Each token can exit the forward path if confidence is higher than threshold.
-        4) Shallow-Deep framework:
-            While a few early layers are defined as 'Shallow' decoder, the entire network including Shallow is defined as 'Deep' decoder.
-            Each token can skip the Deep decoder path if confidence at Shallow decoder is higher than threshold.
+        2) Early-Exit framework: Each token can exit the forward path if confidence is higher than threshold.
         """
         if self.config.use_synchronize:
             torch.cuda.synchronize()
@@ -1077,7 +1113,6 @@ class DeployT5Stack(T5Stack):
 
         prev_probits = {}
         prev_confidences = {}
-        top_1_index = None
         if self.is_decoder and self.config.plotting_logits:
             previous_logits = []
 
@@ -1091,13 +1126,8 @@ class DeployT5Stack(T5Stack):
                     if self.config.tie_word_embeddings
                     else _hidden_states
                 )
-                lm_logits = lm_head(_hidden_states)
+                lm_logits = compute_logits(_hidden_states, self.lm_head.weight)
                 previous_logits.append(lm_logits)
-
-            # Static framework
-            if self.is_decoder and self.config.static_exit_layer is not None:
-                if i == self.config.static_exit_layer:
-                    break
 
             layer_head_mask = head_mask[i]
             cross_attn_layer_head_mask = cross_attn_head_mask[i]
@@ -1108,118 +1138,8 @@ class DeployT5Stack(T5Stack):
                 self.block_op[i] += 1
 
             if self.is_decoder and auto_reg and i > 0:
-                # Shallow-Deep framework
-                if self.use_shallow_deep and i == self.shallow_exit_layer:
-                    if self.config.use_synchronize:
-                        torch.cuda.synchronize()
-                    start = datetime.datetime.now()
-                    _hidden_states = self.dropout(self.final_layer_norm(hidden_states))
-                    lm_logits = (
-                        lm_head(_hidden_states)
-                        if not self.config.tie_word_embeddings
-                        else lm_head(_hidden_states * (self.config.d_model**-0.5))
-                    )
-
-                    skip_mask, conf = get_skip_mask(
-                        lm_logits,
-                        _hidden_states,
-                        cm_head,
-                        config=self.config,
-                        adapt_threshold=self.bmm_threshold,
-                        return_conf=True,
-                    )
-                    self.stack_conf = self.stack_conf + (conf,)
-                    self.stack_pred = self.stack_pred + (lm_logits,)
-
-                    if not skip_mask:
-                        self.block_op[i] += 1
-                    if self.config.use_synchronize:
-                        torch.cuda.synchronize()
-                    self.deploy_time["time_confidence"] += (
-                        datetime.datetime.now() - start
-                    )
-
-                    # if skip Deep decoder, store hidden_states at self.shallow_exit_layer
-                    if skip_mask:
-                        if self.config.use_synchronize:
-                            torch.cuda.synchronize()
-                        start = datetime.datetime.now()
-                        self.lm_logits = lm_logits
-                        if self.config.parallel_gen_token:
-                            if use_cache:
-                                for j in range(i, len(self.block)):
-                                    present_key_value_states = (
-                                        present_key_value_states
-                                        + [
-                                            past_key_values[j],
-                                        ]
-                                    )
-                            self.stack_hidden_states = self.stack_hidden_states + (
-                                hidden_states,
-                            )
-
-                        if self.config.use_synchronize:
-                            torch.cuda.synchronize()
-                        if self.is_decoder:
-                            self.deploy_time["time_others"] += (
-                                datetime.datetime.now() - start
-                            )
-                        break
-
-                    if not skip_mask:
-                        self.shallow2deep = True
-                        # if self.config.parallel_gen_token:
-                        if self.config.parallel_gen_token and len(
-                            self.stack_hidden_states
-                        ):
-                            self.parallel_tokens_shallow += len(
-                                self.stack_hidden_states
-                            )
-                            self.parallel_tokens_deep += 1
-
-                            # in Shallow-Deep decoder, generate the next token in a non-autoregressive manner
-                            hidden_states, present_key_value_states = (
-                                self.parallel_gen_token(
-                                    hidden_states,
-                                    attention_mask=extended_attention_mask,
-                                    position_bias=position_bias,
-                                    encoder_hidden_states=encoder_hidden_states,
-                                    encoder_extended_attention_mask=encoder_extended_attention_mask,
-                                    encoder_decoder_position_bias=encoder_decoder_position_bias,
-                                    head_mask=head_mask,
-                                    cross_attn_head_mask=cross_attn_head_mask,
-                                    past_key_values=past_key_values,
-                                    present_key_value_states=present_key_value_states,
-                                    use_cache=use_cache,
-                                    output_attentions=output_attentions,
-                                    layer_idx=self.shallow_exit_layer,
-                                )
-                            )
-
-                            # Adaptive Threshold Estimator
-                            if self.config.use_adapt_threshold:
-                                # Calibration Set Update
-                                self.lm_logits = self.lm_head(
-                                    self.dropout(self.final_layer_norm(hidden_states))
-                                )
-                                deep_pred = self.lm_logits.argmax(-1)
-                                shallow_pred = (
-                                    torch.cat(self.stack_pred).argmax(-1).view(-1)
-                                )
-
-                                self.stack_conf_all += self.stack_conf
-                                self.stack_ident_all += (
-                                    (deep_pred.view(-1) == shallow_pred.view(-1))
-                                    .long()
-                                    .cpu()
-                                    .numpy(),
-                                )
-                                self.stack_conf, self.stack_pred = (), ()
-
-                            break
-
                 # Early-Exit framework
-                elif self.use_early_exit and not skip_mask:
+                if self.use_early_exit and not skip_mask:
                     if self.exit_min_layer is not None and i < self.exit_min_layer:
                         if self.config.use_synchronize:
                             torch.cuda.synchronize()
@@ -1228,9 +1148,9 @@ class DeployT5Stack(T5Stack):
                             self.final_layer_norm(hidden_states)
                         )
                         lm_logits = (
-                            lm_head(_hidden_states)
+                            compute_logits(hidden_states, self.lm_head.weight)
                             if not self.config.tie_word_embeddings
-                            else lm_head(_hidden_states * (self.config.d_model**-0.5))
+                            else compute_logits(_hidden_states, self.lm_head.weight)
                         )
 
                         probits = lm_logits.softmax(
@@ -1238,7 +1158,6 @@ class DeployT5Stack(T5Stack):
                         ).squeeze()  # torch.softmax(lm_logits, dim=-1) + squeezing
                         prev_probits[i] = probits
                         self.block_op[i] += 1
-
                     else:
                         if self.config.use_synchronize:
                             torch.cuda.synchronize()
@@ -1253,9 +1172,9 @@ class DeployT5Stack(T5Stack):
                         ):  # If we are not using any vocab reduction
                             a = _hidden_states * (self.config.d_model**-0.5)
                             lm_logits = (
-                                lm_head(_hidden_states)
+                                compute_logits(hidden_states, self.lm_head.weight)
                                 if not self.config.tie_word_embeddings
-                                else lm_head(a)
+                                else compute_logits(a, self.lm_head.weight)
                             )
 
                             if self.config.count_flops:
@@ -1275,21 +1194,14 @@ class DeployT5Stack(T5Stack):
                                 i == starting_layer
                             ):  # if it is the first layer where we compute the logits
                                 lm_logits = (
-                                    lm_head(_hidden_states)
+                                    compute_logits(_hidden_states, self.lm_head.weight)
                                     if not self.config.tie_word_embeddings
-                                    else lm_head(
-                                        _hidden_states * (self.config.d_model**-0.5)
+                                    else compute_logits(
+                                        _hidden_states * (self.config.d_model**-0.5),
+                                        self.lm_head.weight,
                                     )
                                 )
-                                # Get the top 2500 logits at block 1.
-                                maximum_k_size = 35000  # where 200 is the maximum number of weights to keep ( it actually immediately decreases so it is lower thatn this)
-                                minimum_k_size = 250  # where 50 is the minimum number of weights to keep
-                                num_layers = len(
-                                    self.block
-                                )  # This is the number of layers in the model
-                                k = self.func_inverse(
-                                    i, maximum_k_size, minimum_k_size, num_layers
-                                )
+                                k = self.k_values[i]
                                 self.top_k_indices = torch.topk(
                                     lm_logits[0][0], k, largest=True, sorted=True
                                 )[1].sort()[0]
@@ -1302,6 +1214,7 @@ class DeployT5Stack(T5Stack):
                                 ]  # THis can be done here to win some compute time
                             else:  # For all the other layers either use fixed, decaying or adaptive pruning
                                 if self.config.type_vocab_reduct == "fixed":
+                                    k = self.k_values[i]
                                     if self.config.count_flops:
                                         self.flop_counter += (
                                             (self.config.d_model**2) * k * 1
@@ -1309,40 +1222,32 @@ class DeployT5Stack(T5Stack):
                                     # Note: There is no bias in self.lm_head = nn.Linear(config.d_model, config.vocab_size, bias=False)
                                     a = _hidden_states * (self.config.d_model**-0.5)
                                     lm_logits = (
-                                        torch.nn.functional.linear(
-                                            _hidden_states, selected_weights
-                                        )
+                                        compute_logits(_hidden_states, selected_weights)
                                         if not self.config.tie_word_embeddings
-                                        else torch.nn.functional.linear(
-                                            a, selected_weights
-                                        )
+                                        else compute_logits(a, selected_weights)
                                     )
 
                                 elif (
                                     self.config.type_vocab_reduct == "decaying"
                                 ):  # Smoothed pruning! For all the other layers -> smoothed pruning
-                                    current_k = self.func_inverse(
-                                        i, maximum_k_size, minimum_k_size, num_layers
-                                    )
+                                    current_k = self.k_values[i]
 
                                     if self.config.count_flops:
                                         self.flop_counter += (
                                             (self.config.d_model**2) * current_k * 1
                                         )  # Seq length is always one
-                                    self.top_k_indices = self.top_k_indices[:current_k]
-                                    selected_weights = lm_head.weight[
-                                        self.top_k_indices, :
-                                    ]
 
+                                    # Here new efficient way to get the top_k_indices
+                                    self.update_top_k(
+                                        lm_logits[0][0], k, self.current_gen_step
+                                    )
+                                    top_k_indices = [idx for _, idx in self.top_k_heap]
+                                    selected_weights = lm_head.weight[top_k_indices]
                                     a = _hidden_states * (self.config.d_model**-0.5)
                                     lm_logits = (
-                                        torch.nn.functional.linear(
-                                            _hidden_states, selected_weights
-                                        )
+                                        compute_logits(_hidden_states, selected_weights)
                                         if not self.config.tie_word_embeddings
-                                        else torch.nn.functional.linear(
-                                            a, selected_weights
-                                        )
+                                        else compute_logits(a, selected_weights)
                                     )
 
                                 elif self.config.type_vocab_reduct == "adaptive":
@@ -1447,7 +1352,7 @@ class DeployT5Stack(T5Stack):
                         )
 
                 # Normal framework
-                elif not self.use_shallow_deep and not self.use_early_exit:
+                elif not self.use_early_exit:
                     self.block_op[i] += 1
 
             past_key_value = past_key_values[i]
@@ -1473,8 +1378,6 @@ class DeployT5Stack(T5Stack):
             if self.is_decoder:
                 if self.config.use_early_exit:
                     prefix = "time_exit_" if skip_mask else "time_"
-                elif self.config.use_shallow_deep:
-                    prefix = "time_parallel_" if self.shallow2deep else "time_"
                 else:
                     prefix = "time_"
                 for idx, t in enumerate(layer_module.key_value_gen_time):
@@ -1567,6 +1470,7 @@ class DeployT5Stack(T5Stack):
             torch.cuda.synchronize()
         if self.is_decoder:
             self.deploy_time["time_others"] += datetime.datetime.now() - start
+            self.current_generation_step += 1
 
         if not return_dict:
             return tuple(
@@ -1861,23 +1765,24 @@ class DeployT5ForConditionalGeneration(T5ForConditionalGeneration):
         return encoder_outputs, decoder_outputs
 
     @staticmethod
-    def apply_repetition_penalty(logits, input_ids, penalty=1.2):
+    def apply_repetition_penalty(
+        logits: torch.Tensor, input_ids: torch.Tensor, penalty: float = 1.2
+    ) -> torch.Tensor:
         if penalty == 1.0:
             return logits
 
-        # If we did not early exit using the vocab reduction
-        for i in range(input_ids.shape[0]):
-            for token_id in set(input_ids[i].tolist()):
-                # print(token_id)
-                if logits[i, token_id] < 0:
-                    logits[i, token_id] *= penalty
-                else:
-                    logits[i, token_id] /= penalty
-        return logits
+        unique_mask = (
+            input_ids.unsqueeze(-1)
+            == torch.arange(logits.size(-1), device=logits.device)
+            .unsqueeze(0)
+            .unsqueeze(0)
+        ).any(dim=1)
+        penalized_logits = torch.where(logits < 0, logits * penalty, logits / penalty)
+        return torch.where(unique_mask, penalized_logits, logits)
 
     @staticmethod
     def apply_repetition_penalty_shrinked(
-        logits: torch.Tensor,  # shape (batch_size, vocab_size)
+        logits: torch.Tensor,
         input_ids: torch.Tensor,
         penalty: float,
         offset_index_from_prunning: torch.Tensor,
@@ -1885,18 +1790,15 @@ class DeployT5ForConditionalGeneration(T5ForConditionalGeneration):
         if penalty == 1.0:
             return logits
 
-        inv_penalty = 1 / penalty
-        match_mask = torch.zeros(
-            logits.size(-1), dtype=torch.bool, device=logits.device
-        )
-        match_mask.index_fill_(0, offset_index_from_prunning, True)
-        match_mask = match_mask[input_ids.view(-1)]
-        match_mask = match_mask.view(logits.size(0), 1)
-        logits.mul_(
-            torch.where(match_mask, torch.where(logits < 0, penalty, inv_penalty), 1.0)
-        )
-
-        return logits
+        device = logits.device
+        input_ids = input_ids.to(device)
+        offset_index_from_prunning = offset_index_from_prunning.to(device)
+        match_mask = (
+            input_ids.unsqueeze(-1)
+            == offset_index_from_prunning.unsqueeze(0).unsqueeze(0)
+        ).any(dim=1)
+        penalized_logits = torch.where(logits < 0, logits * penalty, logits / penalty)
+        return torch.where(match_mask, penalized_logits, logits)
 
     def greedy_search(
         self,
@@ -2046,73 +1948,6 @@ class DeployT5ForConditionalGeneration(T5ForConditionalGeneration):
             if synced_gpus and this_peer_finished:
                 continue  # don't waste resources running the code we don't need
 
-            # RollBack policy
-            if (
-                self.config.use_shallow_deep
-                and self.decoder.shallow2deep
-                and not self.config.copy_skipped_hidden_states
-                and self.config.rollback_conf_threshold is not None
-            ):
-                if self.config.use_synchronize:
-                    torch.cuda.synchronize()
-                start = datetime.datetime.now()
-
-                seq_len = outputs.logits.size(1)
-                if seq_len == 1:
-                    # stack_hidden_states is empty, so do not need to RollBack
-                    assert len(self.rollback_candidates) == 0
-                    self.pass_length_rollback += 1
-
-                else:
-                    # we should check RollBack
-                    assert seq_len - 1 == len(self.rollback_candidates)
-
-                    deep_logits = outputs.logits[:, :-1, :]
-                    shallow_preds = torch.cat(self.rollback_candidates, dim=0)
-                    rollback_loss = self.criterion(
-                        deep_logits.squeeze(0), shallow_preds
-                    )
-
-                    for j, _loss in enumerate(rollback_loss):
-                        if _loss.item() > self.config.rollback_conf_threshold:
-                            # RollBack
-                            outputs.logits = deep_logits[:, [j], :]
-
-                            # remove RollBacked tokens
-                            input_ids = input_ids[
-                                :, : self.pass_length_rollback + 1
-                            ]  # consider sos token
-                            past_key_values = []
-                            for past in outputs.past_key_values:
-                                past_key_values += [
-                                    [
-                                        past[0][
-                                            :, :, : self.pass_length_rollback + 1, :
-                                        ],  # self-attn key
-                                        past[1][
-                                            :, :, : self.pass_length_rollback + 1, :
-                                        ],  # self-attn value
-                                        past[2],
-                                        past[3],
-                                    ],
-                                ]
-                            outputs.past_key_values = past_key_values
-
-                            self.decoder.block_op[0] -= (seq_len - 1) - j
-                            self.rollback_num += (seq_len - 1) - j
-                            break
-                        else:
-                            self.pass_length_rollback += 1
-
-                    self.rollback_candidates = ()
-                    self.pass_length_rollback += 1
-
-                if self.config.use_synchronize:
-                    torch.cuda.synchronize()
-                self.deploy_time["time_decoder_forward"] += (
-                    datetime.datetime.now() - start
-                )
-
             next_token_logits = outputs.logits[:, -1, :]
             if self.decoder.offset_index_from_prunning:
                 next_token_logits = self.apply_repetition_penalty_shrinked(
@@ -2166,15 +2001,6 @@ class DeployT5ForConditionalGeneration(T5ForConditionalGeneration):
                         next_tokens.item()
                     ]
             count += 1
-
-            # for RollBack, store Shallow decoder's predictions
-            if (
-                self.config.use_shallow_deep
-                and not self.decoder.shallow2deep
-                and not self.config.copy_skipped_hidden_states
-                and self.config.rollback_conf_threshold is not None
-            ):
-                self.rollback_candidates += (next_tokens,)
 
             # finished sentences should have their next token be a padding token
             if eos_token_id is not None:

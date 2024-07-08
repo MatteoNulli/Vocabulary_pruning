@@ -49,8 +49,9 @@ CUDA_VISIBLE_DEVICES=0 python -m run_question_answering \
     --include_inputs_for_metrics True \
     --use_auth_token True \
     --count_flops True \
-    # --type_vocab_reduct decaying \
-
+    --max_eval_samples 100 \
+    --use_mps_device True \
+    --type_vocab_reduct decaying \
 
 
 
