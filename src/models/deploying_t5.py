@@ -711,7 +711,6 @@ class DeployT5Stack(T5Stack):
             self.stack_hidden_states = torch.cat(self.stack_hidden_states, dim=1)
             extended_attention_mask = attention_mask
 
-        previous_hidden_states = []
         for j in range(layer_idx, len(self.block)):
             past_key_value = past_key_values[j]
             if past_key_value is None:
@@ -1014,7 +1013,7 @@ class DeployT5Stack(T5Stack):
                 lm_logits = lm_head(_hidden_states)
                 previous_logits.append(lm_logits)
 
-            # Static framework
+            # Static framework: Only forward the pre-defined number of early layers.
             if self.is_decoder and self.config.static_exit_layer is not None:
                 if i == self.config.static_exit_layer:
                     break
@@ -1219,29 +1218,20 @@ class DeployT5Stack(T5Stack):
                                     raise (
                                         "Please provide a valid type_vocab_reduct argument. Either use fixed, decaying, or adaptive."
                                     )
-
                         # END OF SHRINKING VOCAB PART
-                        if self.config.type_vocab_reduct == "adaptive":
+                        if (
+                            self.config.type_vocab_reduct == "adaptive"
+                        ):  # If we are using adaptive pruning, we need to calculate the confidence
                             skip_mask, conf = get_skip_mask(
                                 lm_logits,
-                                _hidden_states,
-                                cm_head,
-                                config=self.config,
-                                pos_time=past_key_values[i][0].shape[2] + 1
-                                if past_key_values[i] is not None
-                                else 1,
+                                config=self.config,  # type: ignore
                                 return_conf=True,
                             )
                             prev_confidences[i] = conf
                         else:
                             skip_mask = get_skip_mask(
                                 lm_logits,
-                                _hidden_states,
-                                cm_head,
-                                config=self.config,
-                                pos_time=past_key_values[i][0].shape[2] + 1
-                                if past_key_values[i] is not None
-                                else 1,
+                                config=self.config,  # type: ignore
                                 return_conf=False,
                             )
 
@@ -1421,10 +1411,6 @@ class DeployT5ForConditionalGeneration(T5ForConditionalGeneration):
         self.lm_head = nn.Linear(config.d_model, config.vocab_size, bias=False)
         self.decoder.lm_head = self.lm_head
         self.cm_head = None
-
-        # RollBack policy
-        self.rollback_num = 0
-        self.criterion = nn.CrossEntropyLoss(reduction="none")
 
         self.deploy_time = {
             "time_encoder_forward": datetime.timedelta(),
@@ -1792,10 +1778,6 @@ class DeployT5ForConditionalGeneration(T5ForConditionalGeneration):
         )
 
         this_peer_finished = False  # used by synced_gpus only
-
-        # for RollBack policy
-        self.rollback_candidates = ()
-        self.pass_length_rollback = 0
 
         count = 0
         while True:
