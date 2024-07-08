@@ -26,7 +26,7 @@ import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 
 from transformers import Seq2SeqTrainer, AutoTokenizer
-from transformers.utils import is_torch_tpu_available
+from transformers.utils import is_torch_xla_available
 from transformers.deepspeed import deepspeed_init, is_deepspeed_zero3_enabled
 from transformers.debug_utils import DebugOption
 from transformers.trainer_utils import (
@@ -245,7 +245,7 @@ class QATrainer(Seq2SeqTrainer):
         # Do this before wrapping.
         eval_dataset = getattr(dataloader, "dataset", None)
 
-        if is_torch_tpu_available():
+        if is_torch_xla_available():
             dataloader = pl.ParallelLoader(dataloader, [args.device]).per_device_loader(
                 args.device
             )
@@ -297,7 +297,7 @@ class QATrainer(Seq2SeqTrainer):
                 )
                 print("-END CONTEXT-")
 
-            if is_torch_tpu_available():
+            if is_torch_xla_available():
                 xm.mark_step()
 
             # Update containers on host

@@ -70,6 +70,8 @@ from util import (
 )
 
 import wandb
+wandb.require("core")
+
 
 # Will error if the minimal version of Transformers is not installed. Remove at your own risks.
 # check_min_version("4.28.0.dev0")
@@ -226,7 +228,7 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
         additional_args,
         max_answer_length=data_args.max_target_length
     )
-    
+
     tokenizer = AutoTokenizer.from_pretrained(
         tokenizer_name,
         cache_dir=model_args.cache_dir,
@@ -243,11 +245,11 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
         revision=model_args.model_revision,
         use_auth_token=True if model_args.use_auth_token else None,
     )
-        
+
     if additional_args.use_lora:
         if training_args.do_train:
             lora_config = LoraConfig(
-                task_type=TaskType.SEQ_2_SEQ_LM, r=additional_args.lora_rank, 
+                task_type=TaskType.SEQ_2_SEQ_LM, r=additional_args.lora_rank,
                 lora_alpha=additional_args.lora_alpha, lora_dropout=additional_args.lora_dropout,
                 target_modules=additional_args.lora_target_modules,
             )
@@ -360,7 +362,7 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
 
         model_inputs["labels"] = labels["input_ids"]
         return model_inputs
-        
+
     if training_args.do_train:
         train_dataset = raw_datasets["train"]
         if data_args.max_train_samples is not None:
@@ -437,23 +439,23 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
             preds, labels = eval_preds
         if isinstance(preds, tuple):
             preds = preds[0]
-            
+
         try:
             decoded_preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
         except:
-            
-            decoded_preds = tokenizer.batch_decode(np.where(preds != -100, preds, tokenizer.pad_token_id), 
+
+            decoded_preds = tokenizer.batch_decode(np.where(preds != -100, preds, tokenizer.pad_token_id),
                                                    skip_special_tokens=True)
         if data_args.ignore_pad_token_for_loss:
             # Replace -100 in the labels as we can't decode them.
             labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
-            
+
         try:
             decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
         except:
-            decoded_labels = tokenizer.batch_decode(np.where(labels != -100, labels, tokenizer.pad_token_id), 
+            decoded_labels = tokenizer.batch_decode(np.where(labels != -100, labels, tokenizer.pad_token_id),
                                                     skip_special_tokens=True)
-        
+
         # Some simple post-processing
         decoded_preds, decoded_labels = postprocess_text(decoded_preds, decoded_labels)
 
@@ -471,7 +473,7 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
     )
     training_args.generation_num_beams = (
         data_args.num_beams if data_args.num_beams is not None else training_args.generation_num_beams
-    )    
+    )
     # adjust training arguments
     training_args = adjust_training_args(training_args, additional_args)
 
@@ -536,7 +538,7 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
                         mode='constant',
                         constant_values=np.nan)
                 for arr in data]
-            
+
             padded_conf = [np.pad(np.array(arr, dtype=float),  # Convert array to float
                         (0, max_length - len(arr)),
                         mode='constant',
@@ -563,10 +565,10 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
             mean_conf_block = np.nanmean(padded_conf_array, axis=0)
 
             return mean_conf_block
-        
+
         max_eval_samples = data_args.max_eval_samples if data_args.max_eval_samples is not None else len(eval_dataset)
         metrics["eval_samples"] = min(max_eval_samples, len(eval_dataset))
- 
+
         trainer.log_metrics("eval", metrics)
         trainer.save_metrics("eval", metrics)
 
@@ -616,7 +618,7 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
         return trainer, metrics
 
 
-if __name__ == "__main__": 
+if __name__ == "__main__":
     # See all possible arguments in src/transformers/training_args.py
     # or by passing the --help flag to this script.
     # We now keep distinct sets of args, for a cleaner separation of concerns.
@@ -628,7 +630,7 @@ if __name__ == "__main__":
         model_args, data_args, training_args, additional_args = parser.parse_json_file(json_file=os.path.abspath(sys.argv[1]))
     else:
         model_args, data_args, training_args, additional_args = parser.parse_args_into_dataclasses()
-    
+
     if 't5' in model_args.model_name_or_path:
         if data_args.dataset_name in ["cnn_dailymail", "xsum", "samsum"]:
             model_cls = T5ForConditionalGeneration if not additional_args.deploy_scenario \
@@ -648,13 +650,13 @@ if __name__ == "__main__":
     else:
         mean_block_confidence = main(model_args, data_args, training_args, additional_args, model_cls, trainer_cls)
         block_k_metric = []
-        
+
         additional_args.plotting_logits = False
 
-        for block in range(1, 25):           
+        for block in range(1, 25):
             additional_args.static_exit_layer = block
             _, metrics = main(model_args, data_args, training_args, additional_args, model_cls, trainer_cls)
-            block_k_metric.append(metrics["eval_rougeL"]/100)    
+            block_k_metric.append(metrics["eval_rougeL"]/100)
 
         plt.figure(figsize=(10, 6))
         plt.plot(np.arange(24), mean_block_confidence, label='Confidence', color='midnightblue', linestyle='dashed')
@@ -666,6 +668,5 @@ if __name__ == "__main__":
         plt.grid(True)
         plt.savefig("plots/conf_metric_blocks" + data_args.dataset_name.replace("/","_") + "_" + model_args.model_name_or_path.replace("/","_")  +".png")
 
-        
-        
-    
+
+

@@ -40,7 +40,6 @@ from transformers.models.t5.modeling_t5 import (
 )
 from transformers.utils import logging
 from util import (
-    BetaMixture1D,
     get_skip_mask,
 )
 
@@ -493,57 +492,6 @@ class DeployT5Block(T5Block):
         # Always add the feed-forward layer
         self.layer.append(T5LayerFF(config))
 
-    ######## decoder ########
-    def get_shallow_logits(self, hidden_states):
-        # Generate logits from shallow hidden states (typically used in fast decoding)
-        shallow_hidden_states = self.layer[0].layer_norm(hidden_states)
-        shallow_hidden_states = self.dropout(shallow_hidden_states)
-        shallow_logits = self.lm_head(shallow_hidden_states)
-        return shallow_logits
-
-    ######## decoder ########
-    def gen_cross_attn_key_value(
-        self,
-        hidden_states,
-        attention_mask=None,
-        position_bias=None,
-        encoder_hidden_states=None,
-        encoder_attention_mask=None,
-        encoder_decoder_position_bias=None,
-        layer_head_mask=None,
-        cross_attn_layer_head_mask=None,
-        past_key_value=None,
-        use_cache=False,
-        output_attentions=False,
-    ):
-        r"""
-        In Shallow-Deep framework, if all previous tokens, including <start> token, have skipped Deep decoder,
-        generate cross-attn key_values only ONCE because they are shared for all sequence.
-
-        return (None, None) + cross_attn_past_key_value: Tuple[torch.Tensor] (length of 2)
-        """
-
-        # if all previous tokens, including <start> token, have skipped Deep decoder
-        assert self.is_decoder and encoder_hidden_states is not None
-        cross_attn_past_key_value = self.layer[1](
-            hidden_states,
-            key_value_states=encoder_hidden_states,
-            attention_mask=encoder_attention_mask,
-            position_bias=encoder_decoder_position_bias,
-            layer_head_mask=cross_attn_layer_head_mask,
-            past_key_value=past_key_value,
-            use_cache=use_cache,
-            output_attentions=output_attentions,
-            gen_cross_attn_key_value=True,
-        )
-        self.key_value_gen_time = self.layer[1].key_value_gen_time
-
-        past_key_value = [
-            None,
-            None,
-        ] + cross_attn_past_key_value
-        return past_key_value
-
     def forward(
         self,
         hidden_states,
@@ -697,31 +645,10 @@ class DeployT5Stack(T5Stack):
         self.use_early_exit = config.use_early_exit
         self.exit_min_layer = config.exit_min_layer
 
-        # Shallow-Deep Module
-        self.use_shallow_deep = config.use_shallow_deep
-        self.shallow_exit_layer = config.shallow_exit_layer
-        if self.is_decoder and config.use_shallow_deep:
-            assert config.shallow_exit_layer > 0 and config.shallow_exit_layer < len(
-                self.block
-            )
-
         # Synchronized Parallel Decoding
         self.block_op = [
             0
         ] * config.num_layers  # to calculate the average number of forward block layers
-        self.parallel_tokens_shallow = (
-            0  # how much tokens are used in parallel decoding as stack_hidden_states
-        )
-        self.parallel_tokens_deep = (
-            0  # how much tokens are used in parallel decoding with skip_mask = False
-        )
-        self.stack_hidden_states = ()  # store hidden_states that do not forward Deep decoder
-
-        # Adaptive Threshold Estimator
-        self.bmm_model = BetaMixture1D()
-        self.bmm_threshold = None
-        self.stack_conf, self.stack_pred = (), ()
-        self.stack_conf_all, self.stack_ident_all = (), ()
 
         if self.is_decoder:
             self._reset_time_measure()
@@ -912,9 +839,9 @@ class DeployT5Stack(T5Stack):
 
         return hidden_states, present_key_value_states
 
-    def func_inverse(
-        self, i, k1, k2, num_layers
-    ):  # this is the function for doing smoothed pruning
+    @staticmethod
+    @torch.jit.script
+    def func_inverse(i: int, k1: int, k2: int, num_layers: int) -> int:
         return max(k2, int(k1 / (1 + (k1 - k2) / k2 * i / num_layers)))
 
     def forward(
@@ -940,9 +867,6 @@ class DeployT5Stack(T5Stack):
         1) Normal framework: Forward all transformer layers.
         2) Static framework: Only forward the pre-defined number of early layers.
         3) Early-Exit framework: Each token can exit the forward path if confidence is higher than threshold.
-        4) Shallow-Deep framework:
-            While a few early layers are defined as 'Shallow' decoder, the entire network including Shallow is defined as 'Deep' decoder.
-            Each token can skip the Deep decoder path if confidence at Shallow decoder is higher than threshold.
         """
         if self.config.use_synchronize:
             torch.cuda.synchronize()
@@ -1070,12 +994,10 @@ class DeployT5Stack(T5Stack):
             self.deploy_time["time_others"] += datetime.datetime.now() - start
 
         skip_mask = False  # False: forward, and True: skip
-        self.shallow2deep = False  # False: skip, and True: forward
         self.lm_logits = None  # to prevent calculating logits twice
 
         prev_probits = {}
         prev_confidences = {}
-        top_1_index = None
         if self.is_decoder and self.config.plotting_logits:
             previous_logits = []
 
@@ -1106,118 +1028,8 @@ class DeployT5Stack(T5Stack):
                 self.block_op[i] += 1
 
             if self.is_decoder and auto_reg and i > 0:
-                # Shallow-Deep framework
-                if self.use_shallow_deep and i == self.shallow_exit_layer:
-                    if self.config.use_synchronize:
-                        torch.cuda.synchronize()
-                    start = datetime.datetime.now()
-                    _hidden_states = self.dropout(self.final_layer_norm(hidden_states))
-                    lm_logits = (
-                        lm_head(_hidden_states)
-                        if not self.config.tie_word_embeddings
-                        else lm_head(_hidden_states * (self.config.d_model**-0.5))
-                    )
-
-                    skip_mask, conf = get_skip_mask(
-                        lm_logits,
-                        _hidden_states,
-                        cm_head,
-                        config=self.config,
-                        adapt_threshold=self.bmm_threshold,
-                        return_conf=True,
-                    )
-                    self.stack_conf = self.stack_conf + (conf,)
-                    self.stack_pred = self.stack_pred + (lm_logits,)
-
-                    if not skip_mask:
-                        self.block_op[i] += 1
-                    if self.config.use_synchronize:
-                        torch.cuda.synchronize()
-                    self.deploy_time["time_confidence"] += (
-                        datetime.datetime.now() - start
-                    )
-
-                    # if skip Deep decoder, store hidden_states at self.shallow_exit_layer
-                    if skip_mask:
-                        if self.config.use_synchronize:
-                            torch.cuda.synchronize()
-                        start = datetime.datetime.now()
-                        self.lm_logits = lm_logits
-                        if self.config.parallel_gen_token:
-                            if use_cache:
-                                for j in range(i, len(self.block)):
-                                    present_key_value_states = (
-                                        present_key_value_states
-                                        + [
-                                            past_key_values[j],
-                                        ]
-                                    )
-                            self.stack_hidden_states = self.stack_hidden_states + (
-                                hidden_states,
-                            )
-
-                        if self.config.use_synchronize:
-                            torch.cuda.synchronize()
-                        if self.is_decoder:
-                            self.deploy_time["time_others"] += (
-                                datetime.datetime.now() - start
-                            )
-                        break
-
-                    if not skip_mask:
-                        self.shallow2deep = True
-                        # if self.config.parallel_gen_token:
-                        if self.config.parallel_gen_token and len(
-                            self.stack_hidden_states
-                        ):
-                            self.parallel_tokens_shallow += len(
-                                self.stack_hidden_states
-                            )
-                            self.parallel_tokens_deep += 1
-
-                            # in Shallow-Deep decoder, generate the next token in a non-autoregressive manner
-                            hidden_states, present_key_value_states = (
-                                self.parallel_gen_token(
-                                    hidden_states,
-                                    attention_mask=extended_attention_mask,
-                                    position_bias=position_bias,
-                                    encoder_hidden_states=encoder_hidden_states,
-                                    encoder_extended_attention_mask=encoder_extended_attention_mask,
-                                    encoder_decoder_position_bias=encoder_decoder_position_bias,
-                                    head_mask=head_mask,
-                                    cross_attn_head_mask=cross_attn_head_mask,
-                                    past_key_values=past_key_values,
-                                    present_key_value_states=present_key_value_states,
-                                    use_cache=use_cache,
-                                    output_attentions=output_attentions,
-                                    layer_idx=self.shallow_exit_layer,
-                                )
-                            )
-
-                            # Adaptive Threshold Estimator
-                            if self.config.use_adapt_threshold:
-                                # Calibration Set Update
-                                self.lm_logits = self.lm_head(
-                                    self.dropout(self.final_layer_norm(hidden_states))
-                                )
-                                deep_pred = self.lm_logits.argmax(-1)
-                                shallow_pred = (
-                                    torch.cat(self.stack_pred).argmax(-1).view(-1)
-                                )
-
-                                self.stack_conf_all += self.stack_conf
-                                self.stack_ident_all += (
-                                    (deep_pred.view(-1) == shallow_pred.view(-1))
-                                    .long()
-                                    .cpu()
-                                    .numpy(),
-                                )
-                                self.stack_conf, self.stack_pred = (), ()
-
-                            break
-
                 # Early-Exit framework
-                elif self.use_early_exit and not skip_mask:
+                if self.use_early_exit and not skip_mask:
                     if self.exit_min_layer is not None and i < self.exit_min_layer:
                         if self.config.use_synchronize:
                             torch.cuda.synchronize()
@@ -1445,7 +1257,7 @@ class DeployT5Stack(T5Stack):
                         )
 
                 # Normal framework
-                elif not self.use_shallow_deep and not self.use_early_exit:
+                elif not self.use_early_exit:
                     self.block_op[i] += 1
 
             past_key_value = past_key_values[i]
@@ -1471,8 +1283,6 @@ class DeployT5Stack(T5Stack):
             if self.is_decoder:
                 if self.config.use_early_exit:
                     prefix = "time_exit_" if skip_mask else "time_"
-                elif self.config.use_shallow_deep:
-                    prefix = "time_parallel_" if self.shallow2deep else "time_"
                 else:
                     prefix = "time_"
                 for idx, t in enumerate(layer_module.key_value_gen_time):
@@ -1610,25 +1420,11 @@ class DeployT5ForConditionalGeneration(T5ForConditionalGeneration):
 
         self.lm_head = nn.Linear(config.d_model, config.vocab_size, bias=False)
         self.decoder.lm_head = self.lm_head
-        if (
-            self.config.exit_conf_type == "meta"
-            or self.config.shallow2deep_conf_type == "meta"
-        ):
-            self.cm_head = nn.Sequential(
-                nn.Linear(config.d_model, config.d_model, bias=True),
-                nn.ReLU(),
-                nn.Linear(config.d_model, 2, bias=True),
-            )
-        else:
-            self.cm_head = None
+        self.cm_head = None
 
         # RollBack policy
         self.rollback_num = 0
         self.criterion = nn.CrossEntropyLoss(reduction="none")
-
-        # BMM
-        self.bmm_update_iter = 0
-        self.bmm_update_max_iter = 300
 
         self.deploy_time = {
             "time_encoder_forward": datetime.timedelta(),
@@ -1719,8 +1515,6 @@ class DeployT5ForConditionalGeneration(T5ForConditionalGeneration):
             torch.cuda.synchronize()
         self.deploy_time["time_decoder_forward"] += datetime.datetime.now() - start
 
-        if self.decoder.shallow2deep:
-            self.decoder.stack_conf, self.decoder.stack_pred = (), ()
         if self.config.rollback_conf_threshold is None:
             lm_logits = lm_logits[:, [-1], :]
 
@@ -1814,18 +1608,6 @@ class DeployT5ForConditionalGeneration(T5ForConditionalGeneration):
         ):
             # get decoder inputs from shifting lm labels to the right
             decoder_input_ids = self._shift_right(labels)
-
-        if (
-            past_key_values is None
-            and len(self.decoder.stack_conf_all) > 0
-            and self.bmm_update_iter < self.bmm_update_max_iter
-        ):
-            X = np.hstack(self.decoder.stack_conf_all)
-            Y = np.hstack(self.decoder.stack_ident_all)
-            self.decoder.bmm_model.fit(X, Y)
-
-            self.decoder.bmm_threshold = self.decoder.bmm_model.predict_proba(0.3, 0.9)
-            self.bmm_update_iter += 1
 
         # Decode
         decoder_outputs = self.decoder(
@@ -2044,73 +1826,6 @@ class DeployT5ForConditionalGeneration(T5ForConditionalGeneration):
             if synced_gpus and this_peer_finished:
                 continue  # don't waste resources running the code we don't need
 
-            # RollBack policy
-            if (
-                self.config.use_shallow_deep
-                and self.decoder.shallow2deep
-                and not self.config.copy_skipped_hidden_states
-                and self.config.rollback_conf_threshold is not None
-            ):
-                if self.config.use_synchronize:
-                    torch.cuda.synchronize()
-                start = datetime.datetime.now()
-
-                seq_len = outputs.logits.size(1)
-                if seq_len == 1:
-                    # stack_hidden_states is empty, so do not need to RollBack
-                    assert len(self.rollback_candidates) == 0
-                    self.pass_length_rollback += 1
-
-                else:
-                    # we should check RollBack
-                    assert seq_len - 1 == len(self.rollback_candidates)
-
-                    deep_logits = outputs.logits[:, :-1, :]
-                    shallow_preds = torch.cat(self.rollback_candidates, dim=0)
-                    rollback_loss = self.criterion(
-                        deep_logits.squeeze(0), shallow_preds
-                    )
-
-                    for j, _loss in enumerate(rollback_loss):
-                        if _loss.item() > self.config.rollback_conf_threshold:
-                            # RollBack
-                            outputs.logits = deep_logits[:, [j], :]
-
-                            # remove RollBacked tokens
-                            input_ids = input_ids[
-                                :, : self.pass_length_rollback + 1
-                            ]  # consider sos token
-                            past_key_values = []
-                            for past in outputs.past_key_values:
-                                past_key_values += [
-                                    [
-                                        past[0][
-                                            :, :, : self.pass_length_rollback + 1, :
-                                        ],  # self-attn key
-                                        past[1][
-                                            :, :, : self.pass_length_rollback + 1, :
-                                        ],  # self-attn value
-                                        past[2],
-                                        past[3],
-                                    ],
-                                ]
-                            outputs.past_key_values = past_key_values
-
-                            self.decoder.block_op[0] -= (seq_len - 1) - j
-                            self.rollback_num += (seq_len - 1) - j
-                            break
-                        else:
-                            self.pass_length_rollback += 1
-
-                    self.rollback_candidates = ()
-                    self.pass_length_rollback += 1
-
-                if self.config.use_synchronize:
-                    torch.cuda.synchronize()
-                self.deploy_time["time_decoder_forward"] += (
-                    datetime.datetime.now() - start
-                )
-
             next_token_logits = outputs.logits[:, -1, :]
             if self.decoder.offset_index_from_prunning:
                 next_token_logits = self.apply_repetition_penalty_shrinked(
@@ -2164,16 +1879,6 @@ class DeployT5ForConditionalGeneration(T5ForConditionalGeneration):
                         next_tokens.item()
                     ]
             count += 1
-
-            # for RollBack, store Shallow decoder's predictions
-            if (
-                self.config.use_shallow_deep
-                and not self.decoder.shallow2deep
-                and not self.config.copy_skipped_hidden_states
-                and self.config.rollback_conf_threshold is not None
-            ):
-                self.rollback_candidates += (next_tokens,)
-
             # finished sentences should have their next token be a padding token
             if eos_token_id is not None:
                 if pad_token_id is None:

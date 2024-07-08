@@ -28,20 +28,20 @@ import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
 
 from transformers import Seq2SeqTrainer, AutoTokenizer
-from transformers.utils import is_torch_tpu_available
+from transformers.utils import is_torch_xla_available
 from transformers.deepspeed import deepspeed_init, is_deepspeed_zero3_enabled
 from transformers.debug_utils import DebugOption
 from transformers.trainer_utils import (
-    EvalLoopOutput, 
+    EvalLoopOutput,
     has_length,
-    EvalPrediction, 
+    EvalPrediction,
     denumpify_detensorize,
     speed_metrics,
 )
 from transformers.trainer_pt_utils import (
-    find_batch_size, 
-    nested_concat, 
-    nested_numpify, 
+    find_batch_size,
+    nested_concat,
+    nested_numpify,
     nested_truncate,
     IterableDatasetShard,
 )
@@ -52,11 +52,11 @@ from models.deploying_longt5 import DeployLongT5ForConditionalGeneration
 class SumTrainer(Seq2SeqTrainer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        
+
         descriptive = True
         if descriptive:
             self.tokenizer = AutoTokenizer.from_pretrained('google-t5/t5-large')
-        
+
     def evaluate(
         self,
         eval_dataset: Optional[Dataset] = None,
@@ -116,7 +116,7 @@ class SumTrainer(Seq2SeqTrainer):
             ignore_keys=ignore_keys,
             metric_key_prefix=metric_key_prefix,
         )
-            
+
         total_batch_size = self.args.eval_batch_size * self.args.world_size
         if f"{metric_key_prefix}_jit_compilation_time" in output.metrics:
             start_time += output.metrics[f"{metric_key_prefix}_jit_compilation_time"]
@@ -150,7 +150,7 @@ class SumTrainer(Seq2SeqTrainer):
                 if type(v) != list: deploy_time[k] = str(v).split('.')[0]
                 else: deploy_time[k] = str([str(_v).split('.')[0] for _v in v])
             output.metrics.update(deploy_time)
-                
+
         self.log(output.metrics)
 
         if DebugOption.TPU_METRICS_DEBUG in self.args.debug:
@@ -163,7 +163,7 @@ class SumTrainer(Seq2SeqTrainer):
 
         if self.args.include_inputs_for_metrics:
             return output
-        
+
         return output.metrics
 
     def evaluation_loop(
@@ -211,7 +211,7 @@ class SumTrainer(Seq2SeqTrainer):
         # Do this before wrapping.
         eval_dataset = getattr(dataloader, "dataset", None)
 
-        if is_torch_tpu_available():
+        if is_torch_xla_available():
             dataloader = pl.ParallelLoader(dataloader, [args.device]).per_device_loader(args.device)
 
         if args.past_index >= 0:
@@ -250,7 +250,7 @@ class SumTrainer(Seq2SeqTrainer):
             # print(self.tokenizer.decode(inputs["input_ids"][0], skip_special_tokens=True))
             # print("-END CONTEXT-")
 
-            if is_torch_tpu_available():
+            if is_torch_xla_available():
                 xm.mark_step()
 
             # Update containers on host
@@ -415,14 +415,14 @@ class SumTrainer(Seq2SeqTrainer):
         # users from preparing a dataset with `decoder_input_ids`.
         inputs = {k: v for k, v in inputs.items() if k != "decoder_input_ids"}
         # generated_tokens = self.model.generate(**inputs, **gen_kwargs)
-        
+
         gen_model = self.model.base_model if self.model.config.use_lora else self.model
-        
+
         generated_tokens = gen_model.generate(
             inputs["input_ids"],
             attention_mask=inputs["attention_mask"],
             **gen_kwargs)  # Decoder input shape: (batch_size, 1)
-        
+
         # Temporary hack to ensure the generation config is not initialized for each iteration of the evaluation loop
         # TODO: remove this hack when the legacy code that initializes generation_config from a model config is
         # removed in https://github.com/huggingface/transformers/blob/98d88b23f54e5a23e741833f1e973fdf600cc2c5/src/transformers/generation/utils.py#L1183
@@ -463,5 +463,5 @@ class SumTrainer(Seq2SeqTrainer):
                 labels = self._pad_tensors_to_max_len(labels, (gen_kwargs["max_new_tokens"] + 1))
         else:
             labels = None
-            
+
         return (loss, generated_tokens, labels)
