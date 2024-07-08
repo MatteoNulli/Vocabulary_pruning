@@ -18,66 +18,59 @@ Fine-tuning the library's seq2seq models for question answering using the 🤗 S
 """
 # You can also adapt this script on your own question answering task. Pointers for this are left as comments.
 
-
 TESTING = True
-
-from dataclasses import dataclass, field
-from typing import List, Optional, Tuple
 
 import logging
 import os
 import sys
-import nltk
-import numpy as np
 from copy import deepcopy
-from sklearn.metrics import f1_score
+from typing import List, Tuple
 
-import seaborn as sns
-import pandas as pd
-
-import copy
 import datasets
 import evaluate
+import matplotlib.pyplot as plt
+import nltk
+import numpy as np
+import pandas as pd
+import seaborn as sns
 import transformers
-from datasets import load_dataset    
-from peft import LoraConfig, TaskType, get_peft_model, PeftModel
+from datasets import load_dataset
+from models import (
+    DeployT5ForConditionalGeneration,
+    T5ForConditionalGeneration,
+)
+from peft import LoraConfig, PeftModel, TaskType, get_peft_model
+from qa_lib import (
+    DataTrainingArguments,
+    ModelArguments,
+    QATrainer,
+    adjust_training_args,
+)
 from transformers import (
     AutoConfig,
-    AutoModelForSeq2SeqLM,
     AutoTokenizer,
     DataCollatorForSeq2Seq,
     HfArgumentParser,
     Seq2SeqTrainingArguments,
     set_seed,
 )
-from transformers.trainer_utils import EvalLoopOutput, EvalPrediction, get_last_checkpoint
-from transformers.utils import check_min_version, is_offline_mode, send_example_telemetry
-from transformers.utils.versions import require_version
-
-from qa_lib import (
-    ModelArguments,
-    DataTrainingArguments,
-    QATrainer,
-    adjust_training_args,
+from transformers.trainer_utils import (
+    EvalLoopOutput,
+    EvalPrediction,
+    get_last_checkpoint,
 )
-from models import (
-    T5ForConditionalGeneration,
-    DeployT5ForConditionalGeneration,
-)
+from transformers.utils import is_offline_mode, send_example_telemetry
 from util import (
     AdditionalArguments,
     update_autoconfig,
 )
-import wandb
-
-import matplotlib.pyplot as plt
 
 logger = logging.getLogger(__name__)
 
 question_answering_column_name_mapping = {
     "squad": ("question", "context", "answer"),
     "squad_v2": ("question", "context", "answer"),
-    "narrativeqa": ("question", "document", "answer")
+    "narrativeqa": ("question", "document", "answer"),
 }
 
 try:
@@ -91,7 +84,15 @@ except (LookupError, OSError):
         nltk.download("punkt", quiet=True)
 
 
-def main(model_args, data_args, training_args, additional_args, model_cls, trainer_cls, jupyter=False):    
+def main(
+    model_args,
+    data_args,
+    training_args,
+    additional_args,
+    model_cls,
+    trainer_cls,
+    jupyter=False,
+):
     # Sending telemetry. Tracking the example usage helps us better allocate resources to maintain them. The
     # information sent is the one passed as arguments along with your Python/PyTorch versions.
     send_example_telemetry("run_seq2seq_qa", model_args, data_args)
@@ -106,8 +107,6 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
     if training_args.should_log:
         # The default of training_args.log_level is passive, so we set log level at info here to have that default.
         transformers.utils.logging.set_verbosity_info()
-    
-    model_args
 
     log_level = training_args.get_process_log_level()
     logger.setLevel(log_level)
@@ -125,14 +124,20 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
 
     # Detecting last checkpoint.
     last_checkpoint = None
-    if os.path.isdir(training_args.output_dir) and training_args.do_train and not training_args.overwrite_output_dir:
+    if (
+        os.path.isdir(training_args.output_dir)
+        and training_args.do_train
+        and not training_args.overwrite_output_dir
+    ):
         last_checkpoint = get_last_checkpoint(training_args.output_dir)
         if last_checkpoint is None and len(os.listdir(training_args.output_dir)) > 0:
             raise ValueError(
                 f"Output directory ({training_args.output_dir}) already exists and is not empty. "
                 "Use --overwrite_output_dir to overcome."
             )
-        elif last_checkpoint is not None and training_args.resume_from_checkpoint is None:
+        elif (
+            last_checkpoint is not None and training_args.resume_from_checkpoint is None
+        ):
             logger.info(
                 f"Checkpoint detected, resuming training at {last_checkpoint}. To avoid this behavior, change "
                 "the `--output_dir` or add `--overwrite_output_dir` to train from scratch."
@@ -185,13 +190,21 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
     # The .from_pretrained methods guarantee that only one local process can concurrently
     # download model & vocab.
     if not additional_args.use_lora or training_args.do_train:
-        config_name = model_args.config_name if model_args.config_name else model_args.model_name_or_path
-        tokenizer_name = model_args.tokenizer_name if model_args.tokenizer_name else model_args.model_name_or_path
+        config_name = (
+            model_args.config_name
+            if model_args.config_name
+            else model_args.model_name_or_path
+        )
+        tokenizer_name = (
+            model_args.tokenizer_name
+            if model_args.tokenizer_name
+            else model_args.model_name_or_path
+        )
         model_name = model_args.model_name_or_path
     else:
         lora_config = LoraConfig.from_pretrained(model_args.model_name_or_path)
         config_name = tokenizer_name = model_name = lora_config.base_model_name_or_path
-        
+
     config = AutoConfig.from_pretrained(
         config_name,
         cache_dir=model_args.cache_dir,
@@ -199,11 +212,11 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
         use_auth_token=True if model_args.use_auth_token else None,
     )
     config = update_autoconfig(
-        config, 
+        config,
         additional_args,
         max_answer_length=data_args.max_answer_length,
     )
-    
+
     tokenizer = AutoTokenizer.from_pretrained(
         tokenizer_name,
         cache_dir=model_args.cache_dir,
@@ -211,7 +224,6 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
         revision=model_args.model_revision,
         use_auth_token=True if model_args.use_auth_token else None,
     )
-
 
     model = model_cls.from_pretrained(
         model_name,
@@ -221,18 +233,22 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
         revision=model_args.model_revision,
         use_auth_token=True if model_args.use_auth_token else None,
     )
-        
+
     if additional_args.use_lora:
         if training_args.do_train:
             lora_config = LoraConfig(
-                task_type=TaskType.SEQ_2_SEQ_LM, r=additional_args.lora_rank, 
-                lora_alpha=additional_args.lora_alpha, lora_dropout=additional_args.lora_dropout,
+                task_type=TaskType.SEQ_2_SEQ_LM,
+                r=additional_args.lora_rank,
+                lora_alpha=additional_args.lora_alpha,
+                lora_dropout=additional_args.lora_dropout,
                 target_modules=additional_args.lora_target_modules,
             )
             model = get_peft_model(model, lora_config)
             model.print_trainable_parameters()
         else:
-            model = PeftModel.from_pretrained(model, model_args.model_name_or_path, config=lora_config)
+            model = PeftModel.from_pretrained(
+                model, model_args.model_name_or_path, config=lora_config
+            )
             model = model.merge_and_unload()
 
     # We resize the embeddings only when necessary to avoid index errors. If you are creating a model from scratch
@@ -242,7 +258,9 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
         model.resize_token_embeddings(len(tokenizer))
 
     if model.config.decoder_start_token_id is None:
-        raise ValueError("Make sure that `config.decoder_start_token_id` is correctly defined")
+        raise ValueError(
+            "Make sure that `config.decoder_start_token_id` is correctly defined"
+        )
 
     # Preprocessing the datasets.
     # We need to generate and tokenize inputs and targets.
@@ -253,13 +271,19 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
     elif training_args.do_predict:
         column_names = raw_datasets["test"].column_names
     else:
-        logger.info("There is nothing to do. Please pass `do_train`, `do_eval` and/or `do_predict`.")
+        logger.info(
+            "There is nothing to do. Please pass `do_train`, `do_eval` and/or `do_predict`."
+        )
         return
 
     # Get the column names for input/target.
-    dataset_columns = question_answering_column_name_mapping.get(data_args.dataset_name, None)
+    dataset_columns = question_answering_column_name_mapping.get(
+        data_args.dataset_name, None
+    )
     if data_args.question_column is None:
-        question_column = dataset_columns[0] if dataset_columns is not None else column_names[0]
+        question_column = (
+            dataset_columns[0] if dataset_columns is not None else column_names[0]
+        )
     else:
         question_column = data_args.question_column
         if question_column not in column_names:
@@ -267,7 +291,9 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
                 f"--question_column' value '{data_args.question_column}' needs to be one of: {', '.join(column_names)}"
             )
     if data_args.context_column is None:
-        context_column = dataset_columns[1] if dataset_columns is not None else column_names[1]
+        context_column = (
+            dataset_columns[1] if dataset_columns is not None else column_names[1]
+        )
     else:
         context_column = data_args.context_column
         if context_column not in column_names:
@@ -275,7 +301,9 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
                 f"--context_column' value '{data_args.context_column}' needs to be one of: {', '.join(column_names)}"
             )
     if data_args.answer_column is None:
-        answer_column = dataset_columns[2] if dataset_columns is not None else column_names[2]
+        answer_column = (
+            dataset_columns[2] if dataset_columns is not None else column_names[2]
+        )
     else:
         answer_column = data_args.answer_column
         if answer_column not in column_names:
@@ -287,7 +315,9 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
     max_answer_length = data_args.max_answer_length
     padding = "max_length" if data_args.pad_to_max_length else False
 
-    if training_args.label_smoothing_factor > 0 and not hasattr(model, "prepare_decoder_input_ids_from_labels"):
+    if training_args.label_smoothing_factor > 0 and not hasattr(
+        model, "prepare_decoder_input_ids_from_labels"
+    ):
         logger.warning(
             "label_smoothing is enabled but the `prepare_decoder_input_ids_from_labels` method is not defined for"
             f"`{model.__class__.__name__}`. This will lead to loss being calculated twice and will take up more memory"
@@ -311,12 +341,19 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
         answers = examples[answer_column]
 
         def generate_input(_question, _context):
-            return " ".join(["question:", _question.lstrip(), "context:", _context.lstrip()])
+            return " ".join(
+                ["question:", _question.lstrip(), "context:", _context.lstrip()]
+            )
 
-        inputs = [generate_input(question, context) for question, context in zip(questions, contexts)]
-        targets = [answer["text"][0] if len(answer["text"]) > 0 else "" for answer in answers]
+        inputs = [
+            generate_input(question, context)
+            for question, context in zip(questions, contexts)
+        ]
+        targets = [
+            answer["text"][0] if len(answer["text"]) > 0 else "" for answer in answers
+        ]
         return inputs, targets
-    
+
     def preprocess_narrativeqa_batch(
         examples,
         question_column: str,
@@ -324,62 +361,97 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
         answer_column: str,
     ) -> Tuple[List[str], List[str]]:
         questions = examples[question_column]
-        contexts = [e['summary']['text'] for e in examples[context_column]]
+        contexts = [e["summary"]["text"] for e in examples[context_column]]
         answers = examples[answer_column]
-        
-        def generate_input(_question, _context):
-            return " ".join(["question:", _question.lstrip(), "context:", _context.lstrip()])
 
-        inputs = [generate_input(question['text'], context) for question, context in zip(questions, contexts)]
+        def generate_input(_question, _context):
+            return " ".join(
+                ["question:", _question.lstrip(), "context:", _context.lstrip()]
+            )
+
+        inputs = [
+            generate_input(question["text"], context)
+            for question, context in zip(questions, contexts)
+        ]
         targets = [answer[0]["text"] if len(answer) > 0 else "" for answer in answers]
         return inputs, targets
 
     def preprocess_function(examples):
         if "squad" in data_args.dataset_name:
-            inputs, targets = preprocess_squad_batch(examples, question_column, context_column, answer_column)
+            inputs, targets = preprocess_squad_batch(
+                examples, question_column, context_column, answer_column
+            )
         elif data_args.dataset_name == "narrativeqa":
-            inputs, targets = preprocess_narrativeqa_batch(examples, question_column, context_column, answer_column)
+            inputs, targets = preprocess_narrativeqa_batch(
+                examples, question_column, context_column, answer_column
+            )
         else:
             raise NotImplementedError
-            
-        model_inputs = tokenizer(inputs, max_length=max_seq_length, padding=padding, truncation=True)
+
+        model_inputs = tokenizer(
+            inputs, max_length=max_seq_length, padding=padding, truncation=True
+        )
         # Tokenize targets with text_target=...
-        labels = tokenizer(text_target=targets, max_length=max_answer_length, padding=padding, truncation=True)
+        labels = tokenizer(
+            text_target=targets,
+            max_length=max_answer_length,
+            padding=padding,
+            truncation=True,
+        )
 
         # If we are padding here, replace all tokenizer.pad_token_id in the labels by -100 when we want to ignore
         # padding in the loss.
         if padding == "max_length" and data_args.ignore_pad_token_for_loss:
             labels["input_ids"] = [
-                [(l if l != tokenizer.pad_token_id else -100) for l in label] for label in labels["input_ids"]
+                [(l if l != tokenizer.pad_token_id else -100) for l in label]
+                for label in labels["input_ids"]
             ]
 
         model_inputs["labels"] = labels["input_ids"]
         return model_inputs
 
     # Validation preprocessing
-    def preprocess_validation_function(examples):            
+    def preprocess_validation_function(examples):
         if "squad" in data_args.dataset_name:
-            inputs, targets = preprocess_squad_batch(examples, question_column, context_column, answer_column)
-            model_inputs = tokenizer(inputs, max_length=max_seq_length, padding=padding, truncation=True,
-                                     return_overflowing_tokens=True, return_offsets_mapping=True,)
+            inputs, targets = preprocess_squad_batch(
+                examples, question_column, context_column, answer_column
+            )
+            model_inputs = tokenizer(
+                inputs,
+                max_length=max_seq_length,
+                padding=padding,
+                truncation=True,
+                return_overflowing_tokens=True,
+                return_offsets_mapping=True,
+            )
 
         elif data_args.dataset_name == "narrativeqa":
-            inputs, targets = preprocess_narrativeqa_batch(examples, question_column, context_column, answer_column)
-            model_inputs = tokenizer(inputs, max_length=max_seq_length, padding=padding, truncation=True)
-            
+            inputs, targets = preprocess_narrativeqa_batch(
+                examples, question_column, context_column, answer_column
+            )
+            model_inputs = tokenizer(
+                inputs, max_length=max_seq_length, padding=padding, truncation=True
+            )
+
         else:
             raise NotImplementedError
 
         # Tokenize targets with the `text_target` keyword argument
-        labels = tokenizer(text_target=targets, max_length=max_answer_length, padding=padding, truncation=True)
+        labels = tokenizer(
+            text_target=targets,
+            max_length=max_answer_length,
+            padding=padding,
+            truncation=True,
+        )
 
         # If we are padding here, replace all tokenizer.pad_token_id in the labels by -100 when we want to ignore
         # padding in the loss.
         if padding == "max_length" and data_args.ignore_pad_token_for_loss:
             labels["input_ids"] = [
-                [(l if l != tokenizer.pad_token_id else -100) for l in label] for label in labels["input_ids"]
+                [(l if l != tokenizer.pad_token_id else -100) for l in label]
+                for label in labels["input_ids"]
             ]
-        
+
         if "squad" in data_args.dataset_name:
             # Since one example might give us several features if it has a long context, we need a map from a feature to
             # its corresponding example. This key gives us just that.
@@ -397,13 +469,13 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
                 labels_out.append(labels["input_ids"][sample_index])
 
             model_inputs["labels"] = labels_out
-            
+
         elif data_args.dataset_name == "narrativeqa":
             model_inputs["labels"] = labels["input_ids"]
-            
+
         else:
             raise NotImplementedError
-            
+
         return model_inputs
 
     if training_args.do_train:
@@ -438,7 +510,9 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
             max_eval_samples = min(len(eval_examples), data_args.max_eval_samples)
             eval_examples = eval_examples.select(range(max_eval_samples))
         # Validation Feature Creation
-        with training_args.main_process_first(desc="validation dataset map pre-processing"):
+        with training_args.main_process_first(
+            desc="validation dataset map pre-processing"
+        ):
             eval_dataset = eval_examples.map(
                 preprocess_validation_function,
                 batched=True,
@@ -458,9 +532,13 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
         predict_examples = raw_datasets["test"]
         if data_args.max_predict_samples is not None:
             # We will select sample from whole data
-            predict_examples = predict_examples.select(range(data_args.max_predict_samples))
+            predict_examples = predict_examples.select(
+                range(data_args.max_predict_samples)
+            )
         # Predict Feature Creation
-        with training_args.main_process_first(desc="prediction dataset map pre-processing"):
+        with training_args.main_process_first(
+            desc="prediction dataset map pre-processing"
+        ):
             predict_dataset = predict_examples.map(
                 preprocess_validation_function,
                 batched=True,
@@ -471,21 +549,25 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
             )
         if data_args.max_predict_samples is not None:
             # During Feature creation dataset samples might increase, we will select required samples again
-            max_predict_samples = min(len(predict_dataset), data_args.max_predict_samples)
+            max_predict_samples = min(
+                len(predict_dataset), data_args.max_predict_samples
+            )
             predict_dataset = predict_dataset.select(range(max_predict_samples))
 
     # Data collator
-    label_pad_token_id = -100 if data_args.ignore_pad_token_for_loss else tokenizer.pad_token_id
+    label_pad_token_id = (
+        -100 if data_args.ignore_pad_token_for_loss else tokenizer.pad_token_id
+    )
     data_collator = DataCollatorForSeq2Seq(
         tokenizer,
         model=model,
         label_pad_token_id=label_pad_token_id,
         pad_to_multiple_of=8 if training_args.fp16 else None,
     )
-    
+
     if data_args.dataset_name == "narrativeqa":
         metric = evaluate.load("rouge")
-        
+
         def postprocess_text(preds, labels):
             preds = [pred.strip() for pred in preds]
             labels = [label.strip() for label in labels]
@@ -495,7 +577,7 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
             labels = ["\n".join(nltk.sent_tokenize(label)) for label in labels]
 
             return preds, labels
-        
+
         def compute_metrics(eval_preds):
             preds, labels = eval_preds
             if isinstance(preds, tuple):
@@ -504,44 +586,63 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
             try:
                 decoded_preds = tokenizer.batch_decode(preds, skip_special_tokens=True)
             except:
-                decoded_preds = tokenizer.batch_decode(np.where(preds != -100, preds, tokenizer.pad_token_id), 
-                                                       skip_special_tokens=True)
+                decoded_preds = tokenizer.batch_decode(
+                    np.where(preds != -100, preds, tokenizer.pad_token_id),
+                    skip_special_tokens=True,
+                )
             if data_args.ignore_pad_token_for_loss:
                 # Replace -100 in the labels as we can't decode them.
                 labels = np.where(labels != -100, labels, tokenizer.pad_token_id)
 
             try:
-                decoded_labels = tokenizer.batch_decode(labels, skip_special_tokens=True)
+                decoded_labels = tokenizer.batch_decode(
+                    labels, skip_special_tokens=True
+                )
             except:
-                decoded_labels = tokenizer.batch_decode(np.where(labels != -100, labels, tokenizer.pad_token_id), 
-                                                        skip_special_tokens=True)
+                decoded_labels = tokenizer.batch_decode(
+                    np.where(labels != -100, labels, tokenizer.pad_token_id),
+                    skip_special_tokens=True,
+                )
 
             # Some simple post-processing
-            decoded_preds, decoded_labels = postprocess_text(decoded_preds, decoded_labels)
+            decoded_preds, decoded_labels = postprocess_text(
+                decoded_preds, decoded_labels
+            )
 
-            result = metric.compute(predictions=decoded_preds, references=decoded_labels, use_stemmer=True)
+            result = metric.compute(
+                predictions=decoded_preds, references=decoded_labels, use_stemmer=True
+            )
             result = {k: round(v * 100, 4) for k, v in result.items()}
-            prediction_lens = [np.count_nonzero(pred != tokenizer.pad_token_id) for pred in preds]
+            prediction_lens = [
+                np.count_nonzero(pred != tokenizer.pad_token_id) for pred in preds
+            ]
             result["gen_len"] = np.mean(prediction_lens)
             return result
-        
+
     elif "squad" in data_args.dataset_name:
-        metric = evaluate.load("squad_v2" if data_args.version_2_with_negative else "squad")
-        
+        metric = evaluate.load(
+            "squad_v2" if data_args.version_2_with_negative else "squad"
+        )
+
         def compute_metrics(p: EvalPrediction, prefix: str = None):
-            metric_dict = metric.compute(predictions=p.predictions, references=p.label_ids)
+            metric_dict = metric.compute(
+                predictions=p.predictions, references=p.label_ids
+            )
             metric_keys = deepcopy(list(metric_dict.keys()))
             for key in metric_keys:
                 if prefix is not None and prefix not in key:
-                    metric_dict['{}_{}'.format(prefix, key)] = metric_dict.pop(key)
+                    metric_dict["{}_{}".format(prefix, key)] = metric_dict.pop(key)
             return metric_dict
-        
+
     else:
         raise NotImplementedError
-        
+
     # Post-processing:
     def post_processing_function(
-        examples: datasets.Dataset, features: datasets.Dataset, outputs: EvalLoopOutput, stage="eval"
+        examples: datasets.Dataset,
+        features: datasets.Dataset,
+        outputs: EvalLoopOutput,
+        stage="eval",
     ):
         # Decode the predicted tokens.
         preds = outputs.predictions
@@ -551,7 +652,10 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
 
         # Build a map example to its corresponding features.
         example_id_to_index = {k: i for i, k in enumerate(examples["id"])}
-        feature_per_example = {example_id_to_index[feature["example_id"]]: i for i, feature in enumerate(features)}
+        feature_per_example = {
+            example_id_to_index[feature["example_id"]]: i
+            for i, feature in enumerate(features)
+        }
         predictions = {}
 
         task_name = "squad_v2" if data_args.version_2_with_negative else "squad"
@@ -568,17 +672,20 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
         # Format the result to the format the metric expects.
         if data_args.version_2_with_negative:
             formatted_predictions = [
-                {"id": k, "prediction_text": v, "no_answer_probability": 0.0} for k, v in predictions.items()
+                {"id": k, "prediction_text": v, "no_answer_probability": 0.0}
+                for k, v in predictions.items()
             ]
         else:
-            formatted_predictions = [{"id": k, "prediction_text": v} for k, v in predictions.items()]
+            formatted_predictions = [
+                {"id": k, "prediction_text": v} for k, v in predictions.items()
+            ]
 
         references = [{"id": ex["id"], "answers": ex[answer_column]} for ex in examples]
         return EvalPrediction(predictions=formatted_predictions, label_ids=references)
 
     # adjust training arguments
     training_args = adjust_training_args(training_args, data_args, additional_args)
-    
+
     trainer = trainer_cls(
         model=model,
         args=training_args,
@@ -587,8 +694,10 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
         eval_examples=eval_examples if training_args.do_eval else None,
         tokenizer=tokenizer,
         data_collator=data_collator,
-        compute_metrics=compute_metrics, # if training_args.predict_with_generate else None,
-        post_process_function=post_processing_function if "squad" in data_args.dataset_name else None,
+        compute_metrics=compute_metrics,  # if training_args.predict_with_generate else None,
+        post_process_function=post_processing_function
+        if "squad" in data_args.dataset_name
+        else None,
     )
 
     # Training
@@ -599,11 +708,14 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
         elif last_checkpoint is not None:
             checkpoint = last_checkpoint
         train_result = trainer.train(resume_from_checkpoint=checkpoint)
-        if not additional_args.use_lora: trainer.save_model()  # Saves the tokenizer too for easy upload
+        if not additional_args.use_lora:
+            trainer.save_model()  # Saves the tokenizer too for easy upload
 
         metrics = train_result.metrics
         max_train_samples = (
-            data_args.max_train_samples if data_args.max_train_samples is not None else len(train_dataset)
+            data_args.max_train_samples
+            if data_args.max_train_samples is not None
+            else len(train_dataset)
         )
         metrics["train_samples"] = min(max_train_samples, len(train_dataset))
 
@@ -613,7 +725,9 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
 
         if additional_args.use_lora:
             model.save_pretrained(training_args.output_dir)  # save adapter_config.json
-            model.base_model.save_pretrained(training_args.output_dir)  # save config.json
+            model.base_model.save_pretrained(
+                training_args.output_dir
+            )  # save config.json
 
     # Evaluation
     results = {}
@@ -622,19 +736,27 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
         if training_args.generation_max_length is not None
         else data_args.val_max_answer_length
     )
-    num_beams = data_args.num_beams if data_args.num_beams is not None else training_args.generation_num_beams
+    num_beams = (
+        data_args.num_beams
+        if data_args.num_beams is not None
+        else training_args.generation_num_beams
+    )
     if training_args.do_eval:
         logger.info("*** Evaluate ***")
         # evaluation metrics could be differ from evaluation during training
         # refer to https://discuss.huggingface.co/t/evaluation-results-metric-during-training-is-different-from-the-evaluation-results-at-the-end/15401/3
         if training_args.include_inputs_for_metrics:
-            output = trainer.evaluate(max_length=max_length, num_beams=num_beams, metric_key_prefix="eval")
+            output = trainer.evaluate(
+                max_length=max_length, num_beams=num_beams, metric_key_prefix="eval"
+            )
             metrics = output.metrics
             if additional_args.count_flops:
-                final_flops = model.decoder.flop_counter/len(eval_dataset)
+                final_flops = model.decoder.flop_counter / len(eval_dataset)
                 print(f"Average FLOPS: {final_flops}")
         else:
-            metrics = trainer.evaluate(max_length=max_length, num_beams=num_beams, metric_key_prefix="eval")
+            metrics = trainer.evaluate(
+                max_length=max_length, num_beams=num_beams, metric_key_prefix="eval"
+            )
 
         if additional_args.plotting_logits:
             data = model.decoder.graph_top_k_list
@@ -642,17 +764,25 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
             max_length = max(len(arr) for arr in data)
 
             # Pad arrays with NaNs to ensure they are all the same length
-            padded_data = [np.pad(np.array(arr, dtype=float),  # Convert array to float
-                        (0, max_length - len(arr)),
-                        mode='constant',
-                        constant_values=np.nan)
-                for arr in data]
-            
-            padded_conf = [np.pad(np.array(arr, dtype=float),  # Convert array to float
-                        (0, max_length - len(arr)),
-                        mode='constant',
-                        constant_values=np.nan)
-                for arr in data_conf]
+            padded_data = [
+                np.pad(
+                    np.array(arr, dtype=float),  # Convert array to float
+                    (0, max_length - len(arr)),
+                    mode="constant",
+                    constant_values=np.nan,
+                )
+                for arr in data
+            ]
+
+            padded_conf = [
+                np.pad(
+                    np.array(arr, dtype=float),  # Convert array to float
+                    (0, max_length - len(arr)),
+                    mode="constant",
+                    constant_values=np.nan,
+                )
+                for arr in data_conf
+            ]
 
             # Convert the list of arrays into a single NumPy array
             padded_array = np.array(padded_data)
@@ -664,17 +794,27 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
             # Creating a boxplot
             plt.figure(figsize=(12, 8))
             sns.boxplot(data=df)
-            plt.title('Rank of the final predicted token at each layer', fontsize=20)
-            plt.xlabel('Layer', fontsize=16)
-            plt.ylabel('Rank of the final predicted token', fontsize=16)
+            plt.title("Rank of the final predicted token at each layer", fontsize=20)
+            plt.xlabel("Layer", fontsize=16)
+            plt.ylabel("Rank of the final predicted token", fontsize=16)
             plt.grid(True)
-            plt.savefig("plots/boxplot_topk_rank_eval" + data_args.dataset_name.replace("/","_") + "_" + model_args.model_name_or_path.replace("/","_") +".png")
+            plt.savefig(
+                "plots/boxplot_topk_rank_eval"
+                + data_args.dataset_name.replace("/", "_")
+                + "_"
+                + model_args.model_name_or_path.replace("/", "_")
+                + ".png"
+            )
 
             # Compute the mean of the first column
             mean_conf_block = np.nanmean(padded_conf_array, axis=0)
             return mean_conf_block
 
-        max_eval_samples = data_args.max_eval_samples if data_args.max_eval_samples is not None else len(eval_dataset)
+        max_eval_samples = (
+            data_args.max_eval_samples
+            if data_args.max_eval_samples is not None
+            else len(eval_dataset)
+        )
         metrics["eval_samples"] = min(max_eval_samples, len(eval_dataset))
 
         trainer.log_metrics("eval", metrics)
@@ -687,7 +827,9 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
         metrics = results.metrics
 
         max_predict_samples = (
-            data_args.max_predict_samples if data_args.max_predict_samples is not None else len(predict_dataset)
+            data_args.max_predict_samples
+            if data_args.max_predict_samples is not None
+            else len(predict_dataset)
         )
         metrics["predict_samples"] = min(max_predict_samples, len(predict_dataset))
 
@@ -695,17 +837,22 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
         trainer.save_metrics("predict", metrics)
 
     if training_args.push_to_hub:
-        kwargs = {"finetuned_from": model_args.model_name_or_path, "tasks": "question-answering"}
+        kwargs = {
+            "finetuned_from": model_args.model_name_or_path,
+            "tasks": "question-answering",
+        }
         if data_args.dataset_name is not None:
             kwargs["dataset_tags"] = data_args.dataset_name
             if data_args.dataset_config_name is not None:
                 kwargs["dataset_args"] = data_args.dataset_config_name
-                kwargs["dataset"] = f"{data_args.dataset_name} {data_args.dataset_config_name}"
+                kwargs["dataset"] = (
+                    f"{data_args.dataset_name} {data_args.dataset_config_name}"
+                )
             else:
                 kwargs["dataset"] = data_args.dataset_name
 
         trainer.push_to_hub(**kwargs)
-        
+
     if not jupyter:
         return results, metrics
     else:
@@ -716,40 +863,87 @@ if __name__ == "__main__":
     # See all possible arguments in src/transformers/training_args.py
     # or by passing the --help flag to this script.
     # We now keep distinct sets of args, for a cleaner separation of concerns.
-    #os.environ["WANDB_DISABLED"] = "true"
-    parser = HfArgumentParser((ModelArguments, DataTrainingArguments, Seq2SeqTrainingArguments, AdditionalArguments))
+    # os.environ["WANDB_DISABLED"] = "true"
+    parser = HfArgumentParser(
+        (
+            ModelArguments,
+            DataTrainingArguments,
+            Seq2SeqTrainingArguments,
+            AdditionalArguments,
+        )
+    )
     if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
         # If we pass only one argument to the script and it's the path to a json file,
         # let's parse it to get our arguments.
-        model_args, data_args, training_args, additional_args = parser.parse_json_file(json_file=os.path.abspath(sys.argv[1]))
+        model_args, data_args, training_args, additional_args = parser.parse_json_file(
+            json_file=os.path.abspath(sys.argv[1])
+        )
     else:
-        model_args, data_args, training_args, additional_args = parser.parse_args_into_dataclasses()
+        model_args, data_args, training_args, additional_args = (
+            parser.parse_args_into_dataclasses()
+        )
 
     if data_args.dataset_name in ["squad", "squad_v2", "narrativeqa"]:
-        model_cls = T5ForConditionalGeneration if not additional_args.deploy_scenario \
+        model_cls = (
+            T5ForConditionalGeneration
+            if not additional_args.deploy_scenario
             else DeployT5ForConditionalGeneration
+        )
     trainer_cls = QATrainer
     training_args.include_inputs_for_metrics = True
-    #os.environ["WANDB_DISABLED"] = "true"
+    # os.environ["WANDB_DISABLED"] = "true"
     if not additional_args.plotting_logits:
-        main(model_args, data_args, training_args, additional_args, model_cls, trainer_cls)
+        main(
+            model_args,
+            data_args,
+            training_args,
+            additional_args,
+            model_cls,
+            trainer_cls,
+        )
     else:
-        mean_block_confidence = main(model_args, data_args, training_args, additional_args, model_cls, trainer_cls)
+        mean_block_confidence = main(
+            model_args,
+            data_args,
+            training_args,
+            additional_args,
+            model_cls,
+            trainer_cls,
+        )
         block_k_metric = []
-        
+
         additional_args.plotting_logits = False
 
-        for block in range(1, 25):           
+        for block in range(1, 25):
             additional_args.static_exit_layer = block
-            _, metrics = main(model_args, data_args, training_args, additional_args, model_cls, trainer_cls)
-            block_k_metric.append(metrics["eval_f1"]/100)
+            _, metrics = main(
+                model_args,
+                data_args,
+                training_args,
+                additional_args,
+                model_cls,
+                trainer_cls,
+            )
+            block_k_metric.append(metrics["eval_f1"] / 100)
 
         plt.figure(figsize=(10, 6))
-        plt.plot(np.arange(24), mean_block_confidence, label='Confidence', color='midnightblue', linestyle='dashed')
-        plt.plot(np.arange(24), block_k_metric, label='F1', color='red')
-        plt.title('Confidence vs F1 over layers')
-        plt.xlabel('Layer')
-        plt.ylabel('Confidence/F1 Score')
+        plt.plot(
+            np.arange(24),
+            mean_block_confidence,
+            label="Confidence",
+            color="midnightblue",
+            linestyle="dashed",
+        )
+        plt.plot(np.arange(24), block_k_metric, label="F1", color="red")
+        plt.title("Confidence vs F1 over layers")
+        plt.xlabel("Layer")
+        plt.ylabel("Confidence/F1 Score")
         plt.legend()
         plt.grid(True)
-        plt.savefig("plots/conf_metric_blocks" + data_args.dataset_name.replace("/","_") + "_" + model_args.model_name_or_path.replace("/","_") + ".png")
+        plt.savefig(
+            "plots/conf_metric_blocks"
+            + data_args.dataset_name.replace("/", "_")
+            + "_"
+            + model_args.model_name_or_path.replace("/", "_")
+            + ".png"
+        )

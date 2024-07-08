@@ -2,49 +2,47 @@
 T5: https://github.com/huggingface/transformers/blob/main/src/transformers/models/t5/modeling_t5.py#L19
 """
 
-from typing import Optional, Tuple, Union, List
 import copy
 import datetime
 import warnings
+from typing import List, Optional, Tuple, Union
+
 import numpy as np
 import torch
-from einops import rearrange
 import torch.distributed as dist
+from einops import rearrange
 from torch import nn
 from torch.nn import CrossEntropyLoss
-
-from transformers.modeling_outputs import (
-    BaseModelOutput,
-    BaseModelOutputWithPastAndCrossAttentions,
-    Seq2SeqLMOutput,
-)
-from transformers.models.t5.modeling_t5 import (
-    T5LayerNorm,
-    T5Attention,
-    T5LayerSelfAttention,
-    T5LayerCrossAttention,
-    T5LayerFF,
-    T5Block,
-    T5Stack,
-    T5ForConditionalGeneration,
-)
-from transformers.models.t5.configuration_t5 import T5Config
-from transformers.generation.utils import (
-    GreedySearchDecoderOnlyOutput,
-    GreedySearchEncoderDecoderOutput,
-)
 from transformers.generation.logits_process import LogitsProcessorList
 from transformers.generation.stopping_criteria import (
     StoppingCriteriaList,
     validate_stopping_criteria,
 )
-from transformers.utils import logging
-
-from util import (
-    get_skip_mask,
-    BetaMixture1D,
+from transformers.generation.utils import (
+    GreedySearchDecoderOnlyOutput,
+    GreedySearchEncoderDecoderOutput,
 )
-
+from transformers.modeling_outputs import (
+    BaseModelOutput,
+    BaseModelOutputWithPastAndCrossAttentions,
+    Seq2SeqLMOutput,
+)
+from transformers.models.t5.configuration_t5 import T5Config
+from transformers.models.t5.modeling_t5 import (
+    T5Attention,
+    T5Block,
+    T5ForConditionalGeneration,
+    T5LayerCrossAttention,
+    T5LayerFF,
+    T5LayerNorm,
+    T5LayerSelfAttention,
+    T5Stack,
+)
+from transformers.utils import logging
+from util import (
+    BetaMixture1D,
+    get_skip_mask,
+)
 
 logger = logging.get_logger(__name__)
 __HEAD_MASK_WARNING_MSG = """
@@ -1877,7 +1875,7 @@ class DeployT5ForConditionalGeneration(T5ForConditionalGeneration):
 
     @staticmethod
     def apply_repetition_penalty_shrinked(
-        logits: torch.Tensor,  # shape (batch_size, vocab_size)
+        logits: torch.Tensor,
         input_ids: torch.Tensor,
         penalty: float,
         offset_index_from_prunning: torch.Tensor,
