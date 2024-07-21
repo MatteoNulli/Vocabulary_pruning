@@ -459,56 +459,12 @@ class QATrainer(Seq2SeqTrainer):
             attention_mask=inputs["attention_mask"],
             **gen_kwargs) # Decoder input shape: (batch_size, 1)
         
-        # def process_list(numbers):
-        #     if not numbers:
-        #         return []
-            
-        #     # Initialize the result list with the first number
-        #     result = [numbers[0]]
-            
-        #     # Change the first number to 0
-        #     result[0] = 0
-            
-        #     # Set to keep track of added numbers for uniqueness
-        #     seen = set(result)
-            
-        #     # Iterate through the numbers starting from the second element
-        #     for num in numbers[1:]:
-        #         if num == 1:
-        #             result.append(num)
-        #         elif num not in seen:
-        #             result.append(num)
-        #             seen.add(num)
-            
-        #     my_list = [item for index, item in enumerate(result) if item != 1 or index == len(result)-1]
-
-        #     # stirngs = self.tokenizer.decode(my_list, skip_special_tokens=False)
-        #     # stirngs = re.sub(r'[A-Z]', '', stirngs)
-        #     # my_list = self.tokenizer.encode(stirngs)
-            
-        #     return [my_list]
-
-
-        # new_array = process_list(self.model.decoder.offset_index_from_prunning)
-
-        # if new_array != generated_tokens.tolist():
-        #     print(new_array, generated_tokens.tolist())
-        #     print("True Generated Sentence", self.tokenizer.decode(generated_tokens[0], skip_special_tokens=True))
-        #     print("Sentence from Last layer", self.tokenizer.decode(new_array[0], skip_special_tokens=True))
-
-
-        # print("="*100)
-        # print("True Generated tokens", generated_tokens.tolist())
-        # print("Logits from Last layer", self.model.decoder.offset_index_from_prunning)
-        # print()
-        # print("True Generated Sentence", self.tokenizer.decode(generated_tokens[0], skip_special_tokens=True))
-        # print("Sentence from Last layer", self.tokenizer.decode(new_array[0], skip_special_tokens=True))
-
-        # print(self.tokenizer.decode([192, 2759], skip_special_tokens=False, clean_up_tokenization_spaces=True))
-        # afad
-        # print(self.tokenizer.decode([16, 1], skip_special_tokens=False, clean_up_tokenization_spaces=True))
-        self.model.decoder.offset_index_from_prunning = []
-        # print("="*100)
+        self.model.decoder.position_token = 0 
+        self.model.decoder.offset_index_from_prunning = np.empty(self.model.config.max_answer_length, dtype=object)
+        
+        
+        # self.offset_index_from_prunning = np.empty(self.model.config.max_answer_length, dtype=object)
+        # self.position_token = 0
         
         # Temporary hack to ensure the generation config is not initialized for each iteration of the evaluation loop
         # TODO: remove this hack when the legacy code that initializes generation_config from a model config is
