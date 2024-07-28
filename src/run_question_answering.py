@@ -731,25 +731,5 @@ if __name__ == "__main__":
     trainer_cls = QATrainer
     training_args.include_inputs_for_metrics = True
     #os.environ["WANDB_DISABLED"] = "true"
-    if not additional_args.plotting_logits:
-        main(model_args, data_args, training_args, additional_args, model_cls, trainer_cls)
-    else:
-        mean_block_confidence = main(model_args, data_args, training_args, additional_args, model_cls, trainer_cls)
-        block_k_metric = []
-        
-        additional_args.plotting_logits = False
 
-        for block in range(1, 25):           
-            additional_args.static_exit_layer = block
-            _, metrics = main(model_args, data_args, training_args, additional_args, model_cls, trainer_cls)
-            block_k_metric.append(metrics["eval_f1"]/100)
-
-        plt.figure(figsize=(10, 6))
-        plt.plot(np.arange(24), mean_block_confidence, label='Confidence', color='midnightblue', linestyle='dashed')
-        plt.plot(np.arange(24), block_k_metric, label='F1', color='red')
-        plt.title('Confidence vs F1 over layers')
-        plt.xlabel('Layer')
-        plt.ylabel('Confidence/F1 Score')
-        plt.legend()
-        plt.grid(True)
-        plt.savefig("plots/conf_metric_blocks" + data_args.dataset_name.replace("/","_") + "_" + model_args.model_name_or_path.replace("/","_") + ".png")
+    main(model_args, data_args, training_args, additional_args, model_cls, trainer_cls)

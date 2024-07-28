@@ -7,16 +7,10 @@ from transformers import AutoConfig
 from copy import deepcopy
 
 
-def softmax_confidence(
-    logits: torch.Tensor = None,
-):  
-    # start = datetime.datetime.now()
+def softmax_confidence(logits: torch.Tensor = None):  
     assert logits is not None
     probs = torch.softmax(logits, dim=-1)
     top_2 = torch.topk(probs, dim=-1, k=2)[0]
-    # end = datetime.datetime.now()
-    # print("Time taken for softmax confidence", end-start)
-
     return (top_2[..., 0] - top_2[..., 1]).squeeze()
 
 
@@ -71,17 +65,9 @@ def get_skip_mask(
 
 
     conf_measure = get_confidence_class(key=key)    
-
-    conf = conf_measure(
-        logits=logits
-        )
+    conf = conf_measure(logits=logits)
 
     mask = torch.where(conf <= threshold, 0., 1.).bool()
-
-    # print(f"Confidence: {conf.item():.4f}, Threshold: {threshold:.4f}, Mask: {mask.item()}")
-    
-    # print("Are we early exiting?", mask.item() == 1)
-    #print('Confidence:', conf.item(), 'Threshold:', threshold, 'Mask:', mask.item())
     if not return_conf:
         return mask.item()  # False (0) and True (1) denote keep and exit
     else:

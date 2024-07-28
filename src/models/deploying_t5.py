@@ -866,14 +866,17 @@ class DeployT5Stack(T5Stack):
         skip_mask = False  # False: forward, and True: skip
         self.shallow2deep = False  # False: skip, and True: forward
         self.lm_logits = None  # to prevent calculating logits twice
-
-        prev_probits = {}
-        prev_confidences = {}
-        top_1_index = None
         if self.is_decoder and self.config.plotting_logits:
             previous_logits = []
 
         _hidden_states = None
+        maximum_k_size = 35000 # where 200 is the maximum number of weights to keep ( it actually immediately decreases so it is lower thatn this)
+        minimum_k_size = 250 # where 50 is the minimum number of weights to keep
+        num_layers = len(self.block) # This is the number of layers in the model
+        starting_layer = self.config.exit_min_layer if self.config.exit_min_layer > 1  else 1 # Start where exit_min_layer is set or start at 1.
+        # For the adaptive case.
+        conf_scaling_factor = 0.9 # TODO experiment with different scaling factors 
+                                   
 
         for i, layer_module in enumerate(self.block):
             if self.is_decoder and self.config.plotting_logits:
@@ -975,13 +978,9 @@ class DeployT5Stack(T5Stack):
                 elif self.use_early_exit and not skip_mask:	
                     if (self.exit_min_layer is not None and i < self.exit_min_layer):
                         if self.config.use_synchronize: torch.cuda.synchronize()
-                        # start = datetime.datetime.now()
                         _hidden_states = self.dropout(self.final_layer_norm(hidden_states))
                         lm_logits = lm_head(_hidden_states) if not self.config.tie_word_embeddings \
                             else lm_head(_hidden_states * (self.config.d_model ** -0.5))
-                        
-                        probits = lm_logits.softmax(dim=-1).squeeze() #torch.softmax(lm_logits, dim=-1) + squeezing
-                        prev_probits[i] = probits
                         self.block_op[i] += 1
 
                     else:
@@ -990,106 +989,49 @@ class DeployT5Stack(T5Stack):
                         _hidden_states = self.dropout(self.final_layer_norm(hidden_states))
 
                         # SHRINKING VOCAB PART:
-                        if not self.config.type_vocab_reduct: # If we are not using any vocab reduction
+                        if not self.config.type_vocab_reduct or i == starting_layer:
+                            # Compute scaled hidden states and logits at the beginning if no vocab reduction is used,
+                            # or if it's the first layer with vocab reduction.
                             a = _hidden_states * (self.config.d_model ** -0.5)
-                            lm_logits = lm_head(_hidden_states) if not self.config.tie_word_embeddings \
-                                else lm_head(a)
-                            
-                            if self.config.count_flops:
-                                self.flop_counter += (self.config.d_model**2)* self.config.vocab_size * 1 # Seq length is always one
+                            lm_logits = lm_head(_hidden_states) if not self.config.tie_word_embeddings else lm_head(a)
 
-                            
-                        else:
-                            starting_layer = self.config.exit_min_layer if self.config.exit_min_layer > 1  else 1 # Start where exit_min_layer is set or start at 2.
-                            if i == starting_layer: # if it is the first layer where we compute the logits
-                                lm_logits = lm_head(_hidden_states) if not self.config.tie_word_embeddings \
-                                    else lm_head(_hidden_states * (self.config.d_model ** -0.5))
-                                # Get the top 2500 logits at block 1.
-                                maximum_k_size = 35000 # where 200 is the maximum number of weights to keep ( it actually immediately decreases so it is lower thatn this)
-                                minimum_k_size = 250 # where 50 is the minimum number of weights to keep
-                                num_layers = len(self.block) # This is the number of layers in the model
-                                k = self.func_inverse(i,maximum_k_size, minimum_k_size, num_layers)
-                                self.top_k_indices = torch.topk(lm_logits[0][0], k, largest=True, sorted=False)[1] #.sort()[0]
-                            
-                                selected_weights = lm_head.weight[self.top_k_indices, : ] # THis can be done here to win some compute time
-                            else: # For all the other layers either use fixed, decaying or adaptive pruning
-                                if self.config.type_vocab_reduct == "fixed":
-
-                                    if self.config.count_flops:
-                                        self.flop_counter +=  (self.config.d_model**2)* k * 1 # Seq length is always one
-                                    # Note: There is no bias in self.lm_head = nn.Linear(config.d_model, config.vocab_size, bias=False)
-                                    a = _hidden_states * (self.config.d_model ** -0.5)
-                                    lm_logits = torch.nn.functional.linear(_hidden_states, selected_weights)  if not self.config.tie_word_embeddings \
-                                        else torch.nn.functional.linear(a, selected_weights)
-    
-                                elif self.config.type_vocab_reduct == "decaying":  # Smoothed pruning! For all the other layers -> smoothed pruning
-                                    current_k = self.func_inverse(i,maximum_k_size, minimum_k_size, num_layers)
-                                    
-                                    if self.config.count_flops:
-                                        self.flop_counter +=  (self.config.d_model**2)* current_k * 1 # Seq length is always one
-                                    self.top_k_indices = self.top_k_indices[:current_k]
-                                    selected_weights = lm_head.weight[self.top_k_indices, :]
-                    
-                                    a = _hidden_states * (self.config.d_model ** -0.5)
-                                    lm_logits = torch.nn.functional.linear(_hidden_states, selected_weights)  if not self.config.tie_word_embeddings \
-                                        else torch.nn.functional.linear(a, selected_weights)
-                                    
+                        if self.config.type_vocab_reduct:  # Additional logic if vocabulary reduction is being used
+                            if i == starting_layer:  # If it's the first layer, compute the full logits and set up top-k indices
+                                k = self.func_inverse(i, maximum_k_size, minimum_k_size, num_layers)
+                                self.top_k_indices = torch.topk(lm_logits[0][0], k, largest=True, sorted=False)[1]
+                            else:  # For all other layers with vocab reduction
+                                if self.config.type_vocab_reduct == "decaying":
+                                    k = self.func_inverse(i, maximum_k_size, minimum_k_size, num_layers)
                                 elif self.config.type_vocab_reduct == "adaptive":
-                                        # TODO experiment with not only the top-1 confidence but combining the top-k confidences
-                                        # TODO experiment with taking the top-k not (only) in the starting layer
-                                        # TODO experiment with different formulas to go from confidence value to retained indices
-                                        # TODO experiment with non-confidence parameters (and potentialy combinations of params)
-                                        curr_weights_size = lm_head.weight.size(dim=0)
-                                        conf = prev_confidences[i-1] # This is the confidence of the previous layer
-                                        conf_scaling_factor = 0.9 # TODO experiment with different scaling factors
-                                        retained_top_k = int(curr_weights_size * (1 - conf * conf_scaling_factor))
-                                        self.top_k_indices = self.top_k_indices[:retained_top_k]
-                                        selected_weights = lm_head.weight[self.top_k_indices[:retained_top_k], :]
-                                        ############################
-                                        a = _hidden_states * (self.config.d_model ** -0.5)
-                                        lm_logits_temp = torch.nn.functional.linear(_hidden_states, selected_weights)  if not self.config.tie_word_embeddings \
-                                            else torch.nn.functional.linear(a, selected_weights)
-                                        
-                                        if self.config.count_flops:
-                                            self.flop_counter +=  (self.config.d_model**2)* retained_top_k * 1 # Seq length is always one
-                                    
-                                        # Initialize lm_logits with -inf
-                                        lm_logits = torch.full((1, 1, self.config.vocab_size), -float("inf"), device=lm_logits_temp.device)
-
-                                        # Create a mask for the top_k_indices
-                                        top_k_mask = torch.zeros(self.config.vocab_size, dtype=torch.bool, device=lm_logits_temp.device)
-                                        top_k_mask[self.top_k_indices[:retained_top_k]] = True
-
-                                        # Use the mask to assign values from lm_logits_temp to lm_logits
-                                        lm_logits[0, 0, top_k_mask] = lm_logits_temp[0, 0, :len(self.top_k_indices[:retained_top_k])]
-                                else:
-                                    raise("Please provide a valid type_vocab_reduct argument. Either use fixed, decaying, or adaptive.")
+                                    k = int(k * (1 - conf * conf_scaling_factor))
+                                
+                                self.top_k_indices = self.top_k_indices[:k] # Shrink the top-k indices from the starting_layer.
+                                selected_weights = lm_head.weight[self.top_k_indices, :] # Select the weights from the top-k indices
+                                # Compute logits with the reduced vocabulary
+                                lm_logits = torch.nn.functional.linear(_hidden_states, selected_weights) if not self.config.tie_word_embeddings \
+                                    else torch.nn.functional.linear(a, selected_weights) # Compute the logits with the reduced vocabulary
 
                         # END OF SHRINKING VOCAB PART
-                        if self.config.type_vocab_reduct == "adaptive":
-                            skip_mask, conf = get_skip_mask(
-                                lm_logits,
-                                _hidden_states,
-                                cm_head,
-                                config=self.config,
-                                pos_time=past_key_values[i][0].shape[2] + 1 if past_key_values[i] is not None else 1,
-                                return_conf=True
-                            )
-                            prev_confidences[i] = conf
-                        else :
-                            skip_mask = get_skip_mask(
-                                lm_logits,
-                                _hidden_states,
-                                cm_head,
-                                config=self.config,
-                                pos_time=past_key_values[i][0].shape[2] + 1 if past_key_values[i] is not None else 1,
-                                return_conf= False
-                            )
+                        return_conf = (self.config.type_vocab_reduct == "adaptive")
+                        result = get_skip_mask(
+                            lm_logits,
+                            _hidden_states,
+                            cm_head,
+                            config=self.config,
+                            pos_time=past_key_values[i][0].shape[2] + 1 if past_key_values[i] is not None else 1,
+                            return_conf= return_conf
+                        )
+                        
+                        # Handle the return based on whether confidence was also requested
+                        if return_conf:
+                            skip_mask, conf = result
+                        else:
+                            skip_mask = result
+
                     
                         if not skip_mask: self.block_op[i] += 1               
                         if skip_mask:
                             self.lm_logits = lm_logits
-
                     
                         if self.config.use_synchronize: torch.cuda.synchronize()
                         self.deploy_time['time_confidence'] += (datetime.datetime.now() - start)
@@ -1113,10 +1055,6 @@ class DeployT5Stack(T5Stack):
                 output_attentions=output_attentions,
                 skip_mask=skip_mask,
             )
-            # # logits are in layer_outputs
-            # if self.config.type_vocab_reduct:
-            #     self.offset_index_from_prunning[self.position_token] = self.top_k_indices
-            #     self.position_token += 1
                  
             # save them and compute new logits!
 
@@ -1149,44 +1087,6 @@ class DeployT5Stack(T5Stack):
             
             if self.config.use_synchronize: torch.cuda.synchronize()
             if self.is_decoder: self.deploy_time['time_others'] += (datetime.datetime.now() - start)
-
-
-
-        
-        if self.is_decoder and self.config.plotting_logits:
-            # Get the top-1 index of last block.
-            index_top_1 = torch.topk(previous_logits[-1], 1)[1][0][0][0].item()
-            confidence, max_index = torch.max(torch.softmax(previous_logits[-1], dim=-1), dim=-1)
-            confidence = confidence[0].item()
-
-            # Initialize a list to store ranks at each layer
-            ranks_at_layers = []
-            confidences_at_layers = []
-
-            # Loop over previous layers in reverse order, stopping at the first layer
-            for i in range(len(previous_logits) - 1, -1, -1):
-                # Get the sorted indices for this layer's logits
-                sorted_indices = torch.argsort(previous_logits[i][-1], descending=True)
-
-                # Find the rank of the top-1 index of the last block in the sorted indices of block i
-                rank = np.where(sorted_indices.cpu() == index_top_1)[-1]
-                #conf = torch.max(torch.softmax(previous_logits[i], dim=-1), dim=-1)[0].item()
-
-                conf, max_index = torch.max(torch.softmax(previous_logits[i], dim=-1), dim=-1)
-                conf = conf[0].item()
-
-                # Store the rank positions
-                ranks_at_layers.append(rank[0])
-                confidences_at_layers.append(conf)
-                    
-            ranks_at_layers.reverse() # Reverse the list to have the ranks in the correct order
-            #ranks_at_layers.append(0) # Append 0 to the end of the list to represent the rank at the last layer
-
-            confidences_at_layers.reverse() # Reverse the list to have the ranks in the correct order
-            #confidences_at_layers.append(confidence) # Append 0 to the end of the list to represent the rank at the last layer
-
-            self.graph_top_k_list.append(ranks_at_layers) # Append the ranks at each layer to the list of ranks
-            self.graph_top_k_confidence.append(confidences_at_layers) # Append the ranks at each layer to the list of ranks
 
 
         if self.config.use_synchronize: torch.cuda.synchronize()
