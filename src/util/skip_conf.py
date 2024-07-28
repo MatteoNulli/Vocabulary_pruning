@@ -7,11 +7,13 @@ from transformers import AutoConfig
 from copy import deepcopy
 
 
-def softmax_confidence(logits: torch.Tensor = None):  
+def softmax_confidence(logits: torch.Tensor = None, k=2, top_k_indices_old=None):  
     assert logits is not None
     probs = torch.softmax(logits, dim=-1)
-    top_2 = torch.topk(probs, dim=-1, k=2)[0]
-    return (top_2[..., 0] - top_2[..., 1]).squeeze()
+    top_2, top_k_indices = torch.topk(probs, dim=-1, k=k)
+    if top_k_indices_old is not None:
+        return (top_2[..., 0] - top_2[..., 1]).squeeze(), top_k_indices_old[top_k_indices[0][0]]
+    return (top_2[..., 0] - top_2[..., 1]).squeeze(), top_k_indices[0][0]
 
 
 def meta_confidence(
@@ -46,6 +48,8 @@ def get_skip_mask(
     pos_time: int = 1,
     adapt_threshold: float = None,
     return_conf=False,
+    k=2,
+    top_k_indices=None
 ):
     assert config.exit_conf_type is not None or config.shallow2deep_conf_type is not None
 
@@ -65,10 +69,10 @@ def get_skip_mask(
 
 
     conf_measure = get_confidence_class(key=key)    
-    conf = conf_measure(logits=logits)
+    conf, top_k_indices = conf_measure(logits=logits, k=k, top_k_indices_old=top_k_indices)
 
     mask = torch.where(conf <= threshold, 0., 1.).bool()
     if not return_conf:
         return mask.item()  # False (0) and True (1) denote keep and exit
     else:
-        return mask.item(), conf.item()
+        return mask.item(), top_k_indices, conf.item()

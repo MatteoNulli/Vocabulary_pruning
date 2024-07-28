@@ -555,9 +555,7 @@ class DeployT5Stack(T5Stack):
 
         #self.offset_index_from_prunning = []
         self.offset_index_from_prunning = np.empty(config.max_answer_length, dtype=object)
-        self.position_token = 0
-        self.top_k_indices = None
-        
+        self.position_token = 0        
         self.embed_tokens = embed_tokens
         self.is_decoder = config.is_decoder
         self.flop_counter = 0.0
@@ -866,9 +864,8 @@ class DeployT5Stack(T5Stack):
         skip_mask = False  # False: forward, and True: skip
         self.shallow2deep = False  # False: skip, and True: forward
         self.lm_logits = None  # to prevent calculating logits twice
-        if self.is_decoder and self.config.plotting_logits:
-            previous_logits = []
 
+        self.top_k_indices = None
         _hidden_states = None
         maximum_k_size = 35000 # where 200 is the maximum number of weights to keep ( it actually immediately decreases so it is lower thatn this)
         minimum_k_size = 250 # where 50 is the minimum number of weights to keep
@@ -879,12 +876,6 @@ class DeployT5Stack(T5Stack):
                                    
 
         for i, layer_module in enumerate(self.block):
-            if self.is_decoder and self.config.plotting_logits:
-                _hidden_states = self.dropout(self.final_layer_norm(hidden_states))
-                _hidden_states = (_hidden_states * (self.config.d_model ** -0.5)) if self.config.tie_word_embeddings else _hidden_states
-                lm_logits = lm_head(_hidden_states)
-                previous_logits.append(lm_logits)
-
             # Static framework
             if self.is_decoder and self.config.static_exit_layer is not None:
                 if i == self.config.static_exit_layer: break
@@ -994,37 +985,34 @@ class DeployT5Stack(T5Stack):
                             # or if it's the first layer with vocab reduction.
                             a = _hidden_states * (self.config.d_model ** -0.5)
                             lm_logits = lm_head(_hidden_states) if not self.config.tie_word_embeddings else lm_head(a)
-
-                        if self.config.type_vocab_reduct:  # Additional logic if vocabulary reduction is being used
-                            if i == starting_layer:  # If it's the first layer, compute the full logits and set up top-k indices
+                            k = self.func_inverse(i, maximum_k_size, minimum_k_size, num_layers)
+                        else:  # Additional logic if vocabulary reduction is being used
+                            if self.config.type_vocab_reduct == "decaying":
                                 k = self.func_inverse(i, maximum_k_size, minimum_k_size, num_layers)
-                                self.top_k_indices = torch.topk(lm_logits[0][0], k, largest=True, sorted=False)[1]
-                            else:  # For all other layers with vocab reduction
-                                if self.config.type_vocab_reduct == "decaying":
-                                    k = self.func_inverse(i, maximum_k_size, minimum_k_size, num_layers)
-                                elif self.config.type_vocab_reduct == "adaptive":
-                                    k = int(k * (1 - conf * conf_scaling_factor))
-                                
-                                self.top_k_indices = self.top_k_indices[:k] # Shrink the top-k indices from the starting_layer.
-                                selected_weights = lm_head.weight[self.top_k_indices, :] # Select the weights from the top-k indices
-                                # Compute logits with the reduced vocabulary
-                                lm_logits = torch.nn.functional.linear(_hidden_states, selected_weights) if not self.config.tie_word_embeddings \
-                                    else torch.nn.functional.linear(a, selected_weights) # Compute the logits with the reduced vocabulary
+                            elif self.config.type_vocab_reduct == "adaptive":
+                                k = int(k * (1 - conf * conf_scaling_factor))
+                            selected_weights = lm_head.weight[self.top_k_indices, :] # Select the weights from the top-k indices
+                            # Compute logits with the reduced vocabulary
+                            a = _hidden_states * (self.config.d_model ** -0.5)
+                            lm_logits = torch.nn.functional.linear(_hidden_states, selected_weights) if not self.config.tie_word_embeddings \
+                                else torch.nn.functional.linear(a, selected_weights) # Compute the logits with the reduced vocabulary
 
                         # END OF SHRINKING VOCAB PART
-                        return_conf = (self.config.type_vocab_reduct == "adaptive")
+                        return_conf = (self.config.type_vocab_reduct == "fixed" or "decaying" or "adaptive")
                         result = get_skip_mask(
                             lm_logits,
                             _hidden_states,
                             cm_head,
                             config=self.config,
                             pos_time=past_key_values[i][0].shape[2] + 1 if past_key_values[i] is not None else 1,
-                            return_conf= return_conf
+                            return_conf= return_conf,
+                            k=k,
+                            top_k_indices = self.top_k_indices # Use the old top-k indices
                         )
                         
                         # Handle the return based on whether confidence was also requested
-                        if return_conf:
-                            skip_mask, conf = result
+                        if return_conf: 
+                            skip_mask, self.top_k_indices, conf = result # Get the new top-k indices
                         else:
                             skip_mask = result
 
@@ -1099,10 +1087,10 @@ class DeployT5Stack(T5Stack):
 
         # logits are in layer_outputs
         if self.config.type_vocab_reduct:
-            if self.position_token < len(self.offset_index_from_prunning):
+            if self.position_token < len(self.offset_index_from_prunning) and self.top_k_indices is not None:
                 self.offset_index_from_prunning[self.position_token] = self.top_k_indices
                 self.position_token += 1
-
+            
         if not return_dict:
             return tuple(
                 v
