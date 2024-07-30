@@ -985,7 +985,7 @@ class DeployT5Stack(T5Stack):
                             # or if it's the first layer with vocab reduction.
                             a = _hidden_states * (self.config.d_model ** -0.5)
                             lm_logits = lm_head(_hidden_states) if not self.config.tie_word_embeddings else lm_head(a)
-                            k = self.func_inverse(i, maximum_k_size, minimum_k_size, num_layers)
+                            k = 100 # self.func_inverse(i, maximum_k_size, minimum_k_size, num_layers)
                         else:  # Additional logic if vocabulary reduction is being used
                             if self.config.type_vocab_reduct == "decaying":
                                 k = self.func_inverse(i, maximum_k_size, minimum_k_size, num_layers)
@@ -998,7 +998,8 @@ class DeployT5Stack(T5Stack):
                                 else torch.nn.functional.linear(a, selected_weights) # Compute the logits with the reduced vocabulary
 
                         # END OF SHRINKING VOCAB PART
-                        return_conf = (self.config.type_vocab_reduct == "fixed" or "decaying" or "adaptive")
+                        return_conf = 1 if self.config.type_vocab_reduct in ["fixed", "decaying", "adaptive"] else 0
+
                         result = get_skip_mask(
                             lm_logits,
                             _hidden_states,
