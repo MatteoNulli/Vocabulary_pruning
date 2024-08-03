@@ -166,10 +166,11 @@ class QATrainer(Seq2SeqTrainer):
         if self.model.deploy_time is not None:
             deploy_time = {}
             for k, v in self.model.deploy_time.items():
-                if type(v) != list:
-                    deploy_time[k] = str(v).split(".")[0]
-                else:
-                    deploy_time[k] = str([str(_v).split(".")[0] for _v in v])
+                if type(v) != list: 
+                    if k != "time_confidence": deploy_time[k] = str(v).split('.')[0]
+                    else:
+                        deploy_time[k] = str(v)
+                else: deploy_time[k] = str([str(_v).split('.')[0] for _v in v])
             output.metrics.update(deploy_time)
 
         self.log(output.metrics)
@@ -538,10 +539,17 @@ class QATrainer(Seq2SeqTrainer):
         gen_model = self.model.base_model if self.model.config.use_lora else self.model
 
         generated_tokens = gen_model.generate(
-            inputs["input_ids"], attention_mask=inputs["attention_mask"], **gen_kwargs
-        )  # Decoder input shape: (batch_size, 1)
-
-        self.model.decoder.offset_index_from_prunning = []
+            inputs["input_ids"],
+            attention_mask=inputs["attention_mask"],
+            **gen_kwargs) # Decoder input shape: (batch_size, 1)
+        
+        self.model.decoder.position_token = 0 
+        self.model.decoder.offset_index_from_prunning = np.empty(self.model.config.max_answer_length, dtype=object)
+        
+        
+        # self.offset_index_from_prunning = np.empty(self.model.config.max_answer_length, dtype=object)
+        # self.position_token = 0
+        
         # Temporary hack to ensure the generation config is not initialized for each iteration of the evaluation loop
         # TODO: remove this hack when the legacy code that initializes generation_config from a model config is
         # removed in https://github.com/huggingface/transformers/blob/98d88b23f54e5a23e741833f1e973fdf600cc2c5/src/transformers/generation/utils.py#L1183
