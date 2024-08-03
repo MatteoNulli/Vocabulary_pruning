@@ -602,7 +602,7 @@ class DeployT5Stack(T5Stack):
         self.deploy_time = {'time_key_value_gen': [datetime.timedelta(), datetime.timedelta()],
                             'time_attn': [datetime.timedelta(), datetime.timedelta()],
                             'time_ffn': datetime.timedelta(),
-                            'time_confidence': datetime.timedelta(),
+                            'time_confidence':  0.0,
                             'time_exit_key_value_gen': [datetime.timedelta(), datetime.timedelta()],
                             'time_exit_attn': [datetime.timedelta(), datetime.timedelta()],
                             'time_exit_ffn': datetime.timedelta(),
@@ -976,7 +976,7 @@ class DeployT5Stack(T5Stack):
 
                     else:
                         if self.config.use_synchronize: torch.cuda.synchronize()
-                        start = datetime.datetime.now()
+                        start = time.perf_counter()
                         _hidden_states = self.dropout(self.final_layer_norm(hidden_states))
 
                         # SHRINKING VOCAB PART:
@@ -1023,7 +1023,7 @@ class DeployT5Stack(T5Stack):
                             self.lm_logits = lm_logits
                     
                         if self.config.use_synchronize: torch.cuda.synchronize()
-                        self.deploy_time['time_confidence'] += (datetime.datetime.now() - start)
+                        self.deploy_time['time_confidence'] += (time.perf_counter() - start)
 
                 # Normal framework
                 elif (not self.use_shallow_deep and not self.use_early_exit):
@@ -1159,7 +1159,7 @@ class DeployT5ForConditionalGeneration(T5ForConditionalGeneration):
             'time_key_value_gen': [datetime.timedelta(), datetime.timedelta()],
             'time_attn': [datetime.timedelta(), datetime.timedelta()],
             'time_ffn': datetime.timedelta(),
-            'time_confidence': datetime.timedelta(),
+            'time_confidence': 0.0,
             'time_exit_key_value_gen': [datetime.timedelta(), datetime.timedelta()],
             'time_exit_attn': [datetime.timedelta(), datetime.timedelta()],
             'time_exit_ffn': datetime.timedelta(),
