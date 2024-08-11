@@ -164,10 +164,7 @@ class QATrainer(Seq2SeqTrainer):
         if self.model.deploy_time is not None:
             deploy_time = {}
             for k, v in self.model.deploy_time.items():
-                if type(v) != list: 
-                    if k != "time_confidence": deploy_time[k] = str(v).split('.')[0]
-                    else:
-                        deploy_time[k] = str(v)
+                if type(v) != list: deploy_time[k] = str(v)
                 else: deploy_time[k] = str([str(_v).split('.')[0] for _v in v])
             output.metrics.update(deploy_time)
 

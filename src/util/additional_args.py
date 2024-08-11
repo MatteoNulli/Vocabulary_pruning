@@ -73,6 +73,11 @@ class AdditionalArguments:
     shallow_exit_layer: Optional[int] = field(
         default=None, metadata={"help": ("Number of layers for shallow decoder model.")}
     )
+
+    k: Optional[int] = field(
+        default=None, metadata={"help": ("What fixed value of k to use when prunning the matrix")}
+    )
+
     shallow2deep_conf_type: Optional[str] = field(
         default=None, metadata={"help": ("Select the type of confidence measure for chaning shallow to deep decoder.")},
     )   
@@ -160,6 +165,7 @@ def update_autoconfig(config, additional_args, **kwargs):
         'type_vocab_reduct': additional_args.type_vocab_reduct,
         'plotting_logits': additional_args.plotting_logits,
         'count_flops': additional_args.count_flops,
+        'k': additional_args.k,
     }
     config.update(early_exit_config)
     

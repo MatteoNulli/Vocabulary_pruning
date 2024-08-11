@@ -423,6 +423,9 @@ class SumTrainer(Seq2SeqTrainer):
             attention_mask=inputs["attention_mask"],
             **gen_kwargs)  # Decoder input shape: (batch_size, 1)
         
+        self.model.decoder.position_token = 0 
+        self.model.decoder.offset_index_from_prunning = np.empty(self.model.config.max_answer_length, dtype=object)
+        
         # Temporary hack to ensure the generation config is not initialized for each iteration of the evaluation loop
         # TODO: remove this hack when the legacy code that initializes generation_config from a model config is
         # removed in https://github.com/huggingface/transformers/blob/98d88b23f54e5a23e741833f1e973fdf600cc2c5/src/transformers/generation/utils.py#L1183

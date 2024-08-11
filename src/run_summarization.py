@@ -519,15 +519,13 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
             metrics = output.metrics
             if additional_args.count_flops:
                 final_flops = model.decoder.flop_counter/len(eval_dataset)
+                wandb.log({'FLOPs': final_flops})   
                 print(f"Final FLOPS: {final_flops}")
         else:
             metrics = trainer.evaluate(metric_key_prefix="eval")
 
         if additional_args.plotting_logits:
             data = model.decoder.graph_top_k_list
-            data_conf = model.decoder.graph_top_k_confidence
-
-
             max_length = max(len(arr) for arr in data)
 
             # Pad arrays with NaNs to ensure they are all the same length
@@ -537,18 +535,15 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
                         constant_values=np.nan)
                 for arr in data]
             
-            padded_conf = [np.pad(np.array(arr, dtype=float),  # Convert array to float
-                        (0, max_length - len(arr)),
-                        mode='constant',
-                        constant_values=np.nan)
-                for arr in data_conf]
+
 
             # Convert the list of arrays into a single NumPy array
             padded_array = np.array(padded_data)
-            padded_conf_array = np.array(padded_conf)
 
             # Converting the array to a DataFrame for easier handling in seaborn
             df = pd.DataFrame(padded_array)
+            table = wandb.Table(dataframe=df)
+            wandb.log({'plotting_logits': table})           
 
             # Creating a boxplot
             plt.figure(figsize=(12, 8))
@@ -557,12 +552,9 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
             plt.xlabel('Layer', fontsize=16)
             plt.ylabel('Rank of the final predicted token', fontsize=16)
             plt.grid(True)
-            plt.savefig("plots/boxplot_top1_rank_eval" + data_args.dataset_name.replace("/","_") + "_" + model_args.model_name_or_path.replace("/","_") +".png")
-
-            # Compute the mean of the first column
-            mean_conf_block = np.nanmean(padded_conf_array, axis=0)
-
-            return mean_conf_block
+            file_path = "plots/boxplot_topk_rank_eval" + data_args.dataset_name.replace("/", "_") + "_" + model_args.model_name_or_path.replace("/", "_") + ".png"
+            plt.savefig(file_path)
+            wandb.log({"Boxplot": wandb.Image(file_path)})
         
         max_eval_samples = data_args.max_eval_samples if data_args.max_eval_samples is not None else len(eval_dataset)
         metrics["eval_samples"] = min(max_eval_samples, len(eval_dataset))
@@ -643,29 +635,26 @@ if __name__ == "__main__":
     trainer_cls = SumTrainer
     training_args.include_inputs_for_metrics = True
 
-    if not additional_args.plotting_logits:
-        main(model_args, data_args, training_args, additional_args, model_cls, trainer_cls)
-    else:
-        mean_block_confidence = main(model_args, data_args, training_args, additional_args, model_cls, trainer_cls)
-        block_k_metric = []
-        
-        additional_args.plotting_logits = False
+    wandb.login()
 
-        for block in range(1, 25):           
-            additional_args.static_exit_layer = block
-            _, metrics = main(model_args, data_args, training_args, additional_args, model_cls, trainer_cls)
-            block_k_metric.append(metrics["eval_rougeL"]/100)    
+    wandb.init(
+        # set the wandb project where this run will be logged
+        project="Runs_NeurIPS_Samsum",
+        entity="uva24",
+        # track hyperparameters and run metadata
+        config={
+            "dataset": data_args.dataset_name,
+            "model": model_args.model_name_or_path, 
+            "exit_conf_type": additional_args.exit_conf_type,
+            "exit_conf_threshold": additional_args.exit_conf_threshold,
+            "exit_min_layer": additional_args.exit_min_layer,
+            "type_vocab_reduct": additional_args.type_vocab_reduct,
+            },
+        mode="disabled" if False else "online",
+    )
 
-        plt.figure(figsize=(10, 6))
-        plt.plot(np.arange(24), mean_block_confidence, label='Confidence', color='midnightblue', linestyle='dashed')
-        plt.plot(np.arange(24), block_k_metric, label='RougeL', color='red')
-        plt.title('Confidence and RougeL over layers')
-        plt.xlabel('Layer')
-        plt.ylabel('Confidence/RougeL Score')
-        plt.legend()
-        plt.grid(True)
-        plt.savefig("plots/conf_metric_blocks" + data_args.dataset_name.replace("/","_") + "_" + model_args.model_name_or_path.replace("/","_")  +".png")
+    main(model_args, data_args, training_args, additional_args, model_cls, trainer_cls)
+    wandb.finish()
 
-        
         
     

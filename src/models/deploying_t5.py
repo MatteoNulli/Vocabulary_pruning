@@ -602,7 +602,7 @@ class DeployT5Stack(T5Stack):
         self.deploy_time = {'time_key_value_gen': [datetime.timedelta(), datetime.timedelta()],
                             'time_attn': [datetime.timedelta(), datetime.timedelta()],
                             'time_ffn': datetime.timedelta(),
-                            'time_confidence':  0.0,
+                            'time_confidence': datetime.timedelta(),
                             'time_exit_key_value_gen': [datetime.timedelta(), datetime.timedelta()],
                             'time_exit_attn': [datetime.timedelta(), datetime.timedelta()],
                             'time_exit_ffn': datetime.timedelta(),
@@ -873,9 +873,26 @@ class DeployT5Stack(T5Stack):
         starting_layer = self.config.exit_min_layer if self.config.exit_min_layer > 1  else 1 # Start where exit_min_layer is set or start at 1.
         # For the adaptive case.
         conf_scaling_factor = 0.9 # TODO experiment with different scaling factors 
+        if self.is_decoder and self.config.plotting_logits:
+            previous_logits = []
                                    
 
         for i, layer_module in enumerate(self.block):
+            
+            if self.is_decoder and self.config.plotting_logits:
+                _hidden_states = self.dropout(self.final_layer_norm(hidden_states))
+                _hidden_states = (_hidden_states * (self.config.d_model ** -0.5)) if self.config.tie_word_embeddings else _hidden_states
+                lm_logits = lm_head(_hidden_states)
+                previous_logits.append(lm_logits)
+
+            if  self.is_decoder and self.config.count_flops and self.config.type_vocab_reduct:
+                if i <= starting_layer:
+                    self.flop_counter += (self.config.d_model**2)* self.config.vocab_size * 1 # Seq length is always one
+                else:
+                    self.flop_counter += (self.config.d_model**2)* k * 1 # Seq length is always one
+            if  self.is_decoder and self.config.count_flops and not self.config.type_vocab_reduct:
+                self.flop_counter += (self.config.d_model**2)* self.config.vocab_size * 1 # Seq length is always one
+            
             # Static framework
             if self.is_decoder and self.config.static_exit_layer is not None:
                 if i == self.config.static_exit_layer: break
@@ -976,7 +993,7 @@ class DeployT5Stack(T5Stack):
 
                     else:
                         if self.config.use_synchronize: torch.cuda.synchronize()
-                        start = time.perf_counter()
+                        start = datetime.datetime.now()
                         _hidden_states = self.dropout(self.final_layer_norm(hidden_states))
 
                         # SHRINKING VOCAB PART:
@@ -985,7 +1002,7 @@ class DeployT5Stack(T5Stack):
                             # or if it's the first layer with vocab reduction.
                             a = _hidden_states * (self.config.d_model ** -0.5)
                             lm_logits = lm_head(_hidden_states) if not self.config.tie_word_embeddings else lm_head(a)
-                            k = 100 # self.func_inverse(i, maximum_k_size, minimum_k_size, num_layers)
+                            k = self.config.k if self.config.k else self.func_inverse(i, maximum_k_size, minimum_k_size, num_layers)
                         else:  # Additional logic if vocabulary reduction is being used
                             if self.config.type_vocab_reduct == "decaying":
                                 k = self.func_inverse(i, maximum_k_size, minimum_k_size, num_layers)
@@ -1023,7 +1040,7 @@ class DeployT5Stack(T5Stack):
                             self.lm_logits = lm_logits
                     
                         if self.config.use_synchronize: torch.cuda.synchronize()
-                        self.deploy_time['time_confidence'] += (time.perf_counter() - start)
+                        self.deploy_time['time_confidence'] += (datetime.datetime.now() - start)
 
                 # Normal framework
                 elif (not self.use_shallow_deep and not self.use_early_exit):
@@ -1076,6 +1093,36 @@ class DeployT5Stack(T5Stack):
             
             if self.config.use_synchronize: torch.cuda.synchronize()
             if self.is_decoder: self.deploy_time['time_others'] += (datetime.datetime.now() - start)
+
+        if self.is_decoder and self.config.plotting_logits:
+            # Get the top-1 index of last block.
+            index_top_1 = torch.topk(previous_logits[-1], 1)[1][0][0][0].item()
+            confidence, max_index = torch.max(torch.softmax(previous_logits[-1], dim=-1), dim=-1)
+            confidence = confidence[0].item()
+
+            # Initialize a list to store ranks at each layer
+            ranks_at_layers = []
+            confidences_at_layers = []
+
+            # Loop over previous layers in reverse order, stopping at the first layer
+            for i in range(len(previous_logits) - 1, -1, -1):
+                # Get the sorted indices for this layer's logits
+                sorted_indices = torch.argsort(previous_logits[i][-1], descending=True)
+
+                # Find the rank of the top-1 index of the last block in the sorted indices of block i
+                rank = np.where(sorted_indices.cpu() == index_top_1)[-1]
+                #conf = torch.max(torch.softmax(previous_logits[i], dim=-1), dim=-1)[0].item()
+
+                conf, max_index = torch.max(torch.softmax(previous_logits[i], dim=-1), dim=-1)
+                conf = conf[0].item()
+
+                # Store the rank positions
+                ranks_at_layers.append(rank[0])
+                confidences_at_layers.append(conf)
+                    
+            ranks_at_layers.reverse() # Reverse the list to have the ranks in the correct order
+            #ranks_at_layers.append(0) # Append 0 to the end of the list to represent the rank at the last layer
+            self.graph_top_k_list.append(ranks_at_layers) # Append the ranks at each layer to the list of ranks
 
 
         if self.config.use_synchronize: torch.cuda.synchronize()
@@ -1159,7 +1206,7 @@ class DeployT5ForConditionalGeneration(T5ForConditionalGeneration):
             'time_key_value_gen': [datetime.timedelta(), datetime.timedelta()],
             'time_attn': [datetime.timedelta(), datetime.timedelta()],
             'time_ffn': datetime.timedelta(),
-            'time_confidence': 0.0,
+            'time_confidence': datetime.timedelta(),
             'time_exit_key_value_gen': [datetime.timedelta(), datetime.timedelta()],
             'time_exit_attn': [datetime.timedelta(), datetime.timedelta()],
             'time_exit_ffn': datetime.timedelta(),
