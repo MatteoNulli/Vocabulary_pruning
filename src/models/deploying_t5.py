@@ -885,12 +885,12 @@ class DeployT5Stack(T5Stack):
                 lm_logits = lm_head(_hidden_states)
                 previous_logits.append(lm_logits)
 
-            if  self.is_decoder and self.config.count_flops and self.config.type_vocab_reduct:
+            if  self.is_decoder and self.config.count_flops and self.config.type_vocab_reduct and not skip_mask:
                 if i <= starting_layer:
                     self.flop_counter += (self.config.d_model**2)* self.config.vocab_size * 1 # Seq length is always one
                 else:
                     self.flop_counter += (self.config.d_model**2)* k * 1 # Seq length is always one
-            if  self.is_decoder and self.config.count_flops and not self.config.type_vocab_reduct:
+            if  self.is_decoder and self.config.count_flops and not self.config.type_vocab_reduct and not skip_mask:
                 self.flop_counter += (self.config.d_model**2)* self.config.vocab_size * 1 # Seq length is always one
             
             # Static framework
