@@ -559,6 +559,7 @@ class DeployT5Stack(T5Stack):
         self.embed_tokens = embed_tokens
         self.is_decoder = config.is_decoder
         self.flop_counter = 0.0
+        self.count_passes = 0
 
         self.block = nn.ModuleList(
             [DeployT5Block(config, has_relative_attention_bias=bool(i == 0)) for i in range(config.num_layers)]
@@ -871,14 +872,14 @@ class DeployT5Stack(T5Stack):
         minimum_k_size = 250 # where 50 is the minimum number of weights to keep
         num_layers = len(self.block) # This is the number of layers in the model
         starting_layer = self.config.exit_min_layer if self.config.exit_min_layer > 1  else 1 # Start where exit_min_layer is set or start at 1.
-        # For the adaptive case.
-        conf_scaling_factor = 0.9 # TODO experiment with different scaling factors 
+        
         if self.is_decoder and self.config.plotting_logits:
-            previous_logits = []
-                                   
+            previous_logits = []   
+
+        if self.is_decoder and self.config.count_flops:
+           self.count_passes += 1
 
         for i, layer_module in enumerate(self.block):
-            
             if self.is_decoder and self.config.plotting_logits:
                 _hidden_states = self.dropout(self.final_layer_norm(hidden_states))
                 _hidden_states = (_hidden_states * (self.config.d_model ** -0.5)) if self.config.tie_word_embeddings else _hidden_states
@@ -887,11 +888,11 @@ class DeployT5Stack(T5Stack):
 
             if  self.is_decoder and self.config.count_flops and self.config.type_vocab_reduct and not skip_mask:
                 if i <= starting_layer:
-                    self.flop_counter += (self.config.d_model**2)* self.config.vocab_size * 1 # Seq length is always one
+                    self.flop_counter += (self.config.d_model)* self.config.vocab_size * 1 # Seq length is always one
                 else:
-                    self.flop_counter += (self.config.d_model**2)* k * 1 # Seq length is always one
+                    self.flop_counter += (self.config.d_model) * k * 1 # Seq length is always one
             if  self.is_decoder and self.config.count_flops and not self.config.type_vocab_reduct and not skip_mask:
-                self.flop_counter += (self.config.d_model**2)* self.config.vocab_size * 1 # Seq length is always one
+                self.flop_counter += (self.config.d_model) * self.config.vocab_size * 1 # Seq length is always one
             
             # Static framework
             if self.is_decoder and self.config.static_exit_layer is not None:
@@ -1000,14 +1001,13 @@ class DeployT5Stack(T5Stack):
                         if not self.config.type_vocab_reduct or i == starting_layer:
                             # Compute scaled hidden states and logits at the beginning if no vocab reduction is used,
                             # or if it's the first layer with vocab reduction.
+                            selected_weights = lm_head.weight # Select the weights
+                            # Compute logits
                             a = _hidden_states * (self.config.d_model ** -0.5)
-                            lm_logits = lm_head(_hidden_states) if not self.config.tie_word_embeddings else lm_head(a)
+                            lm_logits = torch.nn.functional.linear(_hidden_states, selected_weights) if not self.config.tie_word_embeddings \
+                                else torch.nn.functional.linear(a, selected_weights)
                             k = self.config.k if self.config.k else self.func_inverse(i, maximum_k_size, minimum_k_size, num_layers)
                         else:  # Additional logic if vocabulary reduction is being used
-                            if self.config.type_vocab_reduct == "decaying":
-                                k = self.func_inverse(i, maximum_k_size, minimum_k_size, num_layers)
-                            elif self.config.type_vocab_reduct == "adaptive":
-                                k = int(k * (1 - conf * conf_scaling_factor))
                             selected_weights = lm_head.weight[self.top_k_indices, :] # Select the weights from the top-k indices
                             # Compute logits with the reduced vocabulary
                             a = _hidden_states * (self.config.d_model ** -0.5)
@@ -1015,26 +1015,18 @@ class DeployT5Stack(T5Stack):
                                 else torch.nn.functional.linear(a, selected_weights) # Compute the logits with the reduced vocabulary
 
                         # END OF SHRINKING VOCAB PART
-                        return_conf = 1 if self.config.type_vocab_reduct in ["fixed", "decaying", "adaptive"] else 0
-
                         result = get_skip_mask(
                             lm_logits,
                             _hidden_states,
                             cm_head,
                             config=self.config,
                             pos_time=past_key_values[i][0].shape[2] + 1 if past_key_values[i] is not None else 1,
-                            return_conf= return_conf,
-                            k=k,
-                            top_k_indices = self.top_k_indices # Use the old top-k indices
+                            return_conf= 1,
+                            k=k
                         )
                         
-                        # Handle the return based on whether confidence was also requested
-                        if return_conf: 
-                            skip_mask, self.top_k_indices, conf = result # Get the new top-k indices
-                        else:
-                            skip_mask = result
-
-                    
+                        skip_mask, self.top_k_indices, conf = result # Get the new top-k indices
+              
                         if not skip_mask: self.block_op[i] += 1               
                         if skip_mask:
                             self.lm_logits = lm_logits
@@ -1616,7 +1608,7 @@ class DeployT5ForConditionalGeneration(T5ForConditionalGeneration):
             if self.config.type_vocab_reduct is not None:
                 shape_of_tokens = self.decoder.offset_index_from_prunning[count].shape[0] if self.decoder.offset_index_from_prunning[count] is not None else 0
                 if next_tokens_scores.shape[1] <= shape_of_tokens: # The equal is for fixed pruningm the less than is for decaying/adaptive pruning
-                    next_tokens =  self.decoder.offset_index_from_prunning[count][next_tokens.item()]   
+                    next_tokens = self.decoder.offset_index_from_prunning[count][next_tokens.item()]   
             count += 1
 
             # for RollBack, store Shallow decoder's predictions

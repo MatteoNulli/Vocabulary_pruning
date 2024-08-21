@@ -518,7 +518,7 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
             output = trainer.evaluate(metric_key_prefix="eval")
             metrics = output.metrics
             if additional_args.count_flops:
-                final_flops = model.decoder.flop_counter/len(eval_dataset)
+                final_flops = model.decoder.flop_counter/model.decoder.count_passes
                 wandb.log({'FLOPs': final_flops})   
                 print(f"Final FLOPS: {final_flops}")
         else:
