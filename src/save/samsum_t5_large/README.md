@@ -1,4 +1,5 @@
 ---
+license: apache-2.0
 tags:
 - generated_from_trainer
 datasets:
@@ -13,7 +14,7 @@ should probably proofread and complete it, then remove this comment. -->
 
 # samsum_t5_large
 
-This model is a fine-tuned version of [jvelja/t5-samsum](https://huggingface.co/jvelja/t5-samsum) on the samsum dataset.
+This model is a fine-tuned version of [google-t5/t5-large](https://huggingface.co/google-t5/t5-large) on the samsum dataset.
 
 ## Model description
 

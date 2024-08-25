@@ -888,11 +888,11 @@ class DeployT5Stack(T5Stack):
 
             if  self.is_decoder and self.config.count_flops and self.config.type_vocab_reduct and not skip_mask:
                 if i <= starting_layer:
-                    self.flop_counter += (self.config.d_model)* self.config.vocab_size * 1 # Seq length is always one
+                    self.flop_counter += (2*self.config.d_model-1)* self.config.vocab_size * 1 # Seq length is always one
                 else:
-                    self.flop_counter += (self.config.d_model) * k * 1 # Seq length is always one
+                    self.flop_counter += (2*self.config.d_model-1) * k * 1 # Seq length is always one
             if  self.is_decoder and self.config.count_flops and not self.config.type_vocab_reduct and not skip_mask:
-                self.flop_counter += (self.config.d_model) * self.config.vocab_size * 1 # Seq length is always one
+                self.flop_counter += (2*self.config.d_model-1) * self.config.vocab_size * 1 # Seq length is always one
             
             # Static framework
             if self.is_decoder and self.config.static_exit_layer is not None:
