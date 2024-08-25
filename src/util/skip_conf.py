@@ -10,8 +10,12 @@ from copy import deepcopy
 def softmax_confidence(logits: torch.Tensor = None, k=2):  
     assert logits is not None
     probs = torch.softmax(logits, dim=-1)
-    top_2, top_k_indices = torch.topk(probs, dim=-1, k=k)
-    return (top_2[..., 0] - top_2[..., 1]).squeeze(), top_k_indices[0][0]
+    if k == 2: 
+        top_2  = torch.topk(probs, dim=-1, k=k)[0]
+        return (top_2[..., 0] - top_2[..., 1]).squeeze()
+    else: 
+        top_2, top_k_indices = torch.topk(probs, dim=-1, k=k)
+        return (top_2[..., 0] - top_2[..., 1]).squeeze(), top_k_indices[0][0]
 
 
 def meta_confidence(
@@ -65,8 +69,11 @@ def get_skip_mask(
         threshold = config.shallow2deep_conf_threshold if adapt_threshold is None else adapt_threshold
 
 
-    conf_measure = get_confidence_class(key=key)    
-    conf, top_k_indices = conf_measure(logits=logits, k=k)
+    conf_measure = get_confidence_class(key=key)
+    if k == 2:
+        conf = conf_measure(logits=logits)
+    else: 
+        conf, top_k_indices = conf_measure(logits=logits, k=k)
 
     mask = torch.where(conf <= threshold, 0., 1.).bool()
     if not return_conf:

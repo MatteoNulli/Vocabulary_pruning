@@ -632,8 +632,11 @@ def main(model_args, data_args, training_args, additional_args, model_cls, train
             metrics = output.metrics
             if additional_args.count_flops:
                 final_flops = model.decoder.flop_counter/model.decoder.count_passes
-                wandb.log({"FLOPs": final_flops})
-                print("FLOPs: ", final_flops)
+                wandb.log({"FLOP/Token": final_flops})
+                flops_sample = model.decoder.flop_counter/len(eval_dataset)
+                wandb.log({"FLOP/Sample": flops_sample})
+                total_flops = model.decoder.flop_counter
+                wandb.log({"Total_FLOP": total_flops})
         else:
             metrics = trainer.evaluate(max_length=max_length, num_beams=num_beams, metric_key_prefix="eval")
 

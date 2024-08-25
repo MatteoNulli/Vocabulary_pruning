@@ -1008,7 +1008,6 @@ class DeployT5Stack(T5Stack):
                                 else torch.nn.functional.linear(a, selected_weights)
                             k = self.config.k if self.config.k else self.func_inverse(i, maximum_k_size, minimum_k_size, num_layers)
                         else:  # Additional logic if vocabulary reduction is being used
-                            selected_weights = lm_head.weight[self.top_k_indices, :] # Select the weights from the top-k indices
                             # Compute logits with the reduced vocabulary
                             a = _hidden_states * (self.config.d_model ** -0.5)
                             lm_logits = torch.nn.functional.linear(_hidden_states, selected_weights) if not self.config.tie_word_embeddings \
@@ -1021,12 +1020,16 @@ class DeployT5Stack(T5Stack):
                             cm_head,
                             config=self.config,
                             pos_time=past_key_values[i][0].shape[2] + 1 if past_key_values[i] is not None else 1,
-                            return_conf= 1,
-                            k=k
+                            return_conf= 1 if i == starting_layer else 0,
+                            k=k if i == starting_layer else 2,
                         )
                         
-                        skip_mask, self.top_k_indices, conf = result # Get the new top-k indices
-              
+                        if i == starting_layer:
+                            skip_mask, self.top_k_indices, conf = result # Get the new top-k indices
+                            selected_weights = lm_head.weight[self.top_k_indices, :] # Select the weights from the top-k indices
+                        else: 
+                            skip_mask = result
+                            
                         if not skip_mask: self.block_op[i] += 1               
                         if skip_mask:
                             self.lm_logits = lm_logits
