@@ -77,7 +77,8 @@ srun python run_question_answering.py \
     --exit_min_layer 19 \
     --include_inputs_for_metrics False \
     --use_auth_token True \
-    --type_vocab_reduct adaptive \
+    --type_vocab_reduct True \
+    --k 256 \
 ```
 
 ### Parameters Explanation
@@ -98,9 +99,10 @@ In addition to the parameters previously implemented, we have introduced new one
 
 ##### Softmax
 - `--exit_conf_type softmax`: set the confidence measure to softmax values
-- `--type_vocab_reduct [str]`: Can be either fixed, decaying, or adaptive. This will prune the vocabulary matrix.
-- `--plotting_logits False`: if set to True this will plot the confidence, f1, and boxplots (Figure 2,3, and 4 of the [blogpost](blogpost.md)).
-- `--final_flops False`: if set to True this will showcase the amount of flops calculated during confidence estimation (Figure 7 and 8 of the [blogpost](blogpost.md)).
+- `--type_vocab_reduct [bool]`: Either True or False, this will prune the vocabulary matrix.
+- `--k [int]`:  What amount of values should be retained by the pruned vocabulary matrix.
+- `--plotting_logits False`: if set to True this will plot the confidence, f1, and boxplots.
+- `--final_flops False`: if set to True this will showcase the amount of flops calculated during confidence estimation.
 
 Sample task-specific bash files can be found in the `src/scripts` directory. 
 

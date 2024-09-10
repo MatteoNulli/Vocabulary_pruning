@@ -553,14 +553,13 @@ if __name__ == "__main__":
     trainer_cls = TransTrainer
 
 
-    if not additional_args.plotting_logits:
-
+    try:
         wandb.login()
 
         wandb.init(
                 # set the wandb project where this run will be logged
-                project="Final Performance Softmax",
-                entity="uva24",
+                project="ProjectName",
+                entity="ProjectDirectory",
                 # track hyperparameters and run metadata
                 config={
                     "dataset": data_args.dataset_name,
@@ -572,26 +571,12 @@ if __name__ == "__main__":
                     },
                 mode="disabled" if False else "online",
                 )
-        main(model_args, data_args, training_args, additional_args, model_cls, trainer_cls)
+    except:
+        print("Wandb login failed")
+        pass
+    main(model_args, data_args, training_args, additional_args, model_cls, trainer_cls)
+    try:
         wandb.finish()
-    else:
-        mean_block_confidence = main(model_args, data_args, training_args, additional_args, model_cls, trainer_cls)
-        block_k_metric = []
-        
-        additional_args.plotting_logits = False
+    except:
+        pass
 
-        for block in range(1, 25):           
-            additional_args.static_exit_layer = block
-            _, metrics = main(model_args, data_args, training_args, additional_args, model_cls, trainer_cls)
-            block_k_metric.append(metrics["eval_bleu"]/100)
-
-        plt.figure(figsize=(10, 6))
-        plt.plot(np.arange(23),  mean_block_confidence, label='Confidence', color='midnightblue', linestyle='dashed')
-        plt.plot(np.arange(23),  block_k_metric, label='Sacrebleu', color='red')
-        plt.title('Confidence vs Sacrebleu over Layers')
-        plt.xlabel('Layer')
-        plt.ylabel('Confidence/Sacrebleu Score')
-        plt.legend()
-        plt.grid(True)
-    
-        plt.savefig("plots/conf_metric_blocks_" + data_args.dataset_name.replace("/","_") + "_" + model_args.model_name_or_path.replace("/","_")  +".png")

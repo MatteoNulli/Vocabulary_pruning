@@ -7,8 +7,8 @@ class AdditionalArguments:
     """
     Arguments for accelerating decoder models.
     """
-    type_vocab_reduct: Optional[str] = field(
-        default=False, metadata={"help": ("Reduce the size of vocab. Either use fixed, decaying, adaptive, or None.")},
+    type_vocab_reduct: Optional[bool] = field(
+        default=False, metadata={"help": ("Reduce the size of vocab. Either True or False.")},
     )
 
     plotting_logits: Optional[bool] = field(
