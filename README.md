@@ -2,7 +2,7 @@
 # Not all FLOPs are created equally: leveraging confidence in intermediate representations to maximize efficiency subject to calibration error
 -->
 
-# Optimizing Predictions: Vocabulary Reduction in LLMs
+# Vocabulary Pruning in Early-Exit LLMs
 
 ### K.A. Abdel Sadek, M. Nulli, J. Velja, J. Vincenti
 
