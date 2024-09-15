@@ -116,9 +116,10 @@ This, together with the usual `wandb.init()`, will save every evaluation metric 
 This line of code can be found within [run_question_answering](src/run_question_answering.py) / [run_summarization](src/run_summarization.py).
 
 
-
+<!--
 ## Contact
 - Karim Abdel Sadek: karim.abdel.sadek@student.uva.nl
 - Matteo Nulli: matteo.nulli@student.uva.nl
 - Joan Velja: joan.velja@student.uva.nl
 - Jort Vincenti: jort.vincenti@student.uva.nl
+-->
