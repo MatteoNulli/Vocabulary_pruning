@@ -86,7 +86,7 @@ In addition to the parameters previously implemented, we have introduced new one
 #### Essential Parameters:
 ##### Method agnostic parameters
 - `-m`: the file responsible for the task. Its structure is `run_$TASK`. Possible choices: `question_answering`, `summarization`.
-- `--model_name_or_path`: the model to be used for the task. Possible choices: `google-t5/t5-large`, `jvelja/t5-squad`, `jvelja/t5-samsum`.
+- `--model_name_or_path`: the model to be used for the task. <!--Possible choices: `google-t5/t5-large`, `jvelja/t5-squad`, `jvelja/t5-samsum`. -->
 - `--do_eval` True: this should be always True for evals.
 - `--deploy_scenario` True: this should be always True to use deploying_[MODEL_NAME].py for our implementation.
 - `--use_early_exit` True: use conventional early-exiting framework.
