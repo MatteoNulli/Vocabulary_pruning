@@ -4,7 +4,7 @@
 
 # Vocabulary Pruning in Early-Exit LLMs
 
-### K.A. Abdel Sadek, M. Nulli, J. Velja, J. Vincenti
+### K.A. Abdel Sadek, M. Nulli, J. Velja, J. Vincenti, M. Jazbec
 
 This repository is cloned from the code-base <a href="https://github.com/raymin0223/fast_robust_early_exit" target="_blank" rel="noopener noreferrer">  Fast_Robust_Early_Exit</a> (here their [paper](https://arxiv.org/abs/2310.05424)). Our research aims to further extend their work by implementing a Softmax Exiting with reduced vocabulary size. 
 <!-- Our discussion and findings can be found in our [blogpost](blogpost.md) file. Refer to it for the details of our work and the precise setting of the experiments. This README file will mainly address the codebase and reproduction of our results.  -->
