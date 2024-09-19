@@ -4,6 +4,8 @@
 
 # Vocabulary Pruning in Early-Exit LLMs
 
+### K.A. Abdel Sadek, M. Nulli, J. Velja, J. Vincenti
+
 This repository is cloned from the code-base <a href="https://github.com/raymin0223/fast_robust_early_exit" target="_blank" rel="noopener noreferrer">  Fast_Robust_Early_Exit</a> (here their [paper](https://arxiv.org/abs/2310.05424)). Our research aims to further extend their work by implementing a Softmax Exiting with reduced vocabulary size. 
 <!-- Our discussion and findings can be found in our [blogpost](blogpost.md) file. Refer to it for the details of our work and the precise setting of the experiments. This README file will mainly address the codebase and reproduction of our results.  -->
 
@@ -23,7 +25,7 @@ The codebase handles automatically model and dataset downloading. Beware of this
 ## Models and Checkpoints
 
 We use T5-large as the baseline model for our experiments. 
-The non-finetuned and finetuned model weights are available on HuggingFace, respectively at [google](https://huggingface.co/google-t5) and [finetuned](https://huggingface.co/jvelja). 
+The non-finetuned and finetuned model weights are available on HuggingFace, respectively at [google](https://huggingface.co/google-t5) and [jvelja](https://huggingface.co/jvelja). 
 
 The code implementation of the model is available at [models/deploying_t5](src/models/deploying_t5.py).
 
@@ -86,7 +88,7 @@ In addition to the parameters previously implemented, we have introduced new one
 #### Essential Parameters:
 ##### Method agnostic parameters
 - `-m`: the file responsible for the task. Its structure is `run_$TASK`. Possible choices: `question_answering`, `summarization`.
-- `--model_name_or_path`: the model to be used for the task. <!--Possible choices: `google-t5/t5-large`, `jvelja/t5-squad`, `jvelja/t5-samsum`. -->
+- `--model_name_or_path`: the model to be used for the task. Possible choices: `google-t5/t5-large`, `jvelja/t5-squad`, `jvelja/t5-samsum`.
 - `--do_eval` True: this should be always True for evals.
 - `--deploy_scenario` True: this should be always True to use deploying_[MODEL_NAME].py for our implementation.
 - `--use_early_exit` True: use conventional early-exiting framework.
@@ -116,10 +118,9 @@ This, together with the usual `wandb.init()`, will save every evaluation metric 
 This line of code can be found within [run_question_answering](src/run_question_answering.py) / [run_summarization](src/run_summarization.py).
 
 
-<!--
+
 ## Contact
 - Karim Abdel Sadek: karim.abdel.sadek@student.uva.nl
 - Matteo Nulli: matteo.nulli@student.uva.nl
 - Joan Velja: joan.velja@student.uva.nl
 - Jort Vincenti: jort.vincenti@student.uva.nl
--->
