@@ -124,3 +124,4 @@ This line of code can be found within [run_question_answering](src/run_question_
 - Matteo Nulli: matteo.nulli@student.uva.nl
 - Joan Velja: joan.velja@student.uva.nl
 - Jort Vincenti: jort.vincenti@student.uva.nl
+- Metod Jazbec: m.jazbec@uva.nl
