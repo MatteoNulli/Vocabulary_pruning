@@ -4,17 +4,7 @@
 
 # Dynamic Vocabulary Pruning in Early-Exit LLMs (NeurIPS ENLSP 2024)
 
-### K.A. Abdel Sadek, M. Nulli, J. Velja, J. Vincenti, M. Jazbec
-
-
-<a href="https://arxiv.org/abs/2410.18952"><img src="https://img.shields.io/badge/Paper-arXiv:2410.18952-Green"></a>
-<a href=#bibtex><img src="https://img.shields.io/badge/Paper-BibTex-yellow"></a>
-
-<p align="center">
-<img width="1394" src="https://github.com/MatteoNulli/Vocabulary_pruning/blob/main/src/images/final_nips.pdf">
-</p>
-
-![alt text](https://github.com/MatteoNulli/Vocabulary_pruning/blob/main/src/images/final_nips.pdf)
+### J. Vincenti, K.A. Abdel Sadek, J. Velja, M. Nulli, M. Jazbec
 
 <p align="center">
 <img width="1394" src="https://github.com/MatteoNulli/Vocabulary_pruning/blob/main/src/images/final_nips.svg" width="128"/>
