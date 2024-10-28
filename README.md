@@ -2,7 +2,10 @@
 # Not all FLOPs are created equally: leveraging confidence in intermediate representations to maximize efficiency subject to calibration error
 -->
 
-# Vocabulary Pruning in Early-Exit LLMs
+# Dynamic Vocabulary Pruning in Early-Exit LLMs (NeurIPS ENLSP 2024)
+
+<a href="https://arxiv.org/abs/2410.18952"><img src="https://img.shields.io/badge/Paper-arXiv:2410.18952-Green"></a>
+
 
 ### K.A. Abdel Sadek, M. Nulli, J. Velja, J. Vincenti, M. Jazbec
 
