@@ -11,7 +11,7 @@
 <a href=#bibtex><img src="https://img.shields.io/badge/Paper-BibTex-yellow"></a>
 
 <p align="center">
-<img width="1394" src="[https://github.com/MatteoNulli/Vocabulary_pruning/blob/main/src/images/final_nips.pdf">
+<img width="1394" src="https://github.com/MatteoNulli/Vocabulary_pruning/blob/main/src/images/final_nips.pdf">
 </p>
 
 
