@@ -6,6 +6,9 @@
 
 ### J. Vincenti, K.A. Abdel Sadek, J. Velja, M. Nulli, M. Jazbec
 
+<a href="https://arxiv.org/abs/2410.18952"><img src="https://img.shields.io/badge/Paper-arXiv:2310.05424-Green"></a>
+<a href=#bibtex><img src="https://img.shields.io/badge/Paper-BibTex-yellow"></a>
+
 <p align="center">
 <img width="1394" src="https://github.com/MatteoNulli/Vocabulary_pruning/blob/main/src/images/final_nips.svg" width="128"/>
 </p>
