@@ -14,6 +14,7 @@
 <img width="1394" src="https://github.com/MatteoNulli/Vocabulary_pruning/blob/main/src/images/final_nips.pdf">
 </p>
 
+![alt text](https://github.com/MatteoNulli/Vocabulary_pruning/blob/main/src/images/final_nips.pdf)
 
 
 This repository is cloned from the code-base <a href="https://github.com/raymin0223/fast_robust_early_exit" target="_blank" rel="noopener noreferrer">  Fast_Robust_Early_Exit</a> (here their [paper](https://arxiv.org/abs/2310.05424)). Our research aims to further extend their work by implementing a Softmax Exiting with reduced vocabulary size. 
