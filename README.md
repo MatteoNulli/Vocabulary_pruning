@@ -121,6 +121,21 @@ This, together with the usual `wandb.init()`, will save every evaluation metric 
 This line of code can be found within [run_question_answering](src/run_question_answering.py) / [run_summarization](src/run_summarization.py).
 
 
+## BibTeX
+If you find this repo useful for your research, please consider citing our paper:
+
+```
+@misc{vincenti2024dynamicvocabularypruningearlyexit,
+      title={Dynamic Vocabulary Pruning in Early-Exit LLMs}, 
+      author={Jort Vincenti and Karim Abdel Sadek and Joan Velja and Matteo Nulli and Metod Jazbec},
+      year={2024},
+      eprint={2410.18952},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2410.18952}, 
+}
+```
+
 
 ## Contact
 - Karim Abdel Sadek: karim.abdel.sadek@student.uva.nl
