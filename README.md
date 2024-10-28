@@ -3,7 +3,7 @@
 -->
 
 # Dynamic Vocabulary Pruning in Early-Exit LLMs 
-# (NeurIPS ENLSP 2024)
+**(NeurIPS ENLSP 2024)**
 
 ### J. Vincenti, K.A. Abdel Sadek, J. Velja, M. Nulli, M. Jazbec
 
